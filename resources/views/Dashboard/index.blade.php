@@ -340,47 +340,58 @@
                             </li>
 
                             
-                            <li class="menu-title">products</li>
+                            <li class="menu-title">Products</li>
 
 <li>
     <a class='tp-link' href="{{url('products')}}" >
-        <i class="fa-solid fa-percent"></i>
-        <span> products </span>
+        <i class="fa-solid fa-box"></i>
+        <span> Products </span>
+    </a>
+</li>
+                      
+
+<li class="menu-title">Fournisseur</li>
+
+<li>
+    <a class='tp-link' href="{{url('fournisseur')}}" >
+        <i class="fa-solid fa-truck-field"></i>
+        <span> Fournisseur </span>
+    </a>
+</li>
+
+<li class="menu-title mt-2">Categories</li>
+                
+<li>
+    <a class='tp-link' href='{{url('categories')}}'>
+        <i class="fa-solid fa-list-check"></i>
+        <span> List de Categorie </span>
     </a>
 </li>
                             
-
-                            <li class="menu-title mt-2">Categories</li>
+<li class="menu-title mt-2">Local</li>
                 
-                            <li>
-                                <a class='tp-link' href='{{url('categories')}}'>
-                                    <i class="fa-solid fa-list-check"></i>
-                                    <span> List de Categorie </span>
-                                </a>
-                            </li>
-                            <li class="menu-title mt-2">local</li>
+<li>
+    <a class='tp-link' href='{{url('local')}}'>
+        <i class="fa-solid fa-location-dot"></i>
+        <span> Local </span>
+    </a>
+</li>
+<li>
+    <a class='tp-link' href='{{url('rayon')}}'>
+        <i class="fa-solid fa-table-cells"></i>
+        <span> Rayon </span>
+    </a>
+</li>
+<li class="menu-title mt-2">Sub Categories</li>
                 
-                            <li>
-                                <a class='tp-link' href='{{url('local')}}'>
-                                    <i class="fa-solid fa-list-check"></i>
-                                    <span> Local </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class='tp-link' href='{{url('rayon')}}'>
-                                    <i class="fa-solid fa-list-check"></i>
-                                    <span> Rayon </span>
-                                </a>
-                            </li>
-
-                            <li class="menu-title mt-2">Sub Categories</li>
-                
-                            <li>
-                                <a class='tp-link' href='{{url('subcategory')}}'>
-                                    <i class="fa-solid fa-list-check"></i>
-                                    <span> familie </span>
-                                </a>
-                            </li>
+<li>
+    <a class='tp-link' href='{{url('subcategory')}}'>
+        <i class="fa-solid fa-sitemap"></i>
+        <!-- or alternative: -->
+        <!-- <i class="fa-solid fa-diagram-project"></i> -->
+        <span> Familie </span>
+    </a>
+</li>
                             
                             <li>
                                 <a class='tp-link' href='{{url('unite')}}'>

@@ -94,6 +94,10 @@ $(document).ready(function () {
                         // Detailed logging
                         console.log("Données du produit:", response);
                         
+                        // Clear any previous dropdown options to prevent duplicates
+                        $('#edit_id_subcategorie').empty().append('<option value="">Sélectionner une famille</option>');
+                        $('#edit_id_rayon').empty().append('<option value="">Sélectionner un rayon</option>');
+                        
                         // Show edit modal
                         $('#ModalEditProduct').modal("show");
                         
@@ -103,7 +107,6 @@ $(document).ready(function () {
                         // Populate basic product information
                         $('#edit_id').val(response.id);
                         $('#edit_name').val(response.name);
-                        $('#edit_unite').val(response.unite);
                         $('#edit_price_achat').val(response.price_achat);
                         $('#edit_price_vente').val(response.price_vente);
                         $('#edit_code_barre').val(response.code_barre);
@@ -114,25 +117,9 @@ $(document).ready(function () {
                         // Set local dropdown
                         $('#edit_id_local').val(response.id_local);
                         
-                        // Use setTimeout to ensure DOM is updated before triggering
-                        setTimeout(function() {
-                            // Trigger change events to load dependent dropdowns
-                            $('#edit_id_categorie').trigger('change');
-                            $('#edit_id_local').trigger('change');
-                            
-                            // Ensure subcategory and rayon are set after loading
-                            if (response.id_subcategorie) {
-                                setTimeout(function() {
-                                    $('#edit_id_subcategorie').val(response.id_subcategorie);
-                                }, 200);
-                            }
-                            
-                            if (response.id_rayon) {
-                                setTimeout(function() {
-                                    $('#edit_id_rayon').val(response.id_rayon);
-                                }, 200);
-                            }
-                        }, 100);
+                        // Load dependent dropdowns
+                        loadSubcategories('#edit_id_categorie', '#edit_id_subcategorie', response.id_subcategorie);
+                        loadRayons('#edit_id_local', '#edit_id_rayon', response.id_rayon);
                         
                         // Set stock fields if stock exists
                         if (response.stock) {
@@ -467,19 +454,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    // Listen for edit modal shown event to ensure elements are visible
-    $('#ModalEditProduct').on('shown.bs.modal', function () {
-        console.log("Edit modal is now visible");
-        // Reselect form elements now that they're visible
-        if ($('#edit_id_categorie').val()) {
-            loadSubcategories('#edit_id_categorie', '#edit_id_subcategorie');
-        }
-        
-        if ($('#edit_id_local').val()) {
-            loadRayons('#edit_id_local', '#edit_id_rayon');
-        }
-    });
     
     // Initial dropdown population on page load
     $(document).ready(function() {
@@ -491,15 +465,6 @@ $(document).ready(function () {
         // Populate rayons if local is pre-selected
         if ($('#id_local').val()) {
             loadRayons('#id_local', '#id_rayon');
-        }
-
-        // Same for edit form
-        if ($('#edit_id_categorie').val()) {
-            loadSubcategories('#edit_id_categorie', '#edit_id_subcategorie');
-        }
-        
-        if ($('#edit_id_local').val()) {
-            loadRayons('#edit_id_local', '#edit_id_rayon');
         }
     });
 });

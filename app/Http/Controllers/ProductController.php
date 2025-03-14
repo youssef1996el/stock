@@ -322,122 +322,162 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:products,id',
-            'name' => 'required|string|max:255',
-            'price_achat' => 'required|numeric',
-            'price_vente' => 'required|numeric',
-            'id_categorie' => 'required|exists:categories,id',
-            'id_subcategorie' => 'required|exists:sub_categories,id',
-            'id_local' => 'required|exists:locals,id',
-            'id_rayon' => 'required|exists:rayons,id',
-            'id_unite' => 'required|exists:unite,id',
-            'code_barre' => 'nullable|string|max:255',
-            'quantite' => 'required|numeric',
-            'seuil' => 'required|numeric',
-            'id_tva' => 'required|exists:tvas,id',
-        ], [
-            'required' => 'Le champ :attribute est requis.',
-            'numeric' => 'Le champ :attribute doit être un nombre.',
-            'exists' => 'La valeur sélectionnée pour :attribute est invalide.',
-        ]);
+  /**
+ * Update the specified resource in storage.
+ */
+public function update(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'id' => 'required|exists:products,id',
+        'name' => 'required|string|max:255',
+        'price_achat' => 'required|numeric',
+        'price_vente' => 'required|numeric',
+        'id_categorie' => 'required|exists:categories,id',
+        'id_subcategorie' => 'required|exists:sub_categories,id',
+        'id_local' => 'required|exists:locals,id',
+        'id_rayon' => 'required|exists:rayons,id',
+        'id_unite' => 'required|exists:unite,id',
+        'code_barre' => 'nullable|string|max:255',
+        'quantite' => 'required|numeric',
+        'seuil' => 'required|numeric',
+        'id_tva' => 'required|exists:tvas,id',
+    ], [
+        'required' => 'Le champ :attribute est requis.',
+        'numeric' => 'Le champ :attribute doit être un nombre.',
+        'exists' => 'La valeur sélectionnée pour :attribute est invalide.',
+    ]);
+    
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 400,
+            'errors' => $validator->messages(),
+        ], 400);
+    }
+    
+    try {
+        DB::beginTransaction();
         
-        if ($validator->fails()) {
+        $product = Product::find($request->id);
+        
+        if (!$product) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Produit non trouvé',
+            ], 404);
+        }
+        
+        // Verify the relationship between category and subcategory
+        $subcategory = SubCategory::find($request->id_subcategorie);
+        if ($subcategory->id_categorie != $request->id_categorie) {
             return response()->json([
                 'status' => 400,
-                'errors' => $validator->messages(),
+                'message' => 'La famille sélectionnée n\'appartient pas à cette catégorie',
             ], 400);
         }
         
-        try {
-            DB::beginTransaction();
-            
-            $product = Product::find($request->id);
-            
-            if (!$product) {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Produit non trouvé',
-                ], 404);
-            }
-            
-            // Verify the relationship between category and subcategory
-            $subcategory = SubCategory::find($request->id_subcategorie);
-            if ($subcategory->id_categorie != $request->id_categorie) {
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'La famille sélectionnée n\'appartient pas à cette catégorie',
-                ], 400);
-            }
-            
-            // Verify the relationship between local and rayon
-            $rayon = Rayon::find($request->id_rayon);
-            if ($rayon->id_local != $request->id_local) {
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'Le rayon sélectionné n\'appartient pas à ce local',
-                ], 400);
-            }
-            
-            // Update product
-            $product->update([
-                'name' => $request->name,
-                'price_achat' => $request->price_achat,
-                'price_vente' => $request->price_vente,
-                'code_barre' => $request->code_barre,
-                'id_categorie' => $request->id_categorie,
-                'id_subcategorie' => $request->id_subcategorie,
-                'id_local' => $request->id_local,
-                'id_rayon' => $request->id_rayon,
-            ]);
-            
-            // Update emplacement after updating product
-            $product->emplacement = $product->generateEmplacement();
-            $product->save();
-            
-            // Update or create stock
-            $stock = Stock::where('id_product', $product->id)->first();
-            
-            if ($stock) {
-                $stock->update([
-                    'id_tva' => $request->id_tva,
-                    'id_unite' => $request->id_unite,
-                    'quantite' => $request->quantite,
-                    'seuil' => $request->seuil,
-                ]);
-            } else {
-                Stock::create([
-                    'id_product' => $product->id,
-                    'id_tva' => $request->id_tva,
-                    'id_unite' => $request->id_unite,
-                    'quantite' => $request->quantite,
-                    'seuil' => $request->seuil,
-                ]);
-            }
-            
-            DB::commit();
-            
+        // Verify the relationship between local and rayon
+        $rayon = Rayon::find($request->id_rayon);
+        if ($rayon->id_local != $request->id_local) {
             return response()->json([
-                'status' => 200,
-                'message' => 'Produit mis à jour avec succès',
-            ]);
-            
-        } catch (\Exception $e) {
-            DB::rollBack();
-            
-            Log::error('Error updating product: ' . $e->getMessage(), [
-                'id' => $request->id,
-                'request' => $request->all()
-            ]);
-            
-            return response()->json([
-                'status' => 500,'message' => 'Une erreur est survenue: ' . $e->getMessage(),
-            ], 500);
+                'status' => 400,
+                'message' => 'Le rayon sélectionné n\'appartient pas à ce local',
+            ], 400);
         }
+        
+        // Check for duplicate product (excluding the current product)
+        $existingProduct = Product::where('name', $request->name)
+            ->where('id_categorie', $request->id_categorie)
+            ->where('id_subcategorie', $request->id_subcategorie)
+            ->where('id', '!=', $request->id)
+            ->first();
+        
+        if ($existingProduct) {
+            // Product exists, just update the quantity
+            $existingStock = Stock::where('id_product', $existingProduct->id)->first();
+            $currentStock = Stock::where('id_product', $product->id)->first();
+            
+            if ($existingStock && $currentStock) {
+                // Add the quantity from the current product to the existing one
+                $newQuantity = $existingStock->quantite + $currentStock->quantite;
+                
+                $existingStock->update([
+                    'quantite' => $newQuantity,
+                    // Update other stock fields to the new values if needed
+                    'id_tva' => $request->id_tva,
+                    'seuil' => $request->seuil,
+                ]);
+                
+                // Delete the current product and its stock
+                $currentStock->delete();
+                $product->delete();
+                
+                DB::commit();
+                
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Un produit similaire existe déjà. Les quantités ont été fusionnées.',
+                ]);
+            }
+        }
+        
+        // If no duplicate or we want to update the existing product
+        // Update product
+        $product->update([
+            'name' => $request->name,
+            'price_achat' => $request->price_achat,
+            'price_vente' => $request->price_vente,
+            'code_barre' => $request->code_barre,
+            'id_categorie' => $request->id_categorie,
+            'id_subcategorie' => $request->id_subcategorie,
+            'id_local' => $request->id_local,
+            'id_rayon' => $request->id_rayon,
+        ]);
+        
+        // Update emplacement after updating product
+        $product->emplacement = $product->generateEmplacement();
+        $product->save();
+        
+        // Update or create stock
+        $stock = Stock::where('id_product', $product->id)->first();
+        
+        if ($stock) {
+            $stock->update([
+                'id_tva' => $request->id_tva,
+                'id_unite' => $request->id_unite,
+                'quantite' => $request->quantite,
+                'seuil' => $request->seuil,
+            ]);
+        } else {
+            Stock::create([
+                'id_product' => $product->id,
+                'id_tva' => $request->id_tva,
+                'id_unite' => $request->id_unite,
+                'quantite' => $request->quantite,
+                'seuil' => $request->seuil,
+            ]);
+        }
+        
+        DB::commit();
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Produit mis à jour avec succès',
+        ]);
+        
+    } catch (\Exception $e) {
+        DB::rollBack();
+        
+        Log::error('Error updating product: ' . $e->getMessage(), [
+            'id' => $request->id,
+            'request' => $request->all()
+        ]);
+        
+        return response()->json([
+            'status' => 500,
+            'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+        ], 500);
     }
-
+}
     /**
      * Remove the specified resource from storage.
      */

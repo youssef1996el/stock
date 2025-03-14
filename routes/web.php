@@ -11,6 +11,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\RayonController;
 use App\Http\Controllers\UniteController;
+use App\Http\Controllers\FournisseurController;
 
 
 Auth::routes();
@@ -67,14 +68,21 @@ Route::post('DeleteRayon', [RayonController::class, 'destroy']);
 Route::get('editRayon/{id}', [RayonController::class, 'edit']);
 // Product Routes
 
-
-
-// Product routes
 Route::get('products', [ProductController::class, 'index']);
 Route::post('addProduct', [ProductController::class, 'store']);
 Route::get('editProduct/{id}', [ProductController::class, 'edit']);
 Route::post('updateProduct', [ProductController::class, 'update']);
 Route::post('deleteProduct', [ProductController::class, 'destroy']);
+// Add these routes to your web.php file
+
+
+// Fournisseur routes
+Route::get('/fournisseur', [FournisseurController::class, 'index'])->name('fournisseur.index');
+Route::post('/addFournisseur', [FournisseurController::class, 'store']);
+Route::get('/editFournisseur/{id}', [FournisseurController::class, 'edit']);
+Route::post('/updateFournisseur', [FournisseurController::class, 'update']);
+Route::post('/DeleteFournisseur', [FournisseurController::class, 'destroy']);
+
 
 // Dependent dropdown routes
 Route::get('getSubcategories/{id}', [ProductController::class, 'getSubcategories']);
