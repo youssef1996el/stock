@@ -13,6 +13,7 @@ use App\Http\Controllers\RayonController;
 use App\Http\Controllers\UniteController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\AchatController;
+use App\Http\Controllers\TempAchatController;
 
 Auth::routes();
 
@@ -98,13 +99,34 @@ Route::post('addUnite', [App\Http\Controllers\UniteController::class, 'store']);
 Route::get('editUnite/{id}', [App\Http\Controllers\UniteController::class, 'edit']);
 Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update']);
 Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
-// achat routes 
-Route::get('achat'                  , [AchatController::class,      'index'     ]);
-Route::post('addAchat'              , [AchatController::class,      'store'     ]);
-Route::get('achat/{id}/edit'        , [AchatController::class,      'edit'      ]);
-Route::post('updateAchat'           , [AchatController::class,      'update'    ]);
-Route::post('DeleteAchat'           , [AchatController::class,      'destroy'   ]);
+// Achat Controller routes
 
+// Achat Routes
+Route::get('/achats', [AchatController::class, 'index'])->name('achats.index');
+Route::get('/achat/{id}/edit', [AchatController::class, 'edit'])->name('achat.edit');
+Route::post('/updateAchat', [AchatController::class, 'update']);
+Route::post('/receiveAchat', [AchatController::class, 'receive']);
+Route::post('/deleteAchat', [AchatController::class, 'destroy']);
+
+// TempAchat Routes
+Route::get('/tempachat', [App\Http\Controllers\TempAchatController::class, 'index'])->name('tempachat');
+Route::get('/getProductsByCategory/{categoryId}', [App\Http\Controllers\TempAchatController::class, 'getProductsByCategory']);
+Route::post('/addTempAchat', [App\Http\Controllers\TempAchatController::class, 'addTempAchat']);
+Route::get('/getTempAchats', [App\Http\Controllers\TempAchatController::class, 'getTempAchats']);
+Route::post('/increaseTempAchat', [App\Http\Controllers\TempAchatController::class, 'increaseTempAchat']);
+Route::post('/decreaseTempAchat', [App\Http\Controllers\TempAchatController::class, 'decreaseTempAchat']);
+Route::post('/deleteTempAchat', [App\Http\Controllers\TempAchatController::class, 'deleteTempAchat']);
+Route::get('/getProductId/{id}', [App\Http\Controllers\TempAchatController::class, 'getProductId']);
+Route::post('/addAchat', [App\Http\Controllers\TempAchatController::class, 'store']);
+Route::get('/editTempAchat/{id}', [App\Http\Controllers\TempAchatController::class, 'edit']);
+Route::post('/updateTempAchat', [App\Http\Controllers\TempAchatController::class, 'update']);
+
+// LigneAchat Routes
+Route::get('/ligneAchats/{achatId}', [LigneAchatController::class, 'getByAchat']);
+Route::post('/addLigneAchat', [LigneAchatController::class, 'store']);
+Route::post('/updateLigneAchat', [LigneAchatController::class, 'update']);
+Route::post('/deleteLigneAchat', [LigneAchatController::class, 'destroy']);
+Route::post('/receiveProducts', [LigneAchatController::class, 'receiveProducts']);
 // Route::get('/productlist'           , function () {
 //     return view('template.productlist');
 // });

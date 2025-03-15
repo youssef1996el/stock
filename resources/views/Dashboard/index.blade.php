@@ -401,7 +401,17 @@
         <!-- <i class="fa-solid fa-cash-register"></i> -->
         <span> Achats </span>
     </a>
-</li>               
+</li> 
+<li>
+    <a class='tp-link' href='{{url('tempAchat')}}'>
+        <i class="fa-solid fa-shopping-cart"></i>
+        <!-- or alternatives: -->
+        <!-- <i class="fa-solid fa-cart-shopping"></i> -->
+        <!-- <i class="fa-solid fa-receipt"></i> -->
+        <!-- <i class="fa-solid fa-cash-register"></i> -->
+        <span> tempAchat </span>
+    </a>
+</li>                 
                             <li>
                                 <a class='tp-link' href='{{url('unite')}}'>
                                     <i class="fa-solid fa-list-check"></i>
