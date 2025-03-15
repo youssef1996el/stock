@@ -3,18 +3,17 @@
 @section('dashboard')
 <!-- Custom JS -->
 <script>
-    // Pass PHP variables to JavaScript
-    var csrf_token = "{{ csrf_token() }}";
-    var addTempAchat_url = "{{ url('addTempAchat') }}";
-    var getTempAchats_url = "{{ url('getTempAchats') }}";
-    var increaseTempAchat_url = "{{ url('increaseTempAchat') }}";
-    var decreaseTempAchat_url = "{{ url('decreaseTempAchat') }}";
-    var deleteTempAchat_url = "{{ url('deleteTempAchat') }}";
-    var getProductsByCategory_url = "{{ url('getProductsByCategory') }}";
-    var getProductId_url = "{{ url('getProductId') }}";
-    var addAchat_url = "{{ url('addAchat') }}";
-    var editTempAchat_url = "{{ url('editTempAchat') }}";
-    var updateTempAchat_url = "{{ url('updateTempAchat') }}";
+  var csrf_token = "{{ csrf_token() }}";
+var addTempAchat_url = "{{ url('addTempAchat') }}";
+var getTempAchats_url = "{{ url('getTempAchats') }}";
+var increaseTempAchat_url = "{{ url('increaseTempAchat') }}";
+var decreaseTempAchat_url = "{{ url('decreaseTempAchat') }}";
+var deleteTempAchat_url = "{{ url('deleteTempAchat') }}";
+var getProductsByCategory_url = "{{ url('getProductsByCategory') }}";
+var getProductId_url = "{{ url('getProductId') }}";
+var addAchat_url = "{{ url('addAchat') }}";
+var editTempAchat_url = "{{ url('editTempAchat') }}";  
+var updateTempAchat_url = "{{ url('updateTempAchat') }}";
 </script>
 <script src="{{ asset('js/tempachat/script.js') }}"></script>
 

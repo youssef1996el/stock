@@ -108,18 +108,18 @@ Route::post('/updateAchat', [AchatController::class, 'update']);
 Route::post('/receiveAchat', [AchatController::class, 'receive']);
 Route::post('/deleteAchat', [AchatController::class, 'destroy']);
 
-// TempAchat Routes
-Route::get('/tempachat', [App\Http\Controllers\TempAchatController::class, 'index'])->name('tempachat');
-Route::get('/getProductsByCategory/{categoryId}', [App\Http\Controllers\TempAchatController::class, 'getProductsByCategory']);
-Route::post('/addTempAchat', [App\Http\Controllers\TempAchatController::class, 'addTempAchat']);
-Route::get('/getTempAchats', [App\Http\Controllers\TempAchatController::class, 'getTempAchats']);
-Route::post('/increaseTempAchat', [App\Http\Controllers\TempAchatController::class, 'increaseTempAchat']);
-Route::post('/decreaseTempAchat', [App\Http\Controllers\TempAchatController::class, 'decreaseTempAchat']);
-Route::post('/deleteTempAchat', [App\Http\Controllers\TempAchatController::class, 'deleteTempAchat']);
-Route::get('/getProductId/{id}', [App\Http\Controllers\TempAchatController::class, 'getProductId']);
-Route::post('/addAchat', [App\Http\Controllers\TempAchatController::class, 'store']);
-Route::get('/editTempAchat/{id}', [App\Http\Controllers\TempAchatController::class, 'edit']);
-Route::post('/updateTempAchat', [App\Http\Controllers\TempAchatController::class, 'update']);
+
+Route::get('addTempAchat', [TempAchatController::class, 'index'])->name('tempachat.index');
+Route::post('addTempAchat', [TempAchatController::class, 'addTempAchat'])->name('tempachat.add');
+Route::get('getTempAchats', [TempAchatController::class, 'getTempAchats'])->name('tempachat.getAll');
+Route::post('increaseTempAchat', [TempAchatController::class, 'increaseTempAchat'])->name('tempachat.increase');
+Route::post('decreaseTempAchat', [TempAchatController::class, 'decreaseTempAchat'])->name('tempachat.decrease');
+Route::post('deleteTempAchat', [TempAchatController::class, 'deleteTempAchat'])->name('tempachat.delete');
+Route::get('getProductsByCategory/{categoryId}', [TempAchatController::class, 'getProductsByCategory'])->name('products.byCategory');
+Route::get('getProductId/{id}', [TempAchatController::class, 'getProductId'])->name('tempachat.getProductId');
+Route::post('addAchat', [TempAchatController::class, 'store'])->name('achat.add');
+Route::get('editTempAchat/{id}', [TempAchatController::class, 'edit'])->name('tempachat.edit');
+Route::post('updateTempAchat', [TempAchatController::class, 'update'])->name('tempachat.update');
 
 // LigneAchat Routes
 Route::get('/ligneAchats/{achatId}', [LigneAchatController::class, 'getByAchat']);

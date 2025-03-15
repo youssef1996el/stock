@@ -227,6 +227,9 @@ $(document).ready(function () {
         
         var tempAchatId = $(this).data('id');
         
+        // Log for debugging
+        console.log("Edit button clicked for ID:", tempAchatId);
+        
         // Disable edit button during loading
         $(this).prop('disabled', true);
         
@@ -237,6 +240,8 @@ $(document).ready(function () {
             success: function(response) {
                 // Enable edit button
                 $('.editTempAchat').prop('disabled', false);
+                
+                console.log("Edit response:", response);
                 
                 // Show edit modal
                 $('#ModalEditTempAchat').modal("show");
@@ -264,7 +269,8 @@ $(document).ready(function () {
                 console.error("Erreur lors de la récupération de l'article:", {
                     status: status,
                     error: error,
-                    responseText: xhr.responseText
+                    responseText: xhr.responseText,
+                    url: editTempAchat_url + "/" + tempAchatId
                 });
                 
                 // User-friendly error notification

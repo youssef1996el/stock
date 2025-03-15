@@ -393,7 +393,7 @@
     </a>
 </li>
 <li>
-    <a class='tp-link' href='{{url('achat')}}'>
+    <a class='tp-link' href='{{url('achats')}}'>
         <i class="fa-solid fa-shopping-cart"></i>
         <!-- or alternatives: -->
         <!-- <i class="fa-solid fa-cart-shopping"></i> -->
@@ -403,7 +403,7 @@
     </a>
 </li> 
 <li>
-    <a class='tp-link' href='{{url('tempAchat')}}'>
+    <a class='tp-link' href='{{url('addTempAchat')}}'>
         <i class="fa-solid fa-shopping-cart"></i>
         <!-- or alternatives: -->
         <!-- <i class="fa-solid fa-cart-shopping"></i> -->
