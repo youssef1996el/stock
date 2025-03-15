@@ -12,7 +12,7 @@ use App\Http\Controllers\LocalController;
 use App\Http\Controllers\RayonController;
 use App\Http\Controllers\UniteController;
 use App\Http\Controllers\FournisseurController;
-
+use App\Http\Controllers\AchatController;
 
 Auth::routes();
 
@@ -40,7 +40,7 @@ Route::get('tva/{id}/edit'          , [TvaController::class,        'edit'      
 Route::post('updateTva'             , [TvaController::class,        'update'    ]);
 Route::post('DeleteTva'             , [TvaController::class,        'destroy'   ]);
 // Category Routes
-// Add these routes to your routes/web.php file
+
 
 Route::get('categories'             , [CategoriesController::class, 'index'    ]);
 Route::post('addCategory'           , [CategoriesController::class, 'store'    ]);
@@ -73,7 +73,7 @@ Route::post('addProduct', [ProductController::class, 'store']);
 Route::get('editProduct/{id}', [ProductController::class, 'edit']);
 Route::post('updateProduct', [ProductController::class, 'update']);
 Route::post('deleteProduct', [ProductController::class, 'destroy']);
-// Add these routes to your web.php file
+
 
 
 // Fournisseur routes
@@ -87,10 +87,10 @@ Route::post('/DeleteFournisseur', [FournisseurController::class, 'destroy']);
 // Dependent dropdown routes
 Route::get('getSubcategories/{id}', [ProductController::class, 'getSubcategories']);
 Route::get('getRayons/{id}', [ProductController::class, 'getRayons']);
-// Add these routes to your web.php file
+
 
 // Unite routes
-// Add these routes to your web.php file
+
 
 // Unite routes
 Route::get('unite', [App\Http\Controllers\UniteController::class, 'index']);
@@ -98,6 +98,12 @@ Route::post('addUnite', [App\Http\Controllers\UniteController::class, 'store']);
 Route::get('editUnite/{id}', [App\Http\Controllers\UniteController::class, 'edit']);
 Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update']);
 Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
+// achat routes 
+Route::get('achat'                  , [AchatController::class,      'index'     ]);
+Route::post('addAchat'              , [AchatController::class,      'store'     ]);
+Route::get('achat/{id}/edit'        , [AchatController::class,      'edit'      ]);
+Route::post('updateAchat'           , [AchatController::class,      'update'    ]);
+Route::post('DeleteAchat'           , [AchatController::class,      'destroy'   ]);
 
 // Route::get('/productlist'           , function () {
 //     return view('template.productlist');
