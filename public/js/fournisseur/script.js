@@ -122,6 +122,23 @@ $(document).ready(function () {
             });
         }
     });
+
+    function phoneFormatter() {
+        $('#phone_fournisseur, .phone_fournisseur_edit').on('input', function() {
+            var number = $(this).val().replace(/[^\d]/g, ''); // إزالة أي أحرف غير رقمية
+    
+            if (number.length <= 10) {
+                number = number.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1-$2-$3-$4-$5");
+            } else {
+                number = number.substring(0, 10).replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1-$2-$3-$4-$5");
+            }
+    
+            $(this).val(number);
+        });
+    }
+    
+    
+    $(phoneFormatter);
     
     $('#BtnAddFournisseur').on('click', function(e)
     {

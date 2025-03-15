@@ -9,7 +9,7 @@
     var EditFournisseur           = "{{url('editFournisseur')}}";
     var UpdateFournisseur         = "{{url('updateFournisseur')}}";
     var DeleteFournisseur         = "{{url('DeleteFournisseur')}}";
-</script>
+</script> 
 <div class="content-page">
     <div class="content">
 
@@ -99,7 +99,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label>Téléphone</label>
-                                        <input type="text" name="Telephone" class="form-control @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
+                                        <input type="text" name="Telephone" id="phone_fournisseur" class="form-control @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
                                         @error('Telephone')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -157,7 +157,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label>Téléphone</label>
-                                        <input type="text" id="Telephone" name="Telephone" class="form-control @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
+                                        <input type="text" id="Telephone" name="Telephone" class="form-control phone_fournisseur_edit @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
                                         @error('Telephone')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
