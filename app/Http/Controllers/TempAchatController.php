@@ -332,84 +332,143 @@ class TempAchatController extends Controller
     /**
      * Get a specific temp achat item for editing.
      */
-    public function edit($id)
-    {
-        try {
-            // Log the edit request for debugging
-            Log::info('Edit TempAchat requested', ['id' => $id]);
-            
-            $tempAchat = TempAchat::with(['product', 'fournisseur'])->find($id);
-            
-            if (!$tempAchat) {
-                Log::warning('TempAchat not found', ['id' => $id]);
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Article non trouvé',
-                ], 404);
-            }
-            
-            Log::info('TempAchat found', [
-                'id' => $tempAchat->id,
-                'product_id' => $tempAchat->idproduit,
-                'fournisseur_id' => $tempAchat->id_fournisseur
-            ]);
-            
-            return response()->json($tempAchat);
-            
-        } catch (\Exception $e) {
-            Log::error('Error in TempAchatController@edit: ' . $e->getMessage(), [
-                'temp_achat_id' => $id,
-                'trace' => $e->getTraceAsString()
-            ]);
-            
+   /**
+ * Get a specific temp achat item for editing.
+ */
+public function edit($id)
+{
+    try {
+        // Log the edit request for debugging
+        Log::info('Edit TempAchat requested', ['id' => $id]);
+        
+        $tempAchat = TempAchat::with(['product', 'fournisseur'])->find($id);
+        
+        if (!$tempAchat) {
+            Log::warning('TempAchat not found', ['id' => $id]);
             return response()->json([
-                'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
-            ], 500);
+                'status' => 404,
+                'message' => 'Article non trouvé',
+            ], 404);
         }
+        
+        // Get products for dropdown with specific columns
+        $products = Product::select('id', 'name', 'price_achat')->get();
+        
+        // Get fournisseurs with specific columns
+        $fournisseurs = Fournisseur::select('id', 'entreprise')->get();
+        
+        // Get category for the current product to potentially filter products
+        $categoryId = null;
+        if ($tempAchat->product && $tempAchat->product->id_categorie) {
+            $categoryId = $tempAchat->product->id_categorie;
+        }
+        
+        Log::info('TempAchat found', [
+            'id' => $tempAchat->id,
+            'product_id' => $tempAchat->idproduit,
+            'fournisseur_id' => $tempAchat->id_fournisseur
+        ]);
+        
+        return response()->json([
+            'tempAchat' => $tempAchat,
+            'products' => $products,
+            'fournisseurs' => $fournisseurs,
+            'categoryId' => $categoryId
+        ]);
+        
+    } catch (\Exception $e) {
+        Log::error('Error in TempAchatController@edit: ' . $e->getMessage(), [
+            'temp_achat_id' => $id,
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return response()->json([
+            'status' => 500,
+            'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Update a temp achat item.
      */
-    public function update(Request $request)
-    {
-        try {
-            // Log update request for debugging
-            Log::info('Update TempAchat requested', ['request' => $request->all()]);
+    /**
+ * Update a temp achat item.
+ */
+public function update(Request $request)
+{
+    try {
+        // Log update request for debugging
+        Log::info('Update TempAchat requested', ['request' => $request->all()]);
+        
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:temp_achat,id',
+            'id_produit' => 'required|exists:products,id',
+            'id_fournisseur' => 'required|exists:fournisseurs,id',
+            'qte' => 'required|numeric|min:1',
+        ]);
+        
+        if ($validator->fails()) {
+            Log::warning('TempAchat update validation failed', ['errors' => $validator->errors()]);
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ], 400);
+        }
+        
+        DB::beginTransaction();
+        
+        $tempAchat = TempAchat::find($request->id);
+        
+        if (!$tempAchat) {
+            Log::warning('TempAchat not found for update', ['id' => $request->id]);
+            return response()->json([
+                'status' => 404,
+                'message' => 'Article non trouvé',
+            ], 404);
+        }
+        
+        // Check if this combo of product and supplier already exists for this user
+        $existingTempAchat = TempAchat::where('id_user', Auth::id())
+            ->where('idproduit', $request->id_produit)
+            ->where('id_fournisseur', $request->id_fournisseur)
+            ->where('id', '!=', $request->id) // Exclude current item
+            ->first();
             
-            $validator = Validator::make($request->all(), [
-                'id' => 'required|exists:temp_achat,id',
-                'qte' => 'required|numeric|min:1',
+        if ($existingTempAchat) {
+            // Merge quantities and delete the current item
+            $existingTempAchat->qte += $request->qte;
+            $existingTempAchat->save();
+            
+            // Delete the current item as it's now merged
+            $tempAchat->delete();
+            
+            Log::info('TempAchat merged with existing item', [
+                'original_id' => $tempAchat->id,
+                'merged_with_id' => $existingTempAchat->id,
+                'new_quantity' => $existingTempAchat->qte
             ]);
             
-            if ($validator->fails()) {
-                Log::warning('TempAchat update validation failed', ['errors' => $validator->errors()]);
-                return response()->json([
-                    'status' => 400,
-                    'errors' => $validator->messages(),
-                ], 400);
-            }
+            DB::commit();
             
-            DB::beginTransaction();
-            
-            $tempAchat = TempAchat::find($request->id);
-            
-            if (!$tempAchat) {
-                Log::warning('TempAchat not found for update', ['id' => $request->id]);
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Article non trouvé',
-                ], 404);
-            }
-            
-            // Update quantity
+            return response()->json([
+                'status' => 200,
+                'message' => 'Article fusionné avec un article existant',
+                'merged' => true,
+                'merged_id' => $existingTempAchat->id
+            ]);
+        } else {
+            // Update the current item
+            $tempAchat->idproduit = $request->id_produit;
+            $tempAchat->id_fournisseur = $request->id_fournisseur;
             $tempAchat->qte = $request->qte;
             $tempAchat->save();
             
             Log::info('TempAchat updated successfully', [
                 'id' => $tempAchat->id,
-                'new_quantity' => $tempAchat->qte
+                'product_id' => $tempAchat->idproduit,
+                'supplier_id' => $tempAchat->id_fournisseur,
+                'quantity' => $tempAchat->qte
             ]);
             
             DB::commit();
@@ -417,22 +476,24 @@ class TempAchatController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Article mis à jour avec succès',
+                'merged' => false
             ]);
-            
-        } catch (\Exception $e) {
-            DB::rollBack();
-            
-            Log::error('Error in TempAchatController@update: ' . $e->getMessage(), [
-                'temp_achat_id' => $request->id ?? null,
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
-            ], 500);
         }
+        
+    } catch (\Exception $e) {
+        DB::rollBack();
+        
+        Log::error('Error in TempAchatController@update: ' . $e->getMessage(), [
+            'temp_achat_id' => $request->id ?? null,
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return response()->json([
+            'status' => 500,
+            'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+        ], 500);
     }
+}
     
     /**
      * Get the product ID for a temp achat entry.

@@ -137,12 +137,13 @@ var updateTempAchat_url = "{{ url('updateTempAchat') }}";
     </div>
 </div>
 
+
 <!-- Edit TempAchat Modal -->
 <div class="modal fade" id="ModalEditTempAchat" tabindex="-1" aria-labelledby="ModalEditTempAchatLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalEditTempAchatLabel">Modifier la quantité</h5>
+                <h5 class="modal-title" id="ModalEditTempAchatLabel">Modifier l'article</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -153,15 +154,31 @@ var updateTempAchat_url = "{{ url('updateTempAchat') }}";
                 <form id="FormUpdateTempAchat">
                     <input type="hidden" id="edit_id" name="id">
                     
-                    <!-- Product Information (Read-only) -->
-                    <div class="mb-3">
-                        <label>Produit</label>
-                        <input type="text" id="edit_product_name" class="form-control" readonly>
-                    </div>
-                    
+                    <!-- Fournisseur selection -->
                     <div class="mb-3">
                         <label>Fournisseur</label>
-                        <input type="text" id="edit_fournisseur_name" class="form-control" readonly>
+                        <select id="edit_id_fournisseur" class="form-select" required>
+                            <option value="">Sélectionner un fournisseur</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <!-- Category selection (optional, for filtering products) -->
+                    <div class="mb-3">
+                        <label>Catégorie</label>
+                        <select id="edit_id_categorie" class="form-select">
+                            <option value="">Toutes les catégories</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <!-- Product selection -->
+                    <div class="mb-3">
+                        <label>Produit</label>
+                        <select id="edit_id_produit" class="form-select" required>
+                            <option value="">Sélectionner un produit</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
                     </div>
                     
                     <!-- Quantity -->

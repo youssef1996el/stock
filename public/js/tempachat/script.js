@@ -249,17 +249,47 @@ $(document).ready(function () {
                 // Clear any previous validation errors
                 $('.validationEditTempAchat').html("").removeClass('alert alert-danger');
                 
-                // Populate form with data
-                $('#edit_id').val(response.id);
-                $('#edit_qte').val(response.qte);
+                // Get the tempAchat data
+                var tempAchat = response.tempAchat;
                 
-                // Set read-only fields
-                if (response.product) {
-                    $('#edit_product_name').val(response.product.name);
+                // Populate form with data
+                $('#edit_id').val(tempAchat.id);
+                $('#edit_qte').val(tempAchat.qte);
+                
+                // Populate categories dropdown if we have them
+                if (response.categories) {
+                    var categoryDropdown = $('#edit_id_categorie');
+                    categoryDropdown.empty().append('<option value="">Toutes les catégories</option>');
+                    
+                    $.each(response.categories, function(key, category) {
+                        var selected = (response.categoryId && response.categoryId == category.id) ? 'selected' : '';
+                        categoryDropdown.append(
+                            `<option value="${category.id}" ${selected}>${category.name}</option>`
+                        );
+                    });
                 }
-                if (response.fournisseur) {
-                    $('#edit_fournisseur_name').val(response.fournisseur.entreprise);
-                }
+                
+                // Populate fournisseurs dropdown
+                var fournisseurDropdown = $('#edit_id_fournisseur');
+                fournisseurDropdown.empty().append('<option value="">Sélectionner un fournisseur</option>');
+                
+                $.each(response.fournisseurs, function(key, fournisseur) {
+                    var selected = (tempAchat.id_fournisseur == fournisseur.id) ? 'selected' : '';
+                    fournisseurDropdown.append(
+                        `<option value="${fournisseur.id}" ${selected}>${fournisseur.entreprise}</option>`
+                    );
+                });
+                
+                // Populate products dropdown
+                var productDropdown = $('#edit_id_produit');
+                productDropdown.empty().append('<option value="">Sélectionner un produit</option>');
+                
+                $.each(response.products, function(key, product) {
+                    var selected = (tempAchat.idproduit == product.id) ? 'selected' : '';
+                    productDropdown.append(
+                        `<option value="${product.id}" ${selected}>${product.name} - ${parseFloat(product.price_achat).toFixed(2)}€</option>`
+                    );
+                });
             },
             error: function(xhr, status, error) {
                 // Enable edit button
@@ -294,15 +324,84 @@ $(document).ready(function () {
         });
     });
     
+    // Event handling for category change in edit modal
+    $('#edit_id_categorie').on('change', function() {
+        var categoryId = $(this).val();
+        var productDropdown = $('#edit_id_produit');
+        var currentProductId = productDropdown.val(); // Save the currently selected product
+        
+        // Reset product dropdown but keep the selected option if possible
+        productDropdown.empty().append('<option value="">Sélectionner un produit</option>');
+        
+        if (!categoryId) {
+            // If no category is selected, load all products from the response
+            $.ajax({
+                url: window.location.href,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response && response.length > 0) {
+                        $.each(response, function(key, product) {
+                            var selected = (currentProductId == product.id) ? 'selected' : '';
+                            productDropdown.append(
+                                `<option value="${product.id}" ${selected}>${product.name} - ${parseFloat(product.price_achat).toFixed(2)}€</option>`
+                            );
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erreur de chargement des produits:", error);
+                    new AWN().alert("Impossible de charger les produits", { durations: { alert: 5000 } });
+                }
+            });
+        } else {
+            // If a category is selected, load products for that category
+            $.ajax({
+                url: getProductsByCategory_url + "/" + categoryId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 200 && response.products.length > 0) {
+                        $.each(response.products, function(key, product) {
+                            var selected = (currentProductId == product.id) ? 'selected' : '';
+                            productDropdown.append(
+                                `<option value="${product.id}" ${selected}>${product.name} - ${parseFloat(product.price_achat).toFixed(2)}€</option>`
+                            );
+                        });
+                    } else {
+                        console.warn('Aucun produit trouvé');
+                        new AWN().warning("Aucun produit trouvé pour cette catégorie", { durations: { warning: 5000 } });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erreur de chargement des produits:", error);
+                    new AWN().alert("Impossible de charger les produits", { durations: { alert: 5000 } });
+                }
+            });
+        }
+    });
+    
     // Update TempAchat button click
     $('#BtnUpdateTempAchat').on('click', function(e) {
         e.preventDefault();
         
         // Get form data
         var tempAchatId = $('#edit_id').val();
+        var productId = $('#edit_id_produit').val();
+        var fournisseurId = $('#edit_id_fournisseur').val();
         var qte = $('#edit_qte').val();
         
         // Validate data
+        if (!productId) {
+            new AWN().warning("Veuillez sélectionner un produit", { durations: { warning: 5000 } });
+            return;
+        }
+        
+        if (!fournisseurId) {
+            new AWN().warning("Veuillez sélectionner un fournisseur", { durations: { warning: 5000 } });
+            return;
+        }
+        
         if (!qte || qte < 1) {
             new AWN().warning("La quantité doit être supérieure à 0", { durations: { warning: 5000 } });
             return;
@@ -317,6 +416,8 @@ $(document).ready(function () {
             url: updateTempAchat_url,
             data: {
                 id: tempAchatId,
+                id_produit: productId,
+                id_fournisseur: fournisseurId,
                 qte: qte,
                 _token: csrf_token
             },
