@@ -1,7 +1,7 @@
 @extends('dashboard.index')
 
 @section('dashboard')
-
+<!-- test -->
 
 <div class="content-page">
     <div class="content">
