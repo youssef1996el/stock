@@ -7,12 +7,23 @@
 <script src="{{asset('js/achat/script.js')}}"></script>
 <script>
      var getSubcategories_url = "{{ url('getSubcategories') }}";
-     var getRayons_url = "{{ url('getRayons') }}";
+     var getRayons_url  = "{{ url('getRayons') }}";
+     var csrf_token     = "{{csrf_token()}}";
+     var getProduct     = "{{url('getProduct')}}";
+     var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
+     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
 </script>
-<script>
-    var csrf_token    = "{{csrf_token()}}";
-   
-</script>
+<style>
+    .table-responsive {
+        overflow-x: hidden;
+    }
+    .TableProductAchat tbody tr:hover {
+    
+    cursor: pointer; 
+}
+
+</style>
+
 <div class="content-page">
     <div class="content">
 
@@ -80,7 +91,7 @@
                            <div class="col-sm-12 col-md-12 col-xl-6">
                                 <div class="form-group">
                                     <label for="" class="label-form">Fournisseur</label>
-                                    <select name="fournisseur" class="form-select" id="">
+                                    <select name="fournisseur" class="form-select" id="DropDown_fournisseur">
                                         <option value="0">Please selected fournisseur</option>
                                         @foreach ($Fournisseur as $item)
                                             <option value="{{$item->id}}">{{$item->entreprise}}</option>
@@ -96,14 +107,14 @@
                                             <a href="#" class="text-danger linkCallModalAddProduct">Add Produit</a>
                                         </div>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="entre your porudct">
+                                    <input type="text" class="form-control input_products" placeholder="entre your porudct">
                                 </div>
                                 <div class="form-group mt-2">
                                     <div class="card text-start">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
-                                                    <table class="table datatable dataTable no-footer TableAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                    <table class="table table-striped  datatable dataTable no-footer TableProductAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead class="thead-light">
                                                             <tr>
                                                                 <th scope="col">Produit</th>
@@ -135,14 +146,13 @@
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
-                                                <table class="table datatable dataTable no-footer TableAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                <table class="table table-striped datatable dataTable no-footer TableAmpAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th scope="col">Produit</th>
                                                             <th scope="col">Prix Achat</th>
                                                             <th scope="col">Quantité</th>
-                                                            <th scope="col">Local</th>
-                                                            <th scope="col">Rayon</th>
+                                                            <th scope="col">Fournisseur</th>
                                                             <th scope="col">Action</th>    
                                                         </tr>
                                                     </thead>
