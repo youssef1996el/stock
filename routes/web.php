@@ -13,7 +13,7 @@ use App\Http\Controllers\RayonController;
 use App\Http\Controllers\UniteController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\AchatController;
-use App\Http\Controllers\TempAchatController;
+
 
 Auth::routes();
 
@@ -99,6 +99,9 @@ Route::post('addUnite', [App\Http\Controllers\UniteController::class, 'store']);
 Route::get('editUnite/{id}', [App\Http\Controllers\UniteController::class, 'edit']);
 Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update']);
 Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
+
+// achat routes
+Route::get('Achat'                ,[AchatController::class,'index'                     ]);
 
 
 
