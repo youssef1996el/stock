@@ -23,6 +23,57 @@ $(document).ready(function () {
         initializeMainAchatTable();
     }
 
+    // Function to create a custom confirm dialog
+    function customConfirm(title, message, callback) {
+        // Remove any existing modal
+        $('#customConfirmModal').remove();
+        
+        // Create modal HTML
+        var modalHTML = `
+        <div class="modal fade" id="customConfirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <div class="mb-4">
+                            <div class="text-warning" style="font-size: 48px;">
+                                <i class="fa-solid fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <h5 class="modal-title text-uppercase mb-3">${title}</h5>
+                        <p>${message}</p>
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="button" class="btn btn-success me-2 px-4" id="confirmOk">OK</button>
+                            <button type="button" class="btn btn-primary px-4" id="confirmCancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        
+        // Append modal to body
+        $('body').append(modalHTML);
+        
+        // Show modal
+        var modal = new bootstrap.Modal(document.getElementById('customConfirmModal'));
+        modal.show();
+        
+        // Handle OK button
+        $('#confirmOk').on('click', function() {
+            modal.hide();
+            if (typeof callback === 'function') {
+                callback(true);
+            }
+        });
+        
+        // Handle Cancel button
+        $('#confirmCancel').on('click', function() {
+            modal.hide();
+            if (typeof callback === 'function') {
+                callback(false);
+            }
+        });
+    }
+
     function initializeMainAchatTable() {
         // Destroy if exists
         if ($.fn.DataTable.isDataTable('.TableAchat')) {
@@ -595,102 +646,166 @@ $(document).ready(function () {
         });
     });
     
-    // Update Local Form Submission
-    $('#BtnUpdateLocal').on('click', function(e) {
+    // Edit item in temporary achat table
+    $(document).on('click', '.edit-tmp-achat', function(e) {
         e.preventDefault();
         
-        // Get form data
-        var formData = new FormData($('#FormUpdateLocal')[0]);
+        let id = $(this).data('id');
+        if (!id) {
+            console.error('Missing id for edit operation');
+            return;
+        }
         
-        $.ajax({
-            type: "POST",
-            url: $('#FormUpdateLocal').attr('action'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: "json",
-            success: function(response) {
-                if (response.status == 200) {
-                    // Reset form
-                    $('#FormUpdateLocal')[0].reset();
-                    
-                    // Close modal
-                    $('#ModalEditLocal').modal('hide');
-                    
-                    // Show success message
-                    new AWN().success(response.message, {durations: {success: 5000}});
-                    
-                    // Refresh the main table
-                    if (achatMainTable) {
-                        achatMainTable.ajax.reload();
-                    }
-                } else {
-                    // Display validation errors
-                    $('.validationEditLocal').html('');
-                    $.each(response.errors, function(key, value) {
-                        $('.validationEditLocal').append('<li class="text-danger">' + value + '</li>');
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error updating local:', error);
+        let currentQty = $(this).closest('tr').find('td:eq(2)').text().trim();
+        
+        // Remove any existing modal
+        $('#customEditModal').remove();
+        
+        // Create modal HTML
+        var modalHTML = `
+        <div class="modal fade" id="customEditModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 class="modal-title mb-3">MODIFIER QUANTITÉ</h5>
+                        <div class="form-group">
+                            <label for="editQuantity">Quantité</label>
+                            <input type="number" class="form-control" id="editQuantity" value="${currentQty}" min="1" step="1">
+                        </div>
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="button" class="btn btn-success me-2" id="editOk">OK</button>
+                            <button type="button" class="btn btn-primary" id="editCancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        
+        // Append modal to body
+        $('body').append(modalHTML);
+        
+        // Show modal
+        var modal = new bootstrap.Modal(document.getElementById('customEditModal'));
+        modal.show();
+        
+        // Focus on input
+        $('#editQuantity').focus();
+        
+        // Handle OK button
+        $('#editOk').on('click', function() {
+            let newQty = $('#editQuantity').val();
+            
+            if (newQty !== null && newQty !== '' && !isNaN(newQty) && parseFloat(newQty) > 0) {
+                modal.hide();
                 
-                // Try to parse error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    
-                    if (errorResponse.errors) {
-                        $('.validationEditLocal').html('');
-                        $.each(errorResponse.errors, function(key, value) {
-                            $('.validationEditLocal').append('<li class="text-danger">' + value + '</li>');
-                        });
-                    } else {
-                        new AWN().alert('Error updating. Please try again.', {durations: {alert: 5000}});
+                $.ajax({
+                    type: "POST",
+                    url: "updateTmpAchatQty",
+                    data: {
+                        '_token': csrf_token,
+                        'id': id,
+                        'qte': newQty
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == 200) {
+                            new AWN().success(response.message, {durations: {success: 5000}});
+                            
+                            // Refresh the table
+                            let Fournisseur = $('#DropDown_fournisseur').val();
+                            initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                        } else {
+                            new AWN().alert(response.message, {durations: {alert: 5000}});
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating quantity:', error);
+                        new AWN().alert('Error updating quantity. Please try again.', {durations: {alert: 5000}});
                     }
-                } catch (e) {
-                    new AWN().alert('Error updating. Please try again.', {durations: {alert: 5000}});
-                }
+                });
+            } else {
+                new AWN().alert('Veuillez saisir une quantité valide', {durations: {alert: 5000}});
+            }
+        });
+        
+        // Handle Cancel button
+        $('#editCancel').on('click', function() {
+            modal.hide();
+        });
+        
+        // Handle Enter key in input
+        $('#editQuantity').on('keydown', function(e) {
+            if (e.keyCode === 13) {
+                $('#editOk').click();
             }
         });
     });
     
-    // Add Local Form Submission (Finalizing purchase)
-    $('#BtnAddLocal').on('click', function(e) {
+    // Delete functionality
+    $(document).on('click', '.btn-delete-item', function(e) {
         e.preventDefault();
         
-        // Get the fournisseur
-        let Fournisseur = $('#DropDown_fournisseur').val();
-        if (Fournisseur == 0) {
-            new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
-            return false;
+        let id = $(this).data('id');
+        let url = $(this).data('url');
+        
+        if (!id || !url) {
+            console.error('Missing id or url for delete operation');
+            return;
         }
         
-        // Check if there are items in the table
-        if (tmpAchatTable && tmpAchatTable.data().count() === 0) {
-            new AWN().alert('Veuillez ajouter au moins un produit', {durations: {success: 5000}});
-            return false;
-        }
+        // Remove any existing modal
+        $('#customConfirmModal').remove();
         
-        // Show confirmation dialog
-        if (confirm('Êtes-vous sûr de vouloir valider cet achat?')) {
+        // Create modal HTML
+        var modalHTML = `
+        <div class="modal fade" id="customConfirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <div class="mb-4">
+                            <div class="text-warning" style="font-size: 48px;">
+                                <i class="fa-solid fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <h5 class="modal-title text-uppercase mb-3">SUPPRIMER</h5>
+                        <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="button" class="btn btn-success me-2 px-4" id="confirmOk">OK</button>
+                            <button type="button" class="btn btn-primary px-4" id="confirmCancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        
+        // Append modal to body
+        $('body').append(modalHTML);
+        
+        // Show modal
+        var modal = new bootstrap.Modal(document.getElementById('customConfirmModal'));
+        modal.show();
+        
+        // Handle OK button
+        $('#confirmOk').on('click', function() {
+            modal.hide();
+            
             $.ajax({
                 type: "POST",
-                url: "saveAchat", // Make sure this URL is defined in your routes
+                url: url,
                 data: {
                     '_token': csrf_token,
-                    'id_fournisseur': Fournisseur
+                    'id': id
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response.status == 200) {
-                        // Close modal
-                        $('#ModalAddAchat').modal('hide');
-                        
-                        // Show success message
                         new AWN().success(response.message, {durations: {success: 5000}});
                         
-                        // Refresh the main table
-                        if (achatMainTable) {
+                        // Refresh tables
+                        if ($(e.target).closest('.TableAmpAchat').length || $(e.target).closest('tr').parents('.TableAmpAchat').length) {
+                            let Fournisseur = $('#DropDown_fournisseur').val();
+                            initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                        } else if (achatMainTable) {
                             achatMainTable.ajax.reload();
                         }
                     } else {
@@ -698,198 +813,15 @@ $(document).ready(function () {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error saving purchase:', error);
-                    new AWN().alert('Error saving purchase. Please try again.', {durations: {alert: 5000}});
+                    console.error('Error deleting item:', error);
+                    new AWN().alert('Error deleting item. Please try again.', {durations: {alert: 5000}});
                 }
             });
-        }
-    });
-    
-// Delete functionality
-$(document).on('click', '.btn-delete-item', function(e) {
-    e.preventDefault();
-    
-    let id = $(this).data('id');
-    let url = $(this).data('url');
-    
-    if (!id || !url) {
-        console.error('Missing id or url for delete operation');
-        return;
-    }
-    
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément?')) {
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                '_token': csrf_token,
-                'id': id
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response.status == 200) {
-                    new AWN().success(response.message, {durations: {success: 5000}});
-                    
-                    // Refresh tables
-                    if ($(e.target).closest('.TableAmpAchat').length) {
-                        let Fournisseur = $('#DropDown_fournisseur').val();
-                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-                    } else if (achatMainTable) {
-                        achatMainTable.ajax.reload();
-                    }
-                } else {
-                    new AWN().alert(response.message, {durations: {alert: 5000}});
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error deleting item:', error);
-                new AWN().alert('Error deleting item. Please try again.', {durations: {alert: 5000}});
-            }
         });
-    }
-});
-
-// Edit item in temporary achat table
-$(document).on('click', '.edit-tmp-achat', function(e) {
-    e.preventDefault();
-    
-    let id = $(this).data('id');
-    if (!id) {
-        console.error('Missing id for edit operation');
-        return;
-    }
-    
-    let currentQty = $(this).closest('tr').find('td:eq(2)').text().trim();
-    
-    // Use a prompt to get the new quantity
-    let newQty = prompt('Modifier la quantité:', currentQty);
-    
-    if (newQty !== null && newQty !== '' && !isNaN(newQty) && parseFloat(newQty) > 0) {
-        $.ajax({
-            type: "POST",
-            url: "updateTmpAchatQty", // Make sure this URL is defined in your routes
-            data: {
-                '_token': csrf_token,
-                'id': id,
-                'qte': newQty
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response.status == 200) {
-                    new AWN().success(response.message, {durations: {success: 5000}});
-                    
-                    // Refresh the table
-                    let Fournisseur = $('#DropDown_fournisseur').val();
-                    initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-                } else {
-                    new AWN().alert(response.message, {durations: {alert: 5000}});
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error updating quantity:', error);
-                new AWN().alert('Error updating quantity. Please try again.', {durations: {alert: 5000}});
-            }
+        
+        // Handle Cancel button
+        $('#confirmCancel').on('click', function() {
+            modal.hide();
         });
-    } else if (newQty !== null) {
-        new AWN().alert('Veuillez saisir une quantité valide', {durations: {alert: 5000}});
-    }
-});
-
-// View Achat Details
-$(document).on('click', '.view-achat-details', function(e) {
-    e.preventDefault();
-    
-    let id = $(this).data('id');
-    if (!id) {
-        console.error('Missing id for view details operation');
-        return;
-    }
-    
-    $.ajax({
-        type: "GET",
-        url: "viewAchatDetails/" + id, // Make sure this URL is defined in your routes
-        dataType: "json",
-        success: function(response) {
-            if (response.status == 200) {
-                // Create a modal to display details
-                let detailsHtml = `
-                <div class="modal fade" id="ModalAchatDetails" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Détails de l'achat</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <p><strong>Fournisseur:</strong> ${response.achat.fournisseur}</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p><strong>Date:</strong> ${response.achat.created_at}</p>
-                                    </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Produit</th>
-                                                <th>Prix d'achat</th>
-                                                <th>Quantité</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>`;
-                
-                let totalAmount = 0;
-                
-                $.each(response.details, function(key, item) {
-                    let itemTotal = item.price_achat * item.quantite;
-                    totalAmount += itemTotal;
-                    
-                    detailsHtml += `
-                        <tr>
-                            <td>${item.product_name}</td>
-                            <td>${item.price_achat}</td>
-                            <td>${item.quantite}</td>
-                            <td>${itemTotal.toFixed(2)}</td>
-                        </tr>`;
-                });
-                
-                detailsHtml += `
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                                <td><strong>${totalAmount.toFixed(2)}</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-                
-                // Append modal to body and show it
-                $('body').append(detailsHtml);
-                $('#ModalAchatDetails').modal('show');
-                
-                // Remove modal from DOM when hidden
-                $('#ModalAchatDetails').on('hidden.bs.modal', function() {
-                    $(this).remove();
-                });
-            } else {
-                new AWN().alert(response.message, {durations: {alert: 5000}});
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error loading details:', error);
-            new AWN().alert('Error loading details. Please try again.', {durations: {alert: 5000}});
-        }
     });
-});
 });

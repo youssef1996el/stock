@@ -11,7 +11,7 @@
      var getProduct     = "{{url('getProduct')}}";
      var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
      var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
-     var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
+     var GetAchatList   = "{{url('getAchatList')}}";
 </script>
 <style>
     .table-responsive {
