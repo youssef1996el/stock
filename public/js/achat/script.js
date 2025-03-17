@@ -892,4 +892,31 @@ $(document).on('click', '.view-achat-details', function(e) {
         }
     });
 });
+
+    $('#BtnSaveAchat').off('click').on('click', function(e) {
+        e.preventDefault();
+        let Fournisseur = $('#DropDown_fournisseur').val();
+        if(Fournisseur == 0) {
+            new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: StoreAchat,
+            data:
+            {
+                id_fournisseur : Fournisseur,
+                '_token'       : csrf_token
+            },
+            dataType: "json",
+            success: function (response) 
+            {
+                if(response.status == 200)
+                {
+                    
+                }
+            }
+        });
+    });
+
 });

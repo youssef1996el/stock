@@ -5,13 +5,14 @@
 <!-- Custom JS -->
 <script src="{{asset('js/achat/script.js')}}"></script>
 <script>
-     var getSubcategories_url = "{{ url('getSubcategories') }}";
-     var getRayons_url  = "{{ url('getRayons') }}";
-     var csrf_token     = "{{csrf_token()}}";
-     var getProduct     = "{{url('getProduct')}}";
-     var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
-     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
-     var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
+    var getSubcategories_url = "{{ url('getSubcategories') }}";
+    var getRayons_url  = "{{ url('getRayons') }}";
+    var csrf_token     = "{{csrf_token()}}";
+    var getProduct     = "{{url('getProduct')}}";
+    var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
+    var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
+    var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
+    var StoreAchat     = "{{url('StoreAchat')}}";
 </script>
 <style>
     .table-responsive {
@@ -177,7 +178,7 @@
                     </div>
                     <div class="modal-footer text-end">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <button type="button" class="btn btn-primary" id="BtnAddLocal">Sauvegarder</button>
+                        <button type="button" class="btn btn-primary" id="BtnSaveAchat">Sauvegarder</button>
                     </div>
                 </div>
             </div>
