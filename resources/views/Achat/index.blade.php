@@ -2,7 +2,6 @@
 
 @section('dashboard')
 
-
 <!-- Custom JS -->
 <script src="{{asset('js/achat/script.js')}}"></script>
 <script>
@@ -12,16 +11,31 @@
      var getProduct     = "{{url('getProduct')}}";
      var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
      var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
+     var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
 </script>
 <style>
     .table-responsive {
         overflow-x: hidden;
     }
     .TableProductAchat tbody tr:hover {
-    
-    cursor: pointer; 
-}
-
+        cursor: pointer; 
+    }
+    .dataTables-custom-controls {
+        margin-bottom: 15px;
+    }
+    .dataTables-custom-controls label {
+        margin-bottom: 0;
+    }
+    .dataTables-custom-controls .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
+    .dataTables-custom-controls .form-select {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
 </style>
 
 <div class="content-page">
@@ -54,23 +68,21 @@
                                 </button>
                             </div>
                             
-                            <!-- Local list -->
+                            <!-- Achat list -->
                             <div class="table-responsive">
-                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
-                                    <table class="table datatable dataTable no-footer TableAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Fournisseur</th>
-                                                <th scope="col">Créé par</th>
-                                                <th scope="col">Créé le</th>
-                                                <th scope="col">Action</th>    
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Data will be loaded by DataTables -->
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="table datatable TableAchat">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Fournisseur</th>
+                                            <th scope="col">Créé par</th>
+                                            <th scope="col">Créé le</th>
+                                            <th scope="col">Action</th>    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be loaded by DataTables -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -113,22 +125,20 @@
                                     <div class="card text-start">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
-                                                    <table class="table table-striped  datatable dataTable no-footer TableProductAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                        <thead class="thead-light">
-                                                            <tr>
-                                                                <th scope="col">Produit</th>
-                                                                <th scope="col">Quantité</th>
-                                                                <th scope="col">Seuil</th>
-                                                                <th scope="col">Prix Achat</th> 
-                                                                <th scope="col">Local</th> 
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <!-- Data will be loaded by DataTables -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                <table class="table table-striped datatable TableProductAchat">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th scope="col">Produit</th>
+                                                            <th scope="col">Quantité</th>
+                                                            <th scope="col">Seuil</th>
+                                                            <th scope="col">Prix Achat</th> 
+                                                            <th scope="col">Local</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Data will be loaded by DataTables -->
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -145,28 +155,23 @@
                                 <div class="form-group mt-3">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
-                                                <table class="table table-striped datatable dataTable no-footer TableAmpAchat" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th scope="col">Produit</th>
-                                                            <th scope="col">Prix Achat</th>
-                                                            <th scope="col">Quantité</th>
-                                                            <th scope="col">Fournisseur</th>
-                                                            <th scope="col">Action</th>    
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Data will be loaded by DataTables -->
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <table class="table table-striped datatable TableAmpAchat">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col">Produit</th>
+                                                        <th scope="col">Prix Achat</th>
+                                                        <th scope="col">Quantité</th>
+                                                        <th scope="col">Fournisseur</th>
+                                                        <th scope="col">Action</th>    
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Data will be loaded by DataTables -->
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
-
-                           
-                            
                            </div>
                         </div>
                     </div>
@@ -191,6 +196,7 @@
 
                         <!-- Add Product Form -->
                         <form id="FormAddProduct">
+                            @csrf <!-- Add CSRF token -->
                             <!-- Basic Product Information -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -334,6 +340,7 @@
                         <div class="row">
                             <ul class="validationEditLocal"></ul>
                             <form action="{{ url('updateLocal') }}" id="FormUpdateLocal">
+                                @csrf <!-- Add CSRF token -->
                                 <!-- Name -->
                                 <div class="row">
                                     <div class="col-md-12">
