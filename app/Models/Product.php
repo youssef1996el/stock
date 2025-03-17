@@ -84,7 +84,7 @@ class Product extends Model
      * @param string $subcategoryName The subcategory name
      * @return string The generated code article
      */
-    public static function generateCodeArticle($categoryName, $subcategoryName)
+    /* public static function generateCodeArticle($categoryName, $subcategoryName)
     {
         // Extract first 3 letters of category and subcategory
         $categoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $categoryName), 0, 3));
@@ -113,7 +113,48 @@ class Product extends Model
         
         // Return the complete code
         return $prefix . $formattedNumber;
+    } */
+    public static function generateCodeArticle($categoryName, $subcategoryName)
+{
+    // Clean up the category and subcategory names and get their first 3 letters
+    $categoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $categoryName), 0, 3));
+    $subcategoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $subcategoryName), 0, 3));
+
+    // Combine the prefixes to form the beginning of the code
+    $prefix = $categoryPrefix . $subcategoryPrefix;
+
+    // Get the latest product code with this prefix
+    $latestCode = self::where('code_article', 'like', $prefix . '%')
+        ->orderBy('code_article', 'desc')
+        ->first();
+
+    // If no products exist with this prefix, start with '001'
+    // Otherwise, increment the last number in the sequence
+    $nextNumber = 1;
+    if ($latestCode) {
+        // Extract the numeric part from the last product code
+        if (preg_match('/(\d+)$/', $latestCode->code_article, $matches)) {
+            $nextNumber = intval($matches[1]) + 1;
+        }
     }
+
+    // Format the next number as a 3-digit number
+    $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+    // Construct the new product code
+    $newCode = $prefix . $formattedNumber;
+
+    // Keep generating new codes until we find a unique one
+    while (self::where('code_article', $newCode)->exists()) {
+        $nextNumber++;
+        $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        $newCode = $prefix . $formattedNumber;
+    }
+
+    return $newCode;
+}
+
+    
 
     /**
      * Generate the emplacement string.
