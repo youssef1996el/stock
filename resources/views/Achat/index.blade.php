@@ -5,6 +5,7 @@
 <!-- Custom JS -->
 <script src="{{asset('js/achat/script.js')}}"></script>
 <script>
+<<<<<<< HEAD
     var getSubcategories_url = "{{ url('getSubcategories') }}";
     var getRayons_url  = "{{ url('getRayons') }}";
     var csrf_token     = "{{csrf_token()}}";
@@ -13,6 +14,15 @@
     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
     var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
     var StoreAchat     = "{{url('StoreAchat')}}";
+=======
+     var getSubcategories_url = "{{ url('getSubcategories') }}";
+     var getRayons_url  = "{{ url('getRayons') }}";
+     var csrf_token     = "{{csrf_token()}}";
+     var getProduct     = "{{url('getProduct')}}";
+     var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
+     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
+     var GetAchatList   = "{{url('getAchatList')}}";
+>>>>>>> 95264044d5449bde5e9966f8df21fe498ac80c51
 </script>
 <style>
     .table-responsive {

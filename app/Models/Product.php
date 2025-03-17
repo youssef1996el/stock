@@ -78,83 +78,51 @@ class Product extends Model
     }
 
     /**
-     * Generate a code article based on category and subcategory.
-     *
+     * Generate a unique code article based on category and subcategory names
+     * Format: first 3 letters of category + first 3 letters of subcategory + sequential number (001, 002, etc.)
+     * The sequence number continues across all products regardless of category or family
+     * 
      * @param string $categoryName The category name
-     * @param string $subcategoryName The subcategory name
+     * @param string $subcategoryName The subcategory (family) name
      * @return string The generated code article
      */
-    /* public static function generateCodeArticle($categoryName, $subcategoryName)
+    public static function generateCodeArticle($categoryName, $subcategoryName)
     {
-        // Extract first 3 letters of category and subcategory
+        // Clean up the category and subcategory names and get their first 3 letters
         $categoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $categoryName), 0, 3));
         $subcategoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $subcategoryName), 0, 3));
-        
-        // Combine prefixes
+
+        // Combine the prefixes to form the beginning of the code
         $prefix = $categoryPrefix . $subcategoryPrefix;
+
+        // Find the last created product to get the highest sequence number globally
+        $lastProduct = self::orderBy('id', 'desc')->first();
         
-        // Get the latest code with this prefix
-        $latestCode = self::where('code_article', 'like', $prefix . '%')
-            ->orderBy('code_article', 'desc')
-            ->first();
-        
-        // If no codes exist with this prefix, start with 001
-        // Otherwise, increment the last number
+        // Start with 001 if no products exist
         $nextNumber = 1;
-        if ($latestCode) {
-            // Extract the number from the end of the code
-            if (preg_match('/(\d+)$/', $latestCode->code_article, $matches)) {
+        
+        if ($lastProduct && !empty($lastProduct->code_article)) {
+            // Extract the numeric part from the last product code (last 3 digits)
+            if (preg_match('/(\d{3})$/', $lastProduct->code_article, $matches)) {
                 $nextNumber = intval($matches[1]) + 1;
             }
         }
-        
-        // Format the number as a 3-digit string with leading zeros
+
+        // Format the next number as a 3-digit number with leading zeros
         $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-        
-        // Return the complete code
-        return $prefix . $formattedNumber;
-    } */
-    public static function generateCodeArticle($categoryName, $subcategoryName)
-{
-    // Clean up the category and subcategory names and get their first 3 letters
-    $categoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $categoryName), 0, 3));
-    $subcategoryPrefix = strtolower(substr(preg_replace('/\s+/', '', $subcategoryName), 0, 3));
 
-    // Combine the prefixes to form the beginning of the code
-    $prefix = $categoryPrefix . $subcategoryPrefix;
-
-    // Get the latest product code with this prefix
-    $latestCode = self::where('code_article', 'like', $prefix . '%')
-        ->orderBy('code_article', 'desc')
-        ->first();
-
-    // If no products exist with this prefix, start with '001'
-    // Otherwise, increment the last number in the sequence
-    $nextNumber = 1;
-    if ($latestCode) {
-        // Extract the numeric part from the last product code
-        if (preg_match('/(\d+)$/', $latestCode->code_article, $matches)) {
-            $nextNumber = intval($matches[1]) + 1;
-        }
-    }
-
-    // Format the next number as a 3-digit number
-    $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-
-    // Construct the new product code
-    $newCode = $prefix . $formattedNumber;
-
-    // Keep generating new codes until we find a unique one
-    while (self::where('code_article', $newCode)->exists()) {
-        $nextNumber++;
-        $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        // Construct the new product code
         $newCode = $prefix . $formattedNumber;
+
+        // Keep generating new codes until we find a unique one
+        while (self::where('code_article', $newCode)->exists()) {
+            $nextNumber++;
+            $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+            $newCode = $prefix . $formattedNumber;
+        }
+
+        return $newCode;
     }
-
-    return $newCode;
-}
-
-    
 
     /**
      * Generate the emplacement string.

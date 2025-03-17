@@ -145,6 +145,7 @@ class AchatController extends Controller
         
     }
 
+
     public function Store(Request $request)
     {
         $userId = Auth::id();
@@ -208,7 +209,9 @@ class AchatController extends Controller
             'status'  => 200,
             'message' => 'Purchase added successfully'
         ]);
-    }
+    }  
 
 
 }
+
+
