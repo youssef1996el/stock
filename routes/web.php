@@ -101,7 +101,7 @@ Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update
 Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
 
 // achat routes
-Route::get('Achat'                ,[AchatController::class,'index'                     ]);
+Route::get('Achat',[AchatController::class,'index']);
 
 
 
