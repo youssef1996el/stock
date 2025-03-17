@@ -109,9 +109,9 @@ Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFour
 
 
 
-// Route::get('/productlist'           , function () {
-//     return view('template.productlist');
-// });
+Route::get('/productlist'           , function () {
+    return view('template.productlist');
+});
 /* Route::get('/adduser', function () {
     return view('Users.create');
 }); */
