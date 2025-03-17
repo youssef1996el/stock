@@ -161,6 +161,7 @@ $(document).ready(function () {
             );
         });
     }
+<<<<<<< HEAD
 
     function initializeTableTmpAchat(selector, IdFournisseur) {
         // Get the parent container for proper organization
@@ -363,8 +364,24 @@ $(document).ready(function () {
                 
                 // Show error message
                 new AWN().warning('Unable to load data. Please try again.', {durations: {warning: 5000}});
+=======
+    
+   
+        let Fournisseur = 0;
+        var tabletmpAchat = new DataTable('.TableAmpAchat');
+
+        $('#DropDown_fournisseur').on('change', function() 
+        {
+            Fournisseur = $('#DropDown_fournisseur').val();
+            if (Fournisseur == 0) {
+                new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
+                return false;
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
             }
+
+        
         });
+<<<<<<< HEAD
     }
 
     $('#DropDown_fournisseur').on('change', function() {
@@ -386,11 +403,20 @@ $(document).ready(function () {
         tableContainer.find('.dataTables-custom-controls').remove();
         
         // Properly destroy the DataTable if it exists
+=======
+
+
+
+
+    // Function to initialize TableProduct DataTable
+    function initializeTableProduct(selector, data) {
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
         if ($.fn.DataTable.isDataTable(selector)) {
             $(selector).DataTable().destroy();
             // Make sure we don't have duplicate wrappers
             tableContainer.find('.dataTables_wrapper').not(':first').remove();
         }
+<<<<<<< HEAD
         
         // Create custom controls container above the table
         var customControls = $('<div class="dataTables-custom-controls row mb-2"></div>');
@@ -422,6 +448,11 @@ $(document).ready(function () {
         
         // Initialize DataTable
         productTable = $(selector).DataTable({
+=======
+    
+
+        $(selector).DataTable({
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
             select: true,
             data: data || [],
             destroy: true,
@@ -430,6 +461,7 @@ $(document).ready(function () {
             autoWidth: false,
             dom: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>', // Only table, info and pagination
             columns: [
+<<<<<<< HEAD
                 { data: 'name', title: 'Produit', defaultContent: '' },
                 { data: 'quantite', title: 'Quantité', defaultContent: '' },
                 { data: 'seuil', title: 'Seuil', defaultContent: '' },
@@ -440,6 +472,16 @@ $(document).ready(function () {
                 if (data && data.id) {
                     $(row).attr('id', data.id); 
                 }
+=======
+                { data: 'name', title: 'Produit' },
+                { data: 'quantite', title: 'Quantité' },
+                { data: 'seuil', title: 'Seuil' },
+                { data: 'price_achat', title: 'Prix achat' },
+                { data: 'name_local', title: 'Local' }
+            ],
+            rowCallback: function(row, data, index) {
+                $(row).attr('id', data.id);
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
             },
             language: {
                 "sInfo": "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
@@ -469,6 +511,7 @@ $(document).ready(function () {
                 });
             }
         });
+<<<<<<< HEAD
     
         // Handle row click event to add item to TmpAchat
         $(selector + ' tbody').off('click', 'tr').on('click', 'tr', function(e) {
@@ -507,14 +550,52 @@ $(document).ready(function () {
         });
     }
 
+=======
+
+        
+    }
+
+    $('.TableProductAchat').on('click','tbody tr',function(e)
+    {
+        e.preventDefault();
+        let id = $(this).attr('id');
+       
+        $.ajax({
+            type: "POST",
+            url: PostInTmpAchat,
+            data: {
+                '_token': csrf_token,
+                'idproduit': id,
+                'id_fournisseur': Fournisseur,
+            },
+            dataType: "json",
+            success: function(response) {
+                
+                if (response.status == 200) {
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    
+                }
+            }
+        });
+        
+    });
+
+    // Event listener for product input search
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
     $('.input_products').on('keydown', function(e) {
         if (e.keyCode === 13) {
             let name_product = $(this).val().trim();
             let Fournisseur = $('#DropDown_fournisseur').val();
+<<<<<<< HEAD
             if(Fournisseur == 0) {
+=======
+
+            if (Fournisseur == 0) {
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
                 new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
                 return false;
             }
+
             $.ajax({
                 type: "get",
                 url: getProduct,
@@ -525,9 +606,13 @@ $(document).ready(function () {
                 success: function(response) {
                     if (response.status == 200) {
                         initializeTableProduct('.TableProductAchat', response.data);
-                        $('.input_products').val(""); 
+                        $('.input_products').val("");
                     } else {
+<<<<<<< HEAD
                         new AWN().alert("Aucun produit trouvé.", {durations: {alert: 5000}});
+=======
+                        alert("Aucun produit trouvé.");
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
                     }
                 },
                 error: function(xhr, status, error) {
@@ -537,6 +622,7 @@ $(document).ready(function () {
             });
         }
     });
+<<<<<<< HEAD
     
     // Add Product Form Submission
     $('#BtnAddProduct').on('click', function(e) {
@@ -893,4 +979,7 @@ $(document).on('click', '.view-achat-details', function(e) {
         }
     });
 });
+=======
+
+>>>>>>> fac46bdd9607a329675ff41074a3098a479d13e9
 });
