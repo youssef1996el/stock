@@ -120,78 +120,32 @@ $(document).ready(function () {
             );
         });
     }
-    function initializeTableTmpAchat(selector, IdFournisseur) {
-        // Destroy DataTable if it exists
-        if ($.fn.DataTable.isDataTable(selector)) {
-            $(selector).DataTable().clear().destroy();
-        }
     
-        // Reinitialize DataTable
-        $(selector).DataTable({
-            select: true,
-            processing: true,
-            serverSide: false,
-            destroy: true,  // Ensure old instance is removed
-            autoWidth: false, // Prevents layout issues
-            ajax: {
-                url: GetTmpAchatByFournisseur, // Replace with your actual URL
-                data: { id_fournisseur: IdFournisseur },
-                dataType: 'json',
-                type: 'GET',
-                error: function(xhr, error, code) {
-                    console.log('Error occurred: ' + error);
-                }
-            },
-            columns: [
-                { data: 'name'        , title: 'Produit' },
-                { data: 'price_achat' , title: 'Prix achat' },
-                { data: 'qte'         , title: 'Quantité' },
-                { data: 'entreprise'  , title: 'Fournisseur' },
-                { data: 'action'      , title: 'Action', orderable: false, searchable: false }
-            ],
-            rowCallback: function(row, data, index) {
-                $(row).attr('id', data.id);  // Set ID for each row
-            },
-            language: {
-                "sInfo": "",
-                "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-                "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                "sLengthMenu": "Afficher _MENU_ éléments",
-                "sLoadingRecords": "Chargement...",
-                "sProcessing": "Traitement...",
-                "sSearch": "Rechercher :",
-                "sZeroRecords": "Aucun élément correspondant trouvé",
-                "oPaginate": {
-                    "sFirst": "Premier",
-                    "sLast": "Dernier",
-                    "sNext": "Suivant",
-                    "sPrevious": "Précédent"
-                }
+   
+        let Fournisseur = 0;
+        var tabletmpAchat = new DataTable('.TableAmpAchat');
+
+        $('#DropDown_fournisseur').on('change', function() 
+        {
+            Fournisseur = $('#DropDown_fournisseur').val();
+            if (Fournisseur == 0) {
+                new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
+                return false;
             }
+
+        
         });
-    }
-    $('#DropDown_fournisseur').on('change', function() {
-        let Fournisseur = $('#DropDown_fournisseur').val();
-        if (Fournisseur == 0) {
-            new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
-            return false;
-        }
-    
-        // Ensure old DataTable is fully destroyed before reinitializing
-        if ($.fn.DataTable.isDataTable('.TableAmpAchat')) {
-            $('.TableAmpAchat').DataTable().clear().destroy();
-        }
-    
-        // Reinitialize DataTable
-        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-    });
+
+
+
+
+    // Function to initialize TableProduct DataTable
     function initializeTableProduct(selector, data) {
-        // Destroy previous DataTable if exists
         if ($.fn.DataTable.isDataTable(selector)) {
             $(selector).DataTable().clear().destroy();
         }
     
-        // Initialize DataTable
+
         $(selector).DataTable({
             select: true,
             data: data,
@@ -200,14 +154,14 @@ $(document).ready(function () {
             serverSide: false,
             autoWidth: false,
             columns: [
-                { data: 'name'        , title: 'Produit' },
-                { data: 'quantite'    , title: 'Quantité' },
-                { data: 'seuil'       , title: 'Seuil' },
-                { data: 'price_achat' , title: 'Prix achat' },
-                { data: 'name_local'  , title: 'Local' }
+                { data: 'name', title: 'Produit' },
+                { data: 'quantite', title: 'Quantité' },
+                { data: 'seuil', title: 'Seuil' },
+                { data: 'price_achat', title: 'Prix achat' },
+                { data: 'name_local', title: 'Local' }
             ],
             rowCallback: function(row, data, index) {
-                $(row).attr('id', data.id); 
+                $(row).attr('id', data.id);
             },
             language: {
                 "sInfo": "",
@@ -226,49 +180,46 @@ $(document).ready(function () {
                 }
             }
         });
-    
-        // Handle row click event to add item to TmpAchat
-        $(selector + ' tbody').off('click', 'tr').on('click', 'tr', function(e) {
-            e.preventDefault();
-            let id = $(this).attr('id');
-            let Fournisseur = $('#DropDown_fournisseur').val();
-    
-            $.ajax({
-                type: "POST",
-                url: PostInTmpAchat,
-                data: {
-                    '_token': csrf_token,
-                    'idproduit': id,
-                    'id_fournisseur': Fournisseur,
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.status == 200) {
-                        new AWN().success(response.message, {durations: {success: 5000}});
-                        
-                        // Destroy and reinitialize TableAmpAchat only ONCE after the AJAX call
-                        if ($.fn.DataTable.isDataTable('.TableAmpAchat')) {
-                            $('.TableAmpAchat').DataTable().clear().destroy();
-                        }
-                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-                    }
-                }
-            });
-        });
-    }
-            
-    
 
-    $('.input_products').on('keydown', function(e) {
         
+    }
+
+    $('.TableProductAchat').on('click','tbody tr',function(e)
+    {
+        e.preventDefault();
+        let id = $(this).attr('id');
+       
+        $.ajax({
+            type: "POST",
+            url: PostInTmpAchat,
+            data: {
+                '_token': csrf_token,
+                'idproduit': id,
+                'id_fournisseur': Fournisseur,
+            },
+            dataType: "json",
+            success: function(response) {
+                
+                if (response.status == 200) {
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    
+                }
+            }
+        });
+        
+    });
+
+    // Event listener for product input search
+    $('.input_products').on('keydown', function(e) {
         if (e.keyCode === 13) {
             let name_product = $(this).val().trim();
             let Fournisseur = $('#DropDown_fournisseur').val();
-            if(Fournisseur == 0)
-            {
-                new AWN().alert('Please selected fournisseur', {durations: {success: 5000}});
+
+            if (Fournisseur == 0) {
+                new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
                 return false;
             }
+
             $.ajax({
                 type: "get",
                 url: getProduct,
@@ -279,12 +230,13 @@ $(document).ready(function () {
                 success: function(response) {
                     if (response.status == 200) {
                         initializeTableProduct('.TableProductAchat', response.data);
-                        $('.input_products').val(""); 
+                        $('.input_products').val("");
                     } else {
-                        alert("No products found.");
+                        alert("Aucun produit trouvé.");
                     }
                 }
             });
         }
     });
+
 });
