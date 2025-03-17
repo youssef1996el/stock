@@ -111,6 +111,11 @@ $(document).ready(function () {
                         $('#edit_price_vente').val(response.price_vente);
                         $('#edit_code_barre').val(response.code_barre);
                         
+                        // Display code_article in a disabled field if you want to show it
+                        if ($('#edit_code_article').length) {
+                            $('#edit_code_article').val(response.code_article);
+                        }
+                        
                         // Set category dropdown
                         $('#edit_id_categorie').val(response.id_categorie);
                         

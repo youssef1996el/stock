@@ -248,6 +248,16 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label>Code article</label>
+                                            <input type="text" id="edit_code_article" class="form-control" disabled>
+                                            <small class="text-muted">Format: catégorie (3) + famille (3) + numéro séquentiel</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label>Unité</label>
                                             <select id="edit_id_unite" name="id_unite" class="form-control" required>
                                                 <option value="">Sélectionner une unité</option>
@@ -255,6 +265,12 @@
                                                     <option value="{{ $unite->id }}">{{ $unite->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Code barre</label>
+                                            <input type="text" id="edit_code_barre" name="code_barre" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -346,16 +362,6 @@
                                                     <option value="{{ $tva->id }}">{{ $tva->value }}%</option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Additional Information -->
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Code barre</label>
-                                            <input type="text" id="edit_code_barre" name="code_barre" class="form-control">
                                         </div>
                                     </div>
                                 </div>
