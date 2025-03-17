@@ -9,13 +9,13 @@ class LigneAchat extends Model
 {
     use HasFactory;
 
-    protected $table = 'ligne_Achat';
+    protected $table = 'ligne_achat';
 
     protected $fillable = [
         'id_user',
         'idachat',
         'idproduit',
-        'idstock',
+        
         'qte'
     ];
 

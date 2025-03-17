@@ -360,4 +360,221 @@ $(document).ready(function () {
             });
         }
     });
+
+    
+// Delete functionality
+$(document).on('click', '.btn-delete-item', function(e) {
+    e.preventDefault();
+    
+    let id = $(this).data('id');
+    let url = $(this).data('url');
+    
+    if (!id || !url) {
+        console.error('Missing id or url for delete operation');
+        return;
+    }
+    
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément?')) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                '_token': csrf_token,
+                'id': id
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.status == 200) {
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    
+                    // Refresh tables
+                    if ($(e.target).closest('.TableAmpAchat').length) {
+                        let Fournisseur = $('#DropDown_fournisseur').val();
+                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                    } else if (achatMainTable) {
+                        achatMainTable.ajax.reload();
+                    }
+                } else {
+                    new AWN().alert(response.message, {durations: {alert: 5000}});
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting item:', error);
+                new AWN().alert('Error deleting item. Please try again.', {durations: {alert: 5000}});
+            }
+        });
+    }
+});
+
+// Edit item in temporary achat table
+$(document).on('click', '.edit-tmp-achat', function(e) {
+    e.preventDefault();
+    
+    let id = $(this).data('id');
+    if (!id) {
+        console.error('Missing id for edit operation');
+        return;
+    }
+    
+    let currentQty = $(this).closest('tr').find('td:eq(2)').text().trim();
+    
+    // Use a prompt to get the new quantity
+    let newQty = prompt('Modifier la quantité:', currentQty);
+    
+    if (newQty !== null && newQty !== '' && !isNaN(newQty) && parseFloat(newQty) > 0) {
+        $.ajax({
+            type: "POST",
+            url: "updateTmpAchatQty", // Make sure this URL is defined in your routes
+            data: {
+                '_token': csrf_token,
+                'id': id,
+                'qte': newQty
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.status == 200) {
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    
+                    // Refresh the table
+                    let Fournisseur = $('#DropDown_fournisseur').val();
+                    initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                } else {
+                    new AWN().alert(response.message, {durations: {alert: 5000}});
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating quantity:', error);
+                new AWN().alert('Error updating quantity. Please try again.', {durations: {alert: 5000}});
+            }
+        });
+    } else if (newQty !== null) {
+        new AWN().alert('Veuillez saisir une quantité valide', {durations: {alert: 5000}});
+    }
+});
+
+// View Achat Details
+$(document).on('click', '.view-achat-details', function(e) {
+    e.preventDefault();
+    
+    let id = $(this).data('id');
+    if (!id) {
+        console.error('Missing id for view details operation');
+        return;
+    }
+    
+    $.ajax({
+        type: "GET",
+        url: "viewAchatDetails/" + id, // Make sure this URL is defined in your routes
+        dataType: "json",
+        success: function(response) {
+            if (response.status == 200) {
+                // Create a modal to display details
+                let detailsHtml = `
+                <div class="modal fade" id="ModalAchatDetails" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Détails de l'achat</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong>Fournisseur:</strong> ${response.achat.fournisseur}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Date:</strong> ${response.achat.created_at}</p>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Prix d'achat</th>
+                                                <th>Quantité</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>`;
+                
+                let totalAmount = 0;
+                
+                $.each(response.details, function(key, item) {
+                    let itemTotal = item.price_achat * item.quantite;
+                    totalAmount += itemTotal;
+                    
+                    detailsHtml += `
+                        <tr>
+                            <td>${item.product_name}</td>
+                            <td>${item.price_achat}</td>
+                            <td>${item.quantite}</td>
+                            <td>${itemTotal.toFixed(2)}</td>
+                        </tr>`;
+                });
+                
+                detailsHtml += `
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                                <td><strong>${totalAmount.toFixed(2)}</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                
+                // Append modal to body and show it
+                $('body').append(detailsHtml);
+                $('#ModalAchatDetails').modal('show');
+                
+                // Remove modal from DOM when hidden
+                $('#ModalAchatDetails').on('hidden.bs.modal', function() {
+                    $(this).remove();
+                });
+            } else {
+                new AWN().alert(response.message, {durations: {alert: 5000}});
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading details:', error);
+            new AWN().alert('Error loading details. Please try again.', {durations: {alert: 5000}});
+        }
+    });
+});
+
+    $('#BtnSaveAchat').off('click').on('click', function(e) {
+        e.preventDefault();
+        let Fournisseur = $('#DropDown_fournisseur').val();
+        if(Fournisseur == 0) {
+            new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: StoreAchat,
+            data:
+            {
+                id_fournisseur : Fournisseur,
+                '_token'       : csrf_token
+            },
+            dataType: "json",
+            success: function (response) 
+            {
+                if(response.status == 200)
+                {
+                    
+                }
+            }
+        });
+    });
+
+
 });

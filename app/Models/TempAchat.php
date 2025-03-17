@@ -9,7 +9,7 @@ class TempAchat extends Model
 {
     use HasFactory;
 
-    protected $table = 'temp_Achat';
+    protected $table = 'temp_achat';
 
     protected $fillable = [
         'id_user',

@@ -101,12 +101,20 @@ Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update
 Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
 
 
+
+Route::get('Achat',[AchatController::class,'index']); 
+Route::get('getProduct',[AchatController::class,'getProduct']); 
+Route::post('PostInTmpAchat',[AchatController::class,'PostInTmpAchat']); 
+Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFournisseur']); 
+Route::post('StoreAchat'       ,[AchatController::class,'Store']);
+
 Route::get('Achat', [AchatController::class, 'index']); 
 Route::get('getProduct', [AchatController::class, 'getProduct']); 
 Route::post('PostInTmpAchat', [AchatController::class, 'PostInTmpAchat']); 
 Route::get('GetTmpAchatByFournisseur', [AchatController::class, 'GetTmpAchatByFournisseur']);
 Route::post('updateTmpAchatQty', [AchatController::class, 'updateTmpAchatQty']);
 Route::post('deleteTmpAchat', [AchatController::class, 'deleteTmpAchat']);
+
 
 
 
