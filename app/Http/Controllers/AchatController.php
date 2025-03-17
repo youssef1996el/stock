@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TempAchat;
+use App\Models\Achat;
+use App\Models\LigneAchat;
 class AchatController extends Controller
 {
     public function index()
@@ -143,4 +145,72 @@ class AchatController extends Controller
         
     }
 
+
+    public function Store(Request $request)
+    {
+        $userId = Auth::id();
+        $fournisseur = $request->id_fournisseur;
+
+        // Retrieve temporary purchase data
+        $TempAchat = DB::table('temp_achat as t')
+            ->join('products as p', 'p.id', '=', 't.idproduit')
+            ->where('t.id_user', $userId)
+            ->where('t.id_fournisseur', $fournisseur)
+            ->select('t.id_fournisseur', 't.qte', 't.idproduit', 'p.price_achat', 
+                DB::raw('t.qte * p.price_achat as total_by_product'))
+            ->get();
+
+        if ($TempAchat->isEmpty()) {
+            return response()->json([
+                'status'  => 400,
+                'message' => 'No items found for this fournisseur'
+            ]);
+        }
+
+        // Calculate total purchase amount
+        $SumAchat = $TempAchat->sum('total_by_product');
+
+        // Create new purchase
+        $Achat = Achat::create([
+            'total'         => $SumAchat,
+            'status'        => 'In process',
+            'id_Fournisseur'=> $fournisseur,
+            'id_user'       => $userId,
+        ]);
+
+        if (!$Achat) {
+            return response()->json([
+                'status'  => 500,
+                'message' => 'Failed to create purchase record'
+            ]);
+        }
+
+        // Insert purchase details in bulk
+        $LignesAchat = [];
+        foreach ($TempAchat as $item) {
+            $LignesAchat[] = [
+                'id_user'   => $userId,
+                'idachat'   => $Achat->id,
+                'idproduit' => $item->idproduit,
+                'qte'       => $item->qte,
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ];
+        }
+
+        LigneAchat::insert($LignesAchat); // Bulk insert for better performance
+
+        // Delete temporary purchase records
+        TempAchat::where('id_user', $userId)
+            ->where('id_fournisseur', $fournisseur)
+            ->delete();
+
+        return response()->json([
+            'status'  => 200,
+            'message' => 'Purchase added successfully'
+        ]);
+    }  
+
+
 }
+
