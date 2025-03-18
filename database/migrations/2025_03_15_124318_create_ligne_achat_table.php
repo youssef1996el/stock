@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('idachat')->references('id')->on('achats')->onDelete('cascade');
             $table->foreignId('idproduit')->references('id')->on('products')->onDelete('cascade');
-            $table->foreignId('idstock')->references('id')->on('stock')->onDelete('cascade');
             $table->integer('qte');
             $table->timestamps();
         });
