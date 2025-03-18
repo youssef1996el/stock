@@ -105,6 +105,7 @@ Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destro
 Route::get('Achat',[AchatController::class,'index']); 
 Route::get('getProduct',[AchatController::class,'getProduct']); 
 Route::post('PostInTmpAchat',[AchatController::class,'PostInTmpAchat']); 
+Route::post('StoreAchat',[AchatController::class,'Store']); 
 Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFournisseur']); 
 
 

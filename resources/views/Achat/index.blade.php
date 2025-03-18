@@ -14,6 +14,7 @@
     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
     var GetAchatList   = "{{url('getAchatList')}}"; // URL pour le tableau principal
     var StoreAchat     = "{{url('StoreAchat')}}";
+    var Achat          = "{{url('Achat')}}";
 
 </script>
 <style>
@@ -77,6 +78,8 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">Fournisseur</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">status</th>
                                             <th scope="col">Créé par</th>
                                             <th scope="col">Créé le</th>
                                             <th scope="col">Action</th>    

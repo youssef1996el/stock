@@ -18,8 +18,43 @@ use App\Models\Achat;
 use App\Models\LigneAchat;
 class AchatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax())
+        {
+            $Data_Achat = DB::table('achats as a')
+            ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
+            ->join('users as u'       ,'u.id','=','a.id_user')
+            ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
+            ->get();
+            return DataTables::of($Data_Achat)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+
+                    // Edit button
+                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
+                                data-id="' . $row->id . '">
+                                <i class="fa-solid fa-pen-to-square text-primary"></i>
+                            </a>';
+                    // detail button
+                    $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 "
+                                data-id="' . $row->id . '">
+                               <i class="fa-solid fa-eye text-success"></i>
+                            </a>';
+
+                    // Delete button
+                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
+                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                title="Supprimer Catégorie">
+                                <i class="fa-solid fa-trash text-danger"></i>
+                            </a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
         $Fournisseur  = Fournisseur::all();
         $categories = Category::all();
         $subcategories = SubCategory::all();
@@ -173,7 +208,7 @@ class AchatController extends Controller
         // Create new purchase
         $Achat = Achat::create([
             'total'         => $SumAchat,
-            'status'        => 'In process',
+            'status'        => "En cours de traitement",
             'id_Fournisseur'=> $fournisseur,
             'id_user'       => $userId,
         ]);

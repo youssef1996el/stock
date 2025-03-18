@@ -179,9 +179,9 @@ $(document).ready(function () {
         
         return activeDataTables.tmpAchat;
     }
-
+    let Fournisseur = 0;
     $('#DropDown_fournisseur').on('change', function() {
-        let Fournisseur = $('#DropDown_fournisseur').val();
+         Fournisseur = $('#DropDown_fournisseur').val();
         if (Fournisseur == 0) {
             new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
             return false;
@@ -320,5 +320,82 @@ $(document).ready(function () {
                 }
             });
         }
+    });
+
+    function initializeTableAchatDataTable() {
+        try {
+            if ($.fn.DataTable.isDataTable('.TableAchat')) {
+                $('.TableAchat').DataTable().destroy();
+            }
+            
+            var TableAchat = $('.TableAchat').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: Achat,
+                    dataSrc: function (json) {
+                        setTimeout(() => {
+                            if (json.data.length === 0) {
+                                $('.paging_full_numbers').hide();
+                            }
+                        }, 100);
+                        return json.data;
+                    },
+                    error: function(xhr, error, thrown) {
+                        console.log('DataTables error: ' + error + ' ' + thrown);
+                        console.log(xhr);
+                    }
+                },
+                columns: [
+                    { data: 'entreprise'   , name: 'entreprise' },
+                    { data: 'total'         , name: 'total' },
+                    { data: 'status'        , name: 'status' },
+                    { data: 'name'          , name: 'name ' },
+                    { data: 'created_at'    , name: 'created_at' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ],
+                language: {
+                    "sInfo": "",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Error initializing DataTable:", error);
+        }
+    }
+    initializeTableAchatDataTable();
+    $('#BtnSaveAchat').on('click',function(e)
+    {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: StoreAchat,
+            data: 
+            {
+                '_token'       : csrf_token,
+                id_fournisseur : Fournisseur,
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 200){
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    initializeTableAchatDataTable();
+                    $('#ModalAddAchat').modal("hide");
+
+                }
+            }
+        });
     });
 });
