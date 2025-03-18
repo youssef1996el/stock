@@ -176,9 +176,24 @@ $(document).ready(function () {
                 }
             }
         });
+
+        $(selector + ' tbody').off('click','tr .EditTmp');
+
+        $(selector + ' tbody').on('click','tr .EditTmp',function(e)
+        {
+            e.preventDefault();
+            
+            let IdTmp = $(this).attr('data-id');
+            let Qtetmp = $(this).closest('tr').find('td:eq(2)').text();
+            $('#ModalEditQteTmp').modal('show');
+            $('#BtnUpdateQteTmp').attr('data-id',IdTmp); 
+            $('#QteTmp').val(Qtetmp);   
+        })
+        
         
         return activeDataTables.tmpAchat;
     }
+
     let Fournisseur = 0;
     $('#DropDown_fournisseur').on('change', function() {
          Fournisseur = $('#DropDown_fournisseur').val();
@@ -371,11 +386,15 @@ $(document).ready(function () {
                     }
                 }
             });
+
         } catch (error) {
             console.error("Error initializing DataTable:", error);
         }
     }
     initializeTableAchatDataTable();
+    
+   
+
     $('#BtnSaveAchat').on('click',function(e)
     {
         e.preventDefault();
@@ -395,6 +414,52 @@ $(document).ready(function () {
                     $('#ModalAddAchat').modal("hide");
 
                 }
+            }
+        });
+    });
+
+    $('#BtnUpdateQteTmp').off('click').on('click',function(e)
+    {
+        e.preventDefault();
+        let Qte = $('#QteTmp').val();
+        let id  = $(this).attr('data-id');
+        if(Qte <= 0)
+        {
+            new AWN().alert("La quantité doit être supérieure à zéro", {durations: {alert: 5000}});
+            return false;
+        }
+        $('#BtnUpdateQteTmp').prop('disabled', true).text('Enregistrement...');
+        $.ajax({
+            type: "POST",
+            url: UpdateQteTmp,
+            data: 
+            {
+                '_token'  : csrf_token,
+                'qte'     : Qte,
+                'id'      : id,
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#BtnUpdateQteTmp').prop('disabled', false).text('Sauvegarder');
+                if(response.status == 200){
+                    new AWN().success(response.message, {durations: {success: 5000}});
+                    initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                    $('#ModalEditQteTmp').modal('hide');
+                    
+                }
+                else if(response.status == 400)
+                {
+                  
+                    $('.validationUpdateQteTmp').html("");
+                    $('.validationUpdateQteTmp').addClass('alert alert-danger');
+                    $.each(response.errors, function(key, list_err) {
+                        $('.validationUpdateQteTmp').append('<li>' + list_err + '</li>');
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                
+                new AWN().alert("Impossible modifier quantité", {durations: {alert: 5000}});
             }
         });
     });

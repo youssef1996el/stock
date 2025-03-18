@@ -15,6 +15,7 @@
     var GetAchatList   = "{{url('getAchatList')}}"; // URL pour le tableau principal
     var StoreAchat     = "{{url('StoreAchat')}}";
     var Achat          = "{{url('Achat')}}";
+    var UpdateQteTmp          = "{{url('UpdateQteTmp')}}";
 
 </script>
 <style>
@@ -334,41 +335,38 @@
             </div>
         </div>
 
-        <!-- Modal Modifier le Local -->
-        <div class="modal fade" id="ModalEditLocal" tabindex="-1" aria-labelledby="ModalEditLocalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+        
+
+
+        
+        
+        <!-- Modal -->
+        <div class="modal fade" id="ModalEditQteTmp" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="background-color: ##dee8f0 !important">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalEditLocalLabel">Modifier le local</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        <h5 class="modal-title text-uppercase" id="modalTitleId">
+                            Modifier quantité
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <ul class="validationEditLocal"></ul>
-                            <form action="{{ url('updateLocal') }}" id="FormUpdateLocal">
-                                @csrf <!-- Jeton CSRF -->
-                                <!-- Nom -->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Nom du local</label>
-                                            <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
-                                            @error('name')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="form-group">
+                            <ul class="validationUpdateQteTmp"></ul>
+                            <label for="">Quantité :</label>
+                            <input type="number" min="1" class="form-control" id="QteTmp">
                         </div>
                     </div>
-                    <div class="modal-footer text-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <button type="button" class="btn btn-primary" id="BtnUpdateLocal">Mettre à jour</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="BtnUpdateQteTmp">Sauvegarder</button>
                     </div>
                 </div>
             </div>
         </div>
+        
+        
+        
     </div>
 </div>
 @endsection

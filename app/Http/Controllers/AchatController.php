@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TempAchat;
 use App\Models\Achat;
 use App\Models\LigneAchat;
+use Illuminate\Support\Facades\Validator;
 class AchatController extends Controller
 {
     public function index(Request $request)
@@ -161,7 +162,7 @@ class AchatController extends Controller
                     $btn = '';
 
                     // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
+                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp"
                                 data-id="' . $row->id . '">
                                 <i class="fa-solid fa-pen-to-square text-primary"></i>
                             </a>';
@@ -245,6 +246,38 @@ class AchatController extends Controller
             'message' => 'Purchase added successfully'
         ]);
     }  
+
+    public function UpdateQteTmp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'qte' => 'required',
+            
+        ], [
+            'required' => 'Le champ :attribute est requis.',
+           
+        ], [
+            'qte' => 'quantité',
+           
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ], 400); // تأكد من وضع كود الحالة HTTP هنا
+        }
+        $TempAchat = TempAchat::where('id',$request->id)->update([
+            'qte'   => $request->qte,
+        ]);
+        if($TempAchat)
+        {
+            return response()->json([
+                'status'    => 200,
+                'meesage'   => 'Mise à jour effectuée avec succès.'
+            ]);
+        }
+        
+    }
 
 
 }
