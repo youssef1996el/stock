@@ -6,15 +6,15 @@
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">Dashboard</h4>
+                    <h4 class="fs-18 fw-semibold m-0">Tableau de bord</h4>
                 </div>
             </div>
 
-            <!-- Start Main Widgets -->
+            <!-- Début des widgets principaux -->
             <div class="row">
                 <div class="col-md-6 col-lg-4 col-xl">
                     <div class="card">
@@ -32,7 +32,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <p class="mb-0 text-dark fs-15">Total Customers</p>
+                                    <p class="mb-0 text-dark fs-15">Total clients</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center">
@@ -40,7 +40,7 @@
                                     <div class="text-center">
                                         <span class="text-primary fs-14"><i
                                                 class="mdi mdi-trending-up fs-14"></i> 12.5%</span>
-                                        <p class="text-dark fs-13 mb-0">Last 7 days</p>
+                                        <p class="text-dark fs-13 mb-0">7 derniers jours</p>
                                     </div>
                                 </div>
 
@@ -65,7 +65,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <p class="mb-0 text-dark fs-15">Task Pending</p>
+                                    <p class="mb-0 text-dark fs-15">Tâches en attente</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center">
@@ -73,7 +73,7 @@
                                     <div class="text-center">
                                         <span class="text-danger fs-14 me-2"><i
                                                 class="mdi mdi-trending-down fs-14"></i> 1.5%</span>
-                                        <p class="text-dark fs-13 mb-0">Last 7 days</p>
+                                        <p class="text-dark fs-13 mb-0">7 derniers jours</p>
                                     </div>
                                 </div>
 
@@ -98,7 +98,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <p class="mb-0 text-dark fs-15">Total Deals</p>
+                                    <p class="mb-0 text-dark fs-15">Total affaires</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center">
@@ -106,7 +106,7 @@
                                     <div class="text-center">
                                         <span class="text-primary fs-14 me-2"><i
                                                 class="mdi mdi-trending-up fs-14"></i> 12.8%</span>
-                                        <p class="text-dark fs-13 mb-0">Last 7 days</p>
+                                        <p class="text-dark fs-13 mb-0">7 derniers jours</p>
                                     </div>
                                 </div>
 
@@ -131,7 +131,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <p class="mb-0 text-dark fs-15">Total Revenue</p>
+                                    <p class="mb-0 text-dark fs-15">Revenu total</p>
                                 </div>
 
 
@@ -141,7 +141,7 @@
                                     <div class="text-muted">
                                         <span class="text-danger fs-14 me-2"><i
                                                 class="mdi mdi-trending-down fs-14"></i> 18%</span>
-                                        <p class="text-dark fs-13 mb-0">Last 7 days</p>
+                                        <p class="text-dark fs-13 mb-0">7 derniers jours</p>
                                     </div>
                                 </div>
 
@@ -170,7 +170,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <p class="mb-0 text-dark fs-15">Conversion Rate</p>
+                                    <p class="mb-0 text-dark fs-15">Taux de conversion</p>
                                 </div>
 
 
@@ -180,7 +180,7 @@
                                     <div class="text-muted">
                                         <span class="text-primary fs-14 me-2"><i
                                                 class="mdi mdi-trending-up fs-14"></i> 5.8%</span>
-                                        <p class="text-dark fs-13 mb-0">Last 7 days</p>
+                                        <p class="text-dark fs-13 mb-0">7 derniers jours</p>
                                     </div>
                                 </div>
 
@@ -190,26 +190,26 @@
                 </div>
 
             </div>
-            <!-- End Main Widgets -->
+            <!-- Fin des widgets principaux -->
 
-            <!-- start row -->
+            <!-- début ligne -->
             <div class="row">
 
                 <div class="col-md-12 col-xl-8">
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Sales Overview</h5>
+                                <h5 class="card-title mb-0">Aperçu des ventes</h5>
 
                                 <div class="ms-auto">
                                     <button
                                         class="btn btn-sm bg-light border dropdown-toggle fw-medium"
                                         type="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">This Month<i
+                                        aria-expanded="false">Ce mois-ci<i
                                             class="mdi mdi-chevron-down ms-1 fs-14"></i></button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">This Month</a>
-                                        <a class="dropdown-item" href="#">Last Month</a>
+                                        <a class="dropdown-item" href="#">Ce mois-ci</a>
+                                        <a class="dropdown-item" href="#">Mois dernier</a>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Sales Pipeline</h5>
+                                <h5 class="card-title mb-0">Pipeline des ventes</h5>
                             </div>
                         </div>
 
@@ -237,7 +237,7 @@
                                     <div class="d-flex justify-content-between align-items-center p-1">
                                         <div>
                                             <i class="mdi mdi-circle fs-12 align-middle me-1 text-success"></i>
-                                            <span class="align-middle fw-semibold">Won</span>
+                                            <span class="align-middle fw-semibold">Gagné</span>
                                         </div>
                                         <span class="fw-medium text-muted float-end"><i
                                                 class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>12.48%</span>
@@ -247,7 +247,7 @@
                                         <div>
                                             <i class="mdi mdi-circle fs-12 align-middle me-1"
                                                 style="color: #522c8f;"></i>
-                                            <span class="align-middle fw-semibold">Discovery</span>
+                                            <span class="align-middle fw-semibold">Découverte</span>
                                         </div>
                                         <span class="fw-medium text-muted float-end"><i
                                                 class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>5.23%</span>
@@ -256,7 +256,7 @@
                                     <div class="d-flex justify-content-between align-items-center p-1">
                                         <div>
                                             <i class="mdi mdi-circle fs-12 align-middle me-1 text-warning"></i>
-                                            <span class="align-middle fw-semibold">Undiscovery</span>
+                                            <span class="align-middle fw-semibold">Non découvert</span>
                                         </div>
                                         <span class="fw-medium text-muted float-end"><i
                                                 class="mdi mdi-arrow-up text-success align-middle fs-14 me-1"></i>15.58%</span>
@@ -271,16 +271,16 @@
 
 
             </div>
-            <!-- end start -->
+            <!-- fin début -->
 
-            <!-- Start Monthly Sales -->
+            <!-- Début des ventes mensuelles -->
             <div class="row">
 
                 <div class="col-md-6 col-xl-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Tasks List</h5>
+                                <h5 class="card-title mb-0">Liste des tâches</h5>
                             </div>
                         </div>
 
@@ -295,14 +295,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div>
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Plan Product Launch Event</h6>
-                                                    <p class="text-muted mb-0 fs-13">Coordinate with the event planning with team</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Planifier l'événement de lancement du produit</h6>
+                                                    <p class="text-muted mb-0 fs-13">Coordonner la planification de l'événement avec l'équipe</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -319,14 +319,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div>
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Prepare Monthly Sales Report</h6>
-                                                    <p class="text-muted mb-0 fs-13">Analyze sales trends and compile data</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Préparer le rapport mensuel des ventes</h6>
+                                                    <p class="text-muted mb-0 fs-13">Analyser les tendances de vente et compiler les données</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="Edit" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="Edit" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="Delete" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="Delete" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -343,14 +343,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div>
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Organize Team Meeting</h6>
-                                                    <p class="text-muted mb-0 fs-13">Set up a recurring weekly meeting</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Organiser une réunion d'équipe</h6>
+                                                    <p class="text-muted mb-0 fs-13">Mettre en place une réunion hebdomadaire récurrente</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="Edit" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="Edit" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="Delete" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="Delete" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -367,14 +367,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div> 
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Sales Accounting</h6> 
-                                                    <p class="text-muted mb-0 fs-13">Meeting for the sales team regarding growth</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Comptabilité des ventes</h6> 
+                                                    <p class="text-muted mb-0 fs-13">Réunion pour l'équipe des ventes concernant la croissance</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -391,14 +391,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div> 
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update User Database</h6>
-                                                    <p class="text-muted mb-0 fs-13">Hando project s2 to amazon cloud database setup</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Mettre à jour la base de données utilisateurs</h6>
+                                                    <p class="text-muted mb-0 fs-13">Configuration de la base de données cloud Amazon pour le projet Hando s2</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -415,14 +415,14 @@
                                         <div class="flex-fill w-100">
                                             <div class="d-flex align-items-start justify-content-between gap-1">
                                                 <div> 
-                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Update Front-end project UI</h6>
-                                                    <p class="text-muted mb-0 fs-13">For the handover of the project, update the new UI design</p>
+                                                    <h6 class="d-block fw-medium mb-1 text-dark fs-15">Mettre à jour l'interface du projet front-end</h6>
+                                                    <p class="text-muted mb-0 fs-13">Pour la livraison du projet, mettre à jour la nouvelle interface utilisateur</p>
                                                 </div>
                                                 <div class="d-flex gap-1"> 
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                     </a>
-                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    <a aria-label="anchor" class="btn btn-icon btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                     </a>
                                                 </div>
@@ -441,7 +441,7 @@
                     <div class="card overflow-hidden">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Leads Overview</h5>
+                                <h5 class="card-title mb-0">Aperçu des prospects</h5>
                             </div>
                         </div>
 
@@ -456,14 +456,14 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Latest transactions</h5>
+                                <h5 class="card-title mb-0">Dernières transactions</h5>
                             </div>
                         </div>
 
                         <div class="card-body">
                             <ul class="list-group list-group-flush list-group-no-gutters">
 
-                                <!-- List Item -->
+                                <!-- Élément de liste -->
                                 <li class="list-group-item">
                                     <div class="d-flex">
 
@@ -474,15 +474,14 @@
                                                 <img src=""
                                                     class="avatar avatar-sm rounded-circle">
                                             </div>
-                                            <!-- End Avatar -->
+                                            <!-- Fin Avatar -->
                                         </div>
 
                                         <div class="flex-grow-1 ms-3 align-content-center">
                                             <div class="row">
                                                 <div class="col-7 col-md-5 order-md-1">
                                                     <h6 class="mb-1 text-dark fs-15">Bob Dean</h6>
-                                                    <span class="fs-14 text-muted">Transfer to bank
-                                                        account</span>
+                                                    <span class="fs-14 text-muted">Transfert vers compte bancaire</span>
                                                 </div>
 
                                                 <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
@@ -492,17 +491,17 @@
 
                                                 <div class="col-auto col-md-3 order-md-2 align-self-center">
                                                     <span
-                                                        class="badge bg-warning-subtle text-warning fw-semibold rounded-pill">Pending</span>
+                                                        class="badge bg-warning-subtle text-warning fw-semibold rounded-pill">En attente</span>
                                                 </div>
                                             </div>
-                                            <!-- End Row -->
+                                            <!-- Fin Ligne -->
                                         </div>
 
                                     </div>
                                 </li>
-                                <!-- End List Item -->
+                                <!-- Fin Élément de liste -->
 
-                                <!-- List Item -->
+                                <!-- Élément de liste -->
                                 <li class="list-group-item">
                                     <div class="d-flex">
 
@@ -513,37 +512,37 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                                     viewBox="0 0 24 24">
                                                     <path fill="#2786f1"
-                                                        d="M15.194 7.57c.487-.163 1.047-.307 1.534-.451c-1.408-.596-3.176-1.227-4.764-1.625c-.253.073-1.01.271-1.534.434c.541.162 2.328.577 4.764 1.642m-8.896 6.785c.577.343 1.19.812 1.786 1.209c3.952-3.068 7.85-5.432 12.127-6.767c-.596-.307-1.119-.578-1.787-.902c-2.562.65-6.947 2.4-12.126 6.46m-.758-6.46c-2.112.974-4.331 2.31-5.54 3.085c.433.199.866.361 1.461.65c2.671-1.805 4.764-2.905 5.594-3.266c-.595-.217-1.154-.361-1.515-.47zm8.066.234c-.686-.379-3.068-1.263-4.71-1.642c-.487.18-1.173.451-1.642.65c.595.162 2.815.758 4.71 1.714c.487-.235 1.173-.523 1.642-.722m-3.374 1.552c-.56-.27-1.173-.523-1.643-.74c-1.425.704-3.284 1.769-5.63 3.447c.505.27 1.047.595 1.624.92c1.805-1.335 3.627-2.598 5.649-3.627m1.732 8.825c3.79-3.249 9.113-6.407 12.036-7.544a48 48 0 0 0-1.949-1.155c-3.771 1.246-8.174 4.007-12.108 7.129c.667.505 1.371 1.028 2.02 1.57zm2.851-.235h-.108l-.18-.27h-.109v.27h-.072v-.596h.27c.055 0 .109 0 .145.036c.054.019.072.073.072.127c0 .108-.09.162-.198.162zm-.289-.343c.09 0 .199.018.199-.09c0-.072-.072-.09-.144-.09h-.163v.18zm-.523.036c0-.289.235-.523.541-.523s.542.234.542.523a.543.543 0 0 1-.542.542a.53.53 0 0 1-.54-.542m.107 0c0 .235.199.433.451.433a.424.424 0 1 0 0-.848c-.27 0-.45.199-.45.415" />
+                                                        d="M15.194 7.57c.487-.163 1.047-.307 1.534-.451c-1.408-.596-3.176-1.227-4.764-1.625c-.253.073-1.01.271-1.534.434c.541.162 2.328.577 4.764 1.642m-8.896 6.785c.577.343 1.19.812 1.786 1.209c3.952-3.068 7.85-5.432 12.127-6.767c-.596-.307-1.119-.578-1.787-.902c-2.562.65-6.947 2.4-12.126 6.46m-.758-6.46c-2.112.974-4.331 2.31-5.54 3.085c.433.199.866.361 1.461.65c2.671-1.805 4.764-2.905 5.594-3.266c-.595-.217-1.154-.361-1.515-.47zm8.066.234c-.686-.379-3.068-1.263-4.71-1.642c-.487 .18-1.173.451-1.642.65c.595.162 2.815.758 4.71 1.714c.487-.235 1.173-.523 1.642-.722m-3.374 1.552c-.56-.27-1.173-.523-1.643-.74c-1.425.704-3.284 1.769-5.63 3.447c.505.27 1.047.595 1.624.92c1.805-1.335 3.627-2.598 5.649-3.627m1.732 8.825c3.79-3.249 9.113-6.407 12.036-7.544a48 48 0 0 0-1.949-1.155c-3.771 1.246-8.174 4.007-12.108 7.129c.667.505 1.371 1.028 2.02 1.57zm2.851-.235h-.108l-.18-.27h-.109v.27h-.072v-.596h.27c.055 0 .109 0 .145.036c.054.019.072.073.072.127c0 .108-.09.162-.198.162zm-.289-.343c.09 0 .199.018.199-.09c0-.072-.072-.09-.144-.09h-.163v.18zm-.523.036c0-.289.235-.523.541-.523s.542.234.542.523a.543.543 0 0 1-.542.542a.53.53 0 0 1-.54-.542m.107 0c0 .235.199.433.451.433a.424.424 0 1 0 0-.848c-.27 0-.45.199-.45.415" />
                                                 </svg>
                                             </div>
-                                            <!-- End Avatar -->
+                                            <!-- Fin Avatar -->
                                         </div>
 
                                         <div class="flex-grow-1 ms-3 align-content-center">
                                             <div class="row">
                                                 <div class="col-7 col-md-5 order-md-1">
                                                     <h6 class="mb-1 text-dark fs-15">Bank of America</h6>
-                                                    <span class="fs-14 text-muted">Withdrawal to account</span>
+                                                    <span class="fs-14 text-muted">Retrait vers compte</span>
                                                 </div>
 
                                                 <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
                                                     <h6 class="mb-1 text-success fs-14">$258.00 USD</h6>
-                                                    <span class="fs-13 text-muted">26 June, 2024</span>
+                                                    <span class="fs-13 text-muted">26 Juin, 2024</span>
                                                 </div>
 
                                                 <div class="col-auto col-md-3 order-md-2 align-self-center">
                                                     <span
-                                                        class="badge bg-success-subtle text-success fw-semibold rounded-pill">Completed</span>
+                                                        class="badge bg-success-subtle text-success fw-semibold rounded-pill">Terminé</span>
                                                 </div>
                                             </div>
-                                            <!-- End Row -->
+                                            <!-- Fin Ligne -->
                                         </div>
 
                                     </div>
                                 </li>
-                                <!-- End List Item -->
+                                <!-- Fin Élément de liste -->
 
-                                <!-- List Item -->
+                                <!-- Élément de liste -->
                                 <li class="list-group-item">
                                     <div class="d-flex">
 
@@ -563,34 +562,34 @@
                                                         d="M161.32 201.55c14.832 0 26.82 11.987 26.82 26.818s-11.988 26.82-26.82 26.82c-14.831 0-26.818-11.988-26.818-26.82V201.55zm0-13.41c-14.831 0-26.818-11.988-26.818-26.82c0-14.831 11.987-26.818 26.819-26.818h67.25c14.832 0 26.82 11.987 26.82 26.819s-11.988 26.819-26.82 26.819z" />
                                                 </svg>
                                             </div>
-                                            <!-- End Avatar -->
+                                            <!-- Fin Avatar -->
                                         </div>
 
                                         <div class="flex-grow-1 ms-3 align-content-center">
                                             <div class="row">
                                                 <div class="col-7 col-md-5 order-md-1">
                                                     <h6 class="mb-1 text-dark fs-15">Slack</h6>
-                                                    <span class="fs-14 text-muted">Subscription to plan</span>
+                                                    <span class="fs-14 text-muted">Abonnement au forfait</span>
                                                 </div>
 
                                                 <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
                                                     <h6 class="mb-1 text-dark fs-14">-$154.00 USD</h6>
-                                                    <span class="fs-13 text-muted">12 May, 2024</span>
+                                                    <span class="fs-13 text-muted">12 Mai, 2024</span>
                                                 </div>
 
                                                 <div class="col-auto col-md-3 order-md-2 align-self-center">
                                                     <span
-                                                        class="badge bg-danger-subtle text-danger fw-semibold rounded-pill">Failed</span>
+                                                        class="badge bg-danger-subtle text-danger fw-semibold rounded-pill">Échoué</span>
                                                 </div>
                                             </div>
-                                            <!-- End Row -->
+                                            <!-- Fin Ligne -->
                                         </div>
 
                                     </div>
                                 </li>
-                                <!-- End List Item -->
+                                <!-- Fin Élément de liste -->
 
-                                <!-- List Item -->
+                                <!-- Élément de liste -->
                                 <li class="list-group-item">
                                     <div class="d-flex">
 
@@ -604,34 +603,34 @@
                                                         d="M18.78 12.653a5.22 5.22 0 1 0 0 10.44a5.22 5.22 0 0 0 0-10.44m-13.56 0a5.22 5.22 0 1 0 .001 10.439a5.22 5.22 0 0 0-.001-10.439m12-6.525a5.22 5.22 0 1 1-10.44 0a5.22 5.22 0 0 1 10.44 0" />
                                                 </svg>
                                             </div>
-                                            <!-- End Avatar -->
+                                            <!-- Fin Avatar -->
                                         </div>
 
                                         <div class="flex-grow-1 ms-3 align-content-center">
                                             <div class="row">
                                                 <div class="col-7 col-md-5 order-md-1">
                                                     <h6 class="mb-1 text-dark fs-15">Asana</h6>
-                                                    <span class="fs-14 text-muted">Subscription payment</span>
+                                                    <span class="fs-14 text-muted">Paiement d'abonnement</span>
                                                 </div>
 
                                                 <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
                                                     <h6 class="mb-1 text-success fs-14">$258.00 USD</h6>
-                                                    <span class="fs-13 text-muted">15 Fab, 2024</span>
+                                                    <span class="fs-13 text-muted">15 Fév, 2024</span>
                                                 </div>
 
                                                 <div class="col-auto col-md-3 order-md-2 align-self-center">
                                                     <span
-                                                        class="badge bg-success-subtle text-success fw-semibold rounded-pill">Completed</span>
+                                                        class="badge bg-success-subtle text-success fw-semibold rounded-pill">Terminé</span>
                                                 </div>
                                             </div>
-                                            <!-- End Row -->
+                                            <!-- Fin Ligne -->
                                         </div>
 
                                     </div>
                                 </li>
-                                <!-- End List Item -->
+                                <!-- Fin Élément de liste -->
 
-                                <!-- List Item -->
+                                <!-- Élément de liste -->
                                 <li class="list-group-item">
                                     <div class="d-flex">
 
@@ -645,53 +644,53 @@
                                                         d="M205.28 31.36c14.096 14.88 20.016 35.2 22.512 63.68c6.626 0 12.805 1.47 16.976 7.152l7.792 10.56A17.55 17.55 0 0 1 256 123.2v28.688c-.008 3.704-1.843 7.315-4.832 9.504C215.885 187.222 172.35 208 128 208c-49.066 0-98.19-28.273-123.168-46.608c-2.989-2.189-4.825-5.8-4.832-9.504V123.2c0-3.776 1.2-7.424 3.424-10.464l7.792-10.544c4.173-5.657 10.38-7.152 16.992-7.152c2.496-28.48 8.4-48.8 22.512-63.68C77.331 3.165 112.567.06 127.552 0H128c14.72 0 50.4 2.88 77.28 31.36m-77.264 47.376c-3.04 0-6.544.176-10.272.544c-1.312 4.896-3.248 9.312-6.08 12.128c-11.2 11.2-24.704 12.928-31.936 12.928c-6.802 0-13.927-1.42-19.744-5.088c-5.502 1.808-10.786 4.415-11.136 10.912c-.586 12.28-.637 24.55-.688 36.824c-.026 6.16-.05 12.322-.144 18.488c.024 3.579 2.182 6.903 5.44 8.384C79.936 185.92 104.976 192 128.016 192c23.008 0 48.048-6.08 74.512-18.144c3.258-1.48 5.415-4.805 5.44-8.384c.317-18.418.062-36.912-.816-55.312h.016c-.342-6.534-5.648-9.098-11.168-10.912c-5.82 3.652-12.927 5.088-19.728 5.088c-7.232 0-20.72-1.728-31.936-12.928c-2.832-2.816-4.768-7.232-6.08-12.128a106 106 0 0 0-10.24-.544m-26.941 43.93c5.748 0 10.408 4.66 10.408 10.409v19.183c0 5.749-4.66 10.409-10.408 10.409s-10.408-4.66-10.408-10.409v-19.183c0-5.748 4.66-10.408 10.408-10.408m53.333 0c5.749 0 10.409 4.66 10.409 10.409v19.183c0 5.749-4.66 10.409-10.409 10.409c-5.748 0-10.408-4.66-10.408-10.409v-19.183c0-5.748 4.66-10.408 10.408-10.408M81.44 28.32c-11.2 1.12-20.64 4.8-25.44 9.92c-10.4 11.36-8.16 40.16-2.24 46.24c4.32 4.32 12.48 7.2 21.28 7.2c6.72 0 19.52-1.44 30.08-12.16c4.64-4.48 7.52-15.68 7.2-27.04c-.32-9.12-2.88-16.64-6.72-19.84c-4.16-3.68-13.6-5.28-24.16-4.32m68.96 4.32c-3.84 3.2-6.4 10.72-6.72 19.84c-.32 11.36 2.56 22.56 7.2 27.04c10.56 10.72 23.36 12.16 30.08 12.16c8.8 0 16.96-2.88 21.28-7.2c5.92-6.08 8.16-34.88-2.24-46.24c-4.8-5.12-14.24-8.8-25.44-9.92c-10.56-.96-20 .64-24.16 4.32M128 56c-2.56 0-5.6.16-8.96.48c.32 1.76.48 3.68.64 5.76c0 1.44 0 2.88-.16 4.48c3.2-.32 5.92-.32 8.48-.32s5.28 0 8.48.32c-.16-1.6-.16-3.04-.16-4.48c.16-2.08.32-4 .64-5.76c-3.36-.32-6.4-.48-8.96-.48" />
                                                 </svg>
                                             </div>
-                                            <!-- End Avatar -->
+                                            <!-- Fin Avatar -->
                                         </div>
 
                                         <div class="flex-grow-1 ms-3 align-content-center">
                                             <div class="row">
                                                 <div class="col-7 col-md-5 order-md-1">
                                                     <h6 class="mb-1 text-dark fs-15">Github Copilot</h6>
-                                                    <span class="fs-14 text-muted">Renew A Plan</span>
+                                                    <span class="fs-14 text-muted">Renouvellement forfait</span>
                                                 </div>
 
                                                 <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
                                                     <h6 class="mb-1 text-dark fs-14">$89.00 USD</h6>
-                                                    <span class="fs-13 text-muted">25 April, 2024</span>
+                                                    <span class="fs-13 text-muted">25 Avril, 2024</span>
                                                 </div>
 
                                                 <div class="col-auto col-md-3 order-md-2 align-self-center">
                                                     <span
-                                                        class="badge bg-primary-subtle text-primary fw-semibold rounded-pill">Completed</span>
+                                                        class="badge bg-primary-subtle text-primary fw-semibold rounded-pill">Terminé</span>
                                                 </div>
                                             </div>
-                                            <!-- End Row -->
+                                            <!-- Fin Ligne -->
                                         </div>
 
                                     </div>
                                 </li>
-                                <!-- End List Item -->
+                                <!-- Fin Élément de liste -->
 
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End Monthly Sales -->
+            <!-- Fin des ventes mensuelles -->
 
             <div class="row">
                 <div class="col-xl-3">
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Your Recent Perfomance</h5>
+                                <h5 class="card-title mb-0">Vos performances récentes</h5>
                             </div>
                         </div>
 
                         <div class="card-body">
                             <div id="browservisiting" class="apex-charts"></div>
 
-                            <div class="text-center fw-medium my-3">78% increase in company growth.</div>
+                            <div class="text-center fw-medium my-3">Augmentation de 78% de la croissance de l'entreprise.</div>
                             
                             <div class="d-flex gap-3 justify-content-between">
                                 <div class="d-flex">
@@ -743,7 +742,7 @@
 
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h5 class="card-title mb-0">Leads Report</h5>
+                                <h5 class="card-title mb-0">Rapport des prospects</h5>
                             </div>
                         </div>
 
@@ -753,11 +752,11 @@
                                     class="table table-borderless table-centered align-middle table-nowrap mb-0">
                                     <thead class="text-muted table-light">
                                         <tr>
-                                            <th scope="col" class="cursor-pointer">Lead</th>
+                                            <th scope="col" class="cursor-pointer">Prospect</th>
                                             <th scope="col" class="cursor-pointer">Email</th>
-                                            <th scope="col" class="cursor-pointer">Phone No</th>
-                                            <th scope="col" class="cursor-pointer">Campany</th>
-                                            <th scope="col" class="cursor-pointer">Status</th>
+                                            <th scope="col" class="cursor-pointer">Téléphone</th>
+                                            <th scope="col" class="cursor-pointer">Entreprise</th>
+                                            <th scope="col" class="cursor-pointer">Statut</th>
                                             <th scope="col" class="cursor-pointer">Action</th>
                                         </tr>
                                     </thead>
@@ -773,18 +772,17 @@
                                             <td>Mufti</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-primary-subtle text-primary fw-semibold">New
-                                                    Lead</span>
+                                                    class="badge bg-primary-subtle text-primary fw-semibold">Nouveau prospect</span>
                                             </td>
                                             <td>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-danger-subtle"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                     <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                 </a>
                                             </td>
@@ -800,18 +798,17 @@
                                             <td>Gucci</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-secondary-subtle text-secondary fw-semibold">In
-                                                    Progress</span>
+                                                    class="badge bg-secondary-subtle text-secondary fw-semibold">En cours</span>
                                             </td>
                                             <td>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-danger-subtle"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                     <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                 </a>
                                             </td>
@@ -827,17 +824,17 @@
                                             <td>Vans</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-danger-subtle text-danger fw-semibold">Loss</span>
+                                                    class="badge bg-danger-subtle text-danger fw-semibold">Perdu</span>
                                             </td>
                                             <td>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-danger-subtle"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                     <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                 </a>
                                             </td>
@@ -853,17 +850,17 @@
                                             <td>Myntra</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-success-subtle text-success fw-semibold">Won</span>
+                                                    class="badge bg-success-subtle text-success fw-semibold">Gagné</span>
                                             </td>
                                             <td>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-danger-subtle"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                     <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                 </a>
                                             </td>
@@ -879,17 +876,17 @@
                                             <td>HCLTech</td>
                                             <td>
                                                 <span
-                                                    class="badge bg-warning-subtle text-warning fw-semibold">Converted</span>
+                                                    class="badge bg-warning-subtle text-warning fw-semibold">Converti</span>
                                             </td>
                                             <td>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-primary-subtle me-1"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Modifier">
                                                     <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                                 </a>
                                                 <a aria-label="anchor"
                                                     class="btn btn-icon btn-sm bg-danger-subtle"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Supprimer">
                                                     <i class="mdi mdi-delete fs-14 text-danger"></i>
                                                 </a>
                                             </td>
@@ -906,17 +903,17 @@
         </div> <!-- container-fluid -->
     </div> <!-- content -->
 
-    <!-- Footer Start -->
+    <!-- Début du pied de page -->
     <footer class="footer">
         <div class="container-fluid">
             <div class="row">
                 <div class="col fs-13 text-muted text-center">
-                    &copy; <script>document.write(new Date().getFullYear())</script> - Made with <span class="mdi mdi-heart text-danger"></span> by <a href="#!" class="text-reset fw-semibold">Zoyothemes</a> 
+                    &copy; <script>document.write(new Date().getFullYear())</script> - Réalisé avec <span class="mdi mdi-heart text-danger"></span> par <a href="#!" class="text-reset fw-semibold">Zoyothemes</a> 
                 </div>
             </div>
         </div>
     </footer>
-    <!-- end Footer -->
+    <!-- Fin du pied de page -->
 
 </div>
 @endsection
