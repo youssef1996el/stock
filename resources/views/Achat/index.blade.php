@@ -110,77 +110,87 @@
                     <div class="modal-body">
                         <div class="row">
                            <div class="col-sm-12 col-md-12 col-xl-6">
-                                <div class="form-group">
-                                    <label for="" class="label-form">Fournisseur</label>
-                                    <select name="fournisseur" class="form-select" id="DropDown_fournisseur">
-                                        <option value="0">Veuillez sélectionner un fournisseur</option>
-                                        @foreach ($Fournisseur as $item)
-                                            <option value="{{$item->id}}">{{$item->entreprise}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="" class="form-label">Produit</label>
+                                <div class="card bg-light shadow">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="" class="label-form">Fournisseur</label>
+                                            <select name="fournisseur" class="form-select" id="DropDown_fournisseur">
+                                                <option value="0">Veuillez sélectionner un fournisseur</option>
+                                                @foreach ($Fournisseur as $item)
+                                                    <option value="{{$item->id}}">{{$item->entreprise}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="col-6 text-end">
-                                            <a href="#" class="text-danger linkCallModalAddProduct">Ajouter Produit</a>
+                                        <div class="form-group mt-2">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label for="" class="form-label">Produit</label>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <a href="#" class="text-danger linkCallModalAddProduct">Ajouter Produit</a>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control input_products" placeholder="Entrez votre produit">
                                         </div>
-                                    </div>
-                                    <input type="text" class="form-control input_products" placeholder="Entrez votre produit">
-                                </div>
-                                <div class="form-group mt-2">
-                                    <div class="card text-start">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped datatable TableProductAchat">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th scope="col">Produit</th>
-                                                            <th scope="col">Quantité</th>
-                                                            <th scope="col">Seuil</th>
-                                                            <th scope="col">Prix Achat</th> 
-                                                            <th scope="col">Local</th> 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Les données seront chargées par DataTables -->
-                                                    </tbody>
-                                                </table>
+                                        <div class="form-group mt-2">
+                                            <div class="card text-start">
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped datatable TableProductAchat">
+                                                            <thead class="thead-light">
+                                                                <tr>
+                                                                    <th scope="col">Produit</th>
+                                                                    <th scope="col">Quantité</th>
+                                                                    <th scope="col">Seuil</th>
+                                                                    <th scope="col">Prix Achat</th> 
+                                                                    <th scope="col">Local</th> 
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- Les données seront chargées par DataTables -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                            </div>
                            <div class="col-sm-12 col-md-12 col-xl-6">
-                                <div class="form-group mt-3" style="min-height: 123px;">
-                                    <div class="card text-start">
-                                        <div class="card-body">
-                                            <p class="card-text">Total : <span class="TotalByFournisseurAndUser">0.00</span> </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-3">
+                                <div class="card shadow bg-light">
                                     <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped datatable TableAmpAchat">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th scope="col">Produit</th>
-                                                        <th scope="col">Prix Achat</th>
-                                                        <th scope="col">Quantité</th>
-                                                        <th scope="col">Fournisseur</th>
-                                                        <th scope="col">Action</th>    
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Les données seront chargées par DataTables -->
-                                                </tbody>
-                                            </table>
+                                        <div class="form-group mt-3" style="min-height: 123px;">
+                                            <div class="card text-start">
+                                                <div class="card-body">
+                                                    <p class="card-text">Total : <span class="TotalByFournisseurAndUser">0.00</span> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped datatable TableAmpAchat">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">Produit</th>
+                                                                <th scope="col">Prix Achat</th>
+                                                                <th scope="col">Quantité</th>
+                                                                <th scope="col">Fournisseur</th>
+                                                                <th scope="col">Action</th>    
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- Les données seront chargées par DataTables -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            
+                                
                            </div>
                         </div>
                     </div>
