@@ -109,6 +109,7 @@ Route::post('StoreAchat',[AchatController::class,'Store']);
 Route::post('UpdateQteTmp',[AchatController::class,'UpdateQteTmp']); 
 Route::post('DeleteRowsTmpAchat',[AchatController::class,'DeleteRowsTmpAchat']); 
 Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFournisseur']); 
+Route::get('GetTotalTmpByForunisseurAndUser',[AchatController::class,'GetTotalTmpByForunisseurAndUser']); 
 
 
 

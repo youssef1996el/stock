@@ -4,6 +4,25 @@ $(document).ready(function () {
         $('#ModalAddProduct').modal("show");
         $('#ModalAddAchat').modal("hide");
     });
+
+    function GetTotalTmpByForunisseurAndUserScript(Fournisseur)
+    {
+        $.ajax({
+            type: "get",
+            url: GetTotalTmpByForunisseurAndUser,
+            data: {
+                'id_fournisseur' : Fournisseur,
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status == 200)
+                {
+                    $('.TotalByFournisseurAndUser').text(response.total + " DH");
+
+                }
+            }
+        });
+    }
     
     // Initialize dependent dropdowns
     initializeDropdowns();
@@ -209,6 +228,7 @@ $(document).ready(function () {
                     if(response.status == 200){
                         new AWN().success(response.message, {durations: {success: 5000}});
                         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                        GetTotalTmpByForunisseurAndUserScript(Fournisseur);
                     }
                 }
             });
@@ -230,6 +250,7 @@ $(document).ready(function () {
     
         // Initialize or refresh the TmpAchat table
         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+        GetTotalTmpByForunisseurAndUserScript(Fournisseur);
     });
 
     function initializeTableProduct(selector, data) {
@@ -309,6 +330,7 @@ $(document).ready(function () {
                         
                         // Refresh the TmpAchat table
                         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                        GetTotalTmpByForunisseurAndUserScript(Fournisseur);
                     } else {
                         new AWN().alert(response.message || 'Une erreur est survenue', {durations: {alert: 5000}});
                     }
@@ -470,6 +492,7 @@ $(document).ready(function () {
                 if(response.status == 200){
                     new AWN().success(response.message, {durations: {success: 5000}});
                     initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                    GetTotalTmpByForunisseurAndUserScript(Fournisseur);
                     $('#ModalEditQteTmp').modal('hide');
                     
                 }

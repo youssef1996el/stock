@@ -17,6 +17,7 @@
     var Achat          = "{{url('Achat')}}";
     var UpdateQteTmp          = "{{url('UpdateQteTmp')}}";
     var DeleteRowsTmpAchat          = "{{url('DeleteRowsTmpAchat')}}";
+    var GetTotalTmpByForunisseurAndUser          = "{{url('GetTotalTmpByForunisseurAndUser')}}";
 
 </script>
 <style>
@@ -156,7 +157,7 @@
                                 <div class="form-group mt-3" style="min-height: 123px;">
                                     <div class="card text-start">
                                         <div class="card-body">
-                                            <p class="card-text">Total : <span>0.00</span> </p>
+                                            <p class="card-text">Total : <span class="TotalByFournisseurAndUser">0.00</span> </p>
                                         </div>
                                     </div>
                                 </div>

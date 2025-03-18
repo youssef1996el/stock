@@ -291,5 +291,30 @@ class AchatController extends Controller
         }
     }
 
+    public function GetTotalTmpByForunisseurAndUser(Request $request)
+    {
+        $userId = Auth::id();
+        $fournisseur = $request->id_fournisseur;
+
+        // Retrieve temporary purchase data
+        $TempAchat = DB::table('temp_achat as t')
+            ->join('products as p', 'p.id', '=', 't.idproduit')
+            ->where('t.id_user', $userId)
+            ->where('t.id_fournisseur', $fournisseur)
+            ->select('t.id_fournisseur', 't.qte', 't.idproduit', 'p.price_achat', 
+                DB::raw('t.qte * p.price_achat as total_by_product'))
+            ->get();
+
+      
+
+        // Calculate total purchase amount
+        $SumAchat = $TempAchat->sum('total_by_product');
+
+        return response()->json([
+            'status'    => 200,
+            'total'     => $SumAchat
+        ]);
+    }
+
 
 }
