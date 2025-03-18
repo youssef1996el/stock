@@ -1,13 +1,18 @@
 $(document).ready(function () {
 
-    $('.linkCallModalAddProduct').on('click',function(e)
-    {
+    $('.linkCallModalAddProduct').on('click', function(e) {
         $('#ModalAddProduct').modal("show");
         $('#ModalAddAchat').modal("hide");
     });
+    
     // Initialize dependent dropdowns
     initializeDropdowns();
 
+    // Keep track of active DataTables to prevent duplication
+    let activeDataTables = {
+        tmpAchat: null,
+        productSearch: null
+    };
 
     function loadSubcategories(categorySelector, subcategorySelector, selectedValue = null) {
         var categoryId = $(categorySelector).val();
@@ -120,20 +125,16 @@ $(document).ready(function () {
             );
         });
     }
-    
-    function initializeTableTmpAchat(selector, IdFournisseur) {
-        // First, completely destroy any existing DataTable
-        if ($.fn.DataTable.isDataTable(selector)) {
-            $(selector).DataTable().destroy();
-            // Remove any existing DataTable wrappers to prevent duplication
-            $(selector + '_wrapper').remove();
-        }
 
-        // Clean up any remnants that might cause duplication
-        $(selector).closest('.table-responsive').find('.dataTables_filter, .dataTables_length, .dataTables_paginate, .dataTables_info').remove();
+    function initializeTableTmpAchat(selector, IdFournisseur) {
+        // Properly destroy DataTable if it exists
+        if (activeDataTables.tmpAchat) {
+            activeDataTables.tmpAchat.destroy();
+            activeDataTables.tmpAchat = null;
+        }
     
-        // Reinitialize DataTable with a clean slate
-        $(selector).DataTable({
+        // Reinitialize DataTable
+        activeDataTables.tmpAchat = $(selector).DataTable({
             select: true,
             processing: true,
             serverSide: false,
@@ -145,7 +146,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 type: 'GET',
                 error: function(xhr, error, code) {
-                    console.log('Error occurred: ' + error);
+                    console.error('Error occurred: ' + error);
                 }
             },
             columns: [
@@ -175,32 +176,30 @@ $(document).ready(function () {
                 }
             }
         });
+        
+        return activeDataTables.tmpAchat;
     }
-    
+
     $('#DropDown_fournisseur').on('change', function() {
         let Fournisseur = $('#DropDown_fournisseur').val();
         if (Fournisseur == 0) {
             new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
             return false;
         }
-        
-        // Initialize the TmpAchat table
+    
+        // Initialize or refresh the TmpAchat table
         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
     });
-    
-    function initializeTableProduct(selector, data) {
-        // First, completely destroy any existing DataTable
-        if ($.fn.DataTable.isDataTable(selector)) {
-            $(selector).DataTable().destroy();
-            // Remove any existing DataTable wrappers to prevent duplication
-            $(selector + '_wrapper').remove();
-        }
 
-        // Clean up any remnants that might cause duplication
-        $(selector).closest('.table-responsive').find('.dataTables_filter, .dataTables_length, .dataTables_paginate, .dataTables_info').remove();
+    function initializeTableProduct(selector, data) {
+        // Properly destroy DataTable if it exists
+        if (activeDataTables.productSearch) {
+            activeDataTables.productSearch.destroy();
+            activeDataTables.productSearch = null;
+        }
     
         // Initialize DataTable
-        $(selector).DataTable({
+        activeDataTables.productSearch = $(selector).DataTable({
             select: true,
             data: data,
             destroy: true,
@@ -235,11 +234,24 @@ $(document).ready(function () {
             }
         });
     
+        // Remove any existing event handlers before adding new ones
+        $(selector + ' tbody').off('click', 'tr');
+        
         // Handle row click event to add item to TmpAchat
-        $(selector + ' tbody').off('click', 'tr').on('click', 'tr', function(e) {
+        $(selector + ' tbody').on('click', 'tr', function(e) {
             e.preventDefault();
             let id = $(this).attr('id');
             let Fournisseur = $('#DropDown_fournisseur').val();
+            
+            if (!id || id === '') {
+                console.warn('No ID found for this row');
+                return;
+            }
+            
+            if (Fournisseur == 0) {
+                new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {success: 5000}});
+                return false;
+            }
     
             $.ajax({
                 type: "POST",
@@ -254,24 +266,41 @@ $(document).ready(function () {
                     if (response.status == 200) {
                         new AWN().success(response.message, {durations: {success: 5000}});
                         
-                        // Reinitialize TableAmpAchat after adding an item
+                        // Refresh the TmpAchat table
                         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                    } else {
+                        new AWN().alert(response.message || 'Une erreur est survenue', {durations: {alert: 5000}});
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding product:", error);
+                    new AWN().alert("Impossible d'ajouter le produit", {durations: {alert: 5000}});
                 }
             });
         });
+        
+        return activeDataTables.productSearch;
     }
-
+            
+    // Product search functionality
     $('.input_products').on('keydown', function(e) {
         if (e.keyCode === 13) {
+            e.preventDefault(); // Prevent form submission
+            
             let name_product = $(this).val().trim();
-            let Fournisseur = $('#DropDown_fournisseur').val();
-            if(Fournisseur == 0) {
-                new AWN().alert('Please selected fournisseur', {durations: {success: 5000}});
+            if (name_product === '') {
+                new AWN().warning('Veuillez saisir un nom de produit', {durations: {warning: 5000}});
                 return false;
             }
+            
+            let Fournisseur = $('#DropDown_fournisseur').val();
+            if (Fournisseur == 0) {
+                new AWN().alert('Veuillez sélectionner un fournisseur', {durations: {alert: 5000}});
+                return false;
+            }
+            
             $.ajax({
-                type: "get",
+                type: "GET",
                 url: getProduct,
                 data: {
                     product: name_product
@@ -282,80 +311,12 @@ $(document).ready(function () {
                         initializeTableProduct('.TableProductAchat', response.data);
                         $('.input_products').val(""); 
                     } else {
-                        alert("No products found.");
-                    }
-                }
-            });
-        }
-    });
-    
-    // Event handlers for edit and delete functionality
-    $(document).on('click', '.edit-tmp-achat', function(e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        let currentQty = $(this).closest('tr').find('td:eq(2)').text().trim();
-        
-        let newQty = prompt('Modifier la quantité:', currentQty);
-        
-        if (newQty !== null && newQty !== '' && !isNaN(newQty) && parseFloat(newQty) > 0) {
-            $.ajax({
-                type: "POST",
-                url: "updateTmpAchatQty",
-                data: {
-                    '_token': csrf_token,
-                    'id': id,
-                    'qte': newQty
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.status == 200) {
-                        new AWN().success(response.message, {durations: {success: 5000}});
-                        
-                        // Refresh the table
-                        let Fournisseur = $('#DropDown_fournisseur').val();
-                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-                    } else {
-                        new AWN().alert(response.message, {durations: {alert: 5000}});
+                        new AWN().info("Aucun produit trouvé.", {durations: {info: 5000}});
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error updating quantity:', error);
-                    new AWN().alert('Error updating quantity. Please try again.', {durations: {alert: 5000}});
-                }
-            });
-        } else if (newQty !== null) {
-            new AWN().alert('Veuillez saisir une quantité valide', {durations: {alert: 5000}});
-        }
-    });
-    
-    $(document).on('click', '.btn-delete-item', function(e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        let url = $(this).data('url');
-        
-        if (confirm('Êtes-vous sûr de vouloir supprimer cet élément?')) {
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {
-                    '_token': csrf_token,
-                    'id': id
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.status == 200) {
-                        new AWN().success(response.message, {durations: {success: 5000}});
-                        
-                        // Refresh the table
-                        let Fournisseur = $('#DropDown_fournisseur').val();
-                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
-                    } else {
-                        new AWN().alert(response.message, {durations: {alert: 5000}});
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting item:', error);
-                    new AWN().alert('Error deleting item. Please try again.', {durations: {alert: 5000}});
+                    console.error("Error searching for product:", error);
+                    new AWN().alert("Erreur lors de la recherche", {durations: {alert: 5000}});
                 }
             });
         }
