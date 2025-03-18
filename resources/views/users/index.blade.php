@@ -1,6 +1,3 @@
-
-
-
 @extends('dashboard.index')
 
 @section('dashboard')
@@ -21,13 +18,13 @@
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">List de users </h4>
+                    <h4 class="fs-18 fw-semibold m-0">Liste des Utilisateurs</h4>
                 </div>
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
-                        <li class="breadcrumb-item active">users</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
+                        <li class="breadcrumb-item active">Utilisateurs</li>
                     </ol>
                 </div>
             </div>
@@ -38,7 +35,7 @@
 
                         <div class="card-body">
                             <div class=" mb-3">
-                                <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddUser">Add user</button>
+                                <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddUser">Ajouter utilisateur</button>
                             </div>
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
@@ -47,11 +44,11 @@
                                         <table class="table datatable datatable-table TableUsers" >
                                             <thead>
                                                 <tr>
-                                                    <th data-sortable="true">Name</th>
+                                                    <th data-sortable="true">Nom</th>
                                                     <th data-sortable="true">Email</th>
                                                     
-                                                    <th data-sortable="true">roles</th>
-                                                    <th data-sortable="true">créer le</th>
+                                                    <th data-sortable="true">Rôles</th>
+                                                    <th data-sortable="true">Créé le</th>
                                                     <th data-sortable="true">Action</th>    
                                                     
                                                     
@@ -82,7 +79,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalAddUserLabel">Add New User</h5>
+                <h5 class="modal-title" id="ModalAddUserLabel">Ajouter un nouvel utilisateur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -91,11 +88,11 @@
                     <form action="{{ route('users.store') }}" id="FormAddUser">
                        
                 
-                        <!-- Full Name & Email -->
+                        <!-- Nom complet & Email -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Full Name</label>
+                                    <label>Nom complet</label>
                                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
@@ -114,11 +111,11 @@
                             </div>
                         </div>
                 
-                        <!-- Password & Confirm Password -->
+                        <!-- Mot de passe & Confirmation du mot de passe -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Password</label>
+                                    <label>Mot de passe</label>
                                     <div class="pass-group">
                                         <input type="password" name="password" class="form-control pass-input @error('password') is-invalid @enderror">
                                         <span class="fas toggle-password fa-eye-slash"></span>
@@ -131,7 +128,7 @@
                 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Confirm Password</label>
+                                    <label>Confirmer le mot de passe</label>
                                     <div class="pass-group">
                                         <input type="password" name="password_confirmation" class="form-control pass-input">
                                         <span class="fas toggle-password fa-eye-slash"></span>
@@ -140,15 +137,15 @@
                             </div>
                         </div>
                 
-                        <!-- Phone & Role -->
+                        <!-- Téléphone & Rôle -->
                         <div class="row">
                             
                 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Role</label>
+                                    <label>Rôle</label>
                                     <select class="select form-select @error('roles') is-invalid @enderror" name="roles">
-                                        <option value="">Select</option>
+                                        <option value="">Sélectionner</option>
                                         @forelse ($roles as $role)
                                         @if ($role != 'Super Admin')
                                             <option value="{{ $role }}" {{ (old('roles') == $role) ? 'selected' : '' }}>
@@ -177,8 +174,8 @@
                   
             </div>
             <div class="modal-footer text-end">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
-                <button type="button" class="btn btn-primary" id="BtnADDUser"> Sauvegarder</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="BtnADDUser">Sauvegarder</button>
             </div>
         </div>
     </div>
@@ -191,7 +188,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalAddUserLabel">Edit  User</h5>
+                <h5 class="modal-title" id="ModalAddUserLabel">Modifier l'utilisateur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -200,11 +197,11 @@
                     <form action="{{ url('updateUser') }}" id="FormUpdateUser">
                        
                 
-                        <!-- Full Name & Email -->
+                        <!-- Nom complet & Email -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Full Name</label>
+                                    <label>Nom complet</label>
                                     <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
@@ -223,11 +220,11 @@
                             </div>
                         </div>
                 
-                        <!-- Password & Confirm Password -->
+                        <!-- Mot de passe & Confirmation du mot de passe -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Password</label>
+                                    <label>Mot de passe</label>
                                     <div class="pass-group">
                                         <input type="password" id="password" name="password" class="form-control pass-input @error('password') is-invalid @enderror">
                                         <span class="fas toggle-password fa-eye-slash"></span>
@@ -240,7 +237,7 @@
                 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Confirm Password</label>
+                                    <label>Confirmer le mot de passe</label>
                                     <div class="pass-group">
                                         <input type="password" name="password_confirmation" class="form-control pass-input">
                                         <span class="fas toggle-password fa-eye-slash"></span>
@@ -249,15 +246,15 @@
                             </div>
                         </div>
                 
-                        <!-- Phone & Role -->
+                        <!-- Téléphone & Rôle -->
                         <div class="row">
                            
                 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Role</label>
+                                    <label>Rôle</label>
                                     <select class="select form-select @error('roles') is-invalid @enderror" name="roles" id="roles">
-                                        <option value="">Select</option>
+                                        <option value="">Sélectionner</option>
                                         @forelse ($roles as $role)
                                         @if ($role != 'Super Admin')
                                             <option value="{{ $role }}" {{ (old('roles') == $role) ? 'selected' : '' }}>
@@ -286,8 +283,8 @@
                   
             </div>
             <div class="modal-footer text-end">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
-                <button type="button" class="btn btn-primary" id="BtnUpdateUser"> Sauvegarder</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="BtnUpdateUser">Sauvegarder</button>
             </div>
         </div>
     </div>

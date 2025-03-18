@@ -2,7 +2,7 @@
 
 @section('dashboard')
 
-<!-- Custom JS -->
+<!-- Scripts personnalisés -->
 <script src="{{asset('js/achat/script.js')}}"></script>
 <script>
 
@@ -12,7 +12,7 @@
     var getProduct     = "{{url('getProduct')}}";
     var PostInTmpAchat = "{{url('PostInTmpAchat')}}";
     var GetTmpAchatByFournisseur = "{{url('GetTmpAchatByFournisseur')}}";
-    var GetAchatList   = "{{url('getAchatList')}}"; // Add this URL for the main table
+    var GetAchatList   = "{{url('getAchatList')}}"; // URL pour le tableau principal
     var StoreAchat     = "{{url('StoreAchat')}}";
 
 </script>
@@ -44,7 +44,7 @@
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -54,7 +54,7 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Achat</li>
                     </ol>
                 </div>
@@ -71,7 +71,7 @@
                                 </button>
                             </div>
                             
-                            <!-- Achat list -->
+                            <!-- Liste des achats -->
                             <div class="table-responsive">
                                 <table class="table datatable TableAchat">
                                     <thead class="thead-light">
@@ -83,7 +83,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Data will be loaded by DataTables -->
+                                        <!-- Les données seront chargées par DataTables -->
                                     </tbody>
                                 </table>
                             </div>
@@ -93,13 +93,13 @@
             </div>
         </div>
 
-        <!-- Add Local Modal -->
+        <!-- Modal Ajouter un Achat -->
         <div class="modal fade" id="ModalAddAchat" tabindex="-1" aria-labelledby="ModalAddAchat" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalAddLocalLabel">Ajouter un nouveau local</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -107,7 +107,7 @@
                                 <div class="form-group">
                                     <label for="" class="label-form">Fournisseur</label>
                                     <select name="fournisseur" class="form-select" id="DropDown_fournisseur">
-                                        <option value="0">Please selected fournisseur</option>
+                                        <option value="0">Veuillez sélectionner un fournisseur</option>
                                         @foreach ($Fournisseur as $item)
                                             <option value="{{$item->id}}">{{$item->entreprise}}</option>
                                         @endforeach
@@ -119,10 +119,10 @@
                                             <label for="" class="form-label">Produit</label>
                                         </div>
                                         <div class="col-6 text-end">
-                                            <a href="#" class="text-danger linkCallModalAddProduct">Add Produit</a>
+                                            <a href="#" class="text-danger linkCallModalAddProduct">Ajouter Produit</a>
                                         </div>
                                     </div>
-                                    <input type="text" class="form-control input_products" placeholder="entre your porudct">
+                                    <input type="text" class="form-control input_products" placeholder="Entrez votre produit">
                                 </div>
                                 <div class="form-group mt-2">
                                     <div class="card text-start">
@@ -139,7 +139,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <!-- Data will be loaded by DataTables -->
+                                                        <!-- Les données seront chargées par DataTables -->
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -169,7 +169,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- Data will be loaded by DataTables -->
+                                                    <!-- Les données seront chargées par DataTables -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -191,16 +191,16 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalAddProductLabel">Ajouter un nouveau produit</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Validation Errors -->
+                        <!-- Erreurs de Validation -->
                         <ul class="validationAddProduct"></ul>
 
-                        <!-- Add Product Form -->
+                        <!-- Formulaire d'ajout de produit -->
                         <form id="FormAddProduct">
-                            @csrf <!-- Add CSRF token -->
-                            <!-- Basic Product Information -->
+                            @csrf <!-- Jeton CSRF -->
+                            <!-- Informations de base du produit -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -221,7 +221,7 @@
                                 </div>
                             </div>
 
-                            <!-- Category and Subcategory -->
+                            <!-- Catégorie et Sous-catégorie -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -239,13 +239,13 @@
                                         <label>Famille</label>
                                         <select name="id_subcategorie" id="id_subcategorie" class="form-control" required>
                                             <option value="">Sélectionner une famille</option>
-                                            <!-- Will be populated dynamically -->
+                                            <!-- Sera rempli dynamiquement -->
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Location -->
+                            <!-- Emplacement -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -263,13 +263,13 @@
                                         <label>Rayon</label>
                                         <select name="id_rayon" id="id_rayon" class="form-control" required>
                                             <option value="">Sélectionner un rayon</option>
-                                            <!-- Will be populated dynamically -->
+                                            <!-- Sera rempli dynamiquement -->
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Pricing -->
+                            <!-- Prix -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -285,7 +285,7 @@
                                 </div>
                             </div>
 
-                            <!-- Stock and Tax -->
+                            <!-- Stock et TVA -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -312,7 +312,7 @@
                                 </div>
                             </div>
 
-                            <!-- Additional Information -->
+                            <!-- Informations supplémentaires -->
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -331,20 +331,20 @@
             </div>
         </div>
 
-        <!-- Edit Local Modal -->
+        <!-- Modal Modifier le Local -->
         <div class="modal fade" id="ModalEditLocal" tabindex="-1" aria-labelledby="ModalEditLocalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEditLocalLabel">Modifier le local</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationEditLocal"></ul>
                             <form action="{{ url('updateLocal') }}" id="FormUpdateLocal">
-                                @csrf <!-- Add CSRF token -->
-                                <!-- Name -->
+                                @csrf <!-- Jeton CSRF -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">

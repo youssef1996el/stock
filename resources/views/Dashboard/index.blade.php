@@ -1,13 +1,12 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard | Hando - Responsive Admin Dashboard Template</title>
+        <title>Tableau de bord | Hando - Modèle de tableau de bord d'administration réactif</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc."/>
+        <meta name="description" content="Un thème d'administration entièrement fonctionnel qui peut être utilisé pour créer des CRM, CMS, etc."/>
         <meta name="author" content="Zoyothemes"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -139,7 +138,7 @@
                                     <!-- item-->
                                     <div class="dropdown-item noti-title">
                                         <h5 class="m-0">
-                                            <span class="float-end"><a href="" class="text-dark"><small>Clear All</small></a></span>Notification
+                                            <span class="float-end"><a href="" class="text-dark"><small>Tout effacer</small></a></span>Notification
                                         </h5>
                                     </div>
 
@@ -152,10 +151,10 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="notify-details">Carl Steadham</p>
-                                                <small class="text-muted">5 min ago</small>
+                                                <small class="text-muted">Il y a 5 min</small>
                                             </div>
                                             <p class="mb-0 user-msg">
-                                                <small class="fs-14">Completed <span class="text-reset">Improve workflow in Figma</span></small>
+                                                <small class="fs-14">Terminé <span class="text-reset">Amélioration du flux de travail dans Figma</span></small>
                                             </p>
                                         </a>
 
@@ -167,7 +166,7 @@
                                             <div class="notify-content">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p class="notify-details">Olivia McGuire</p>
-                                                    <small class="text-muted">1 min ago</small>
+                                                    <small class="text-muted">Il y a 1 min</small>
                                                 </div>
 
                                                 <div class="d-flex mt-2 align-items-center">
@@ -191,10 +190,10 @@
                                             <div class="notify-content">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p class="notify-details">Travis Williams</p>
-                                                    <small class="text-muted">7 min ago</small>
+                                                    <small class="text-muted">Il y a 7 min</small>
                                                 </div>
                                                 <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2">
-                                                    <span class="text-primary">@Patryk</span> Please make sure that you're....
+                                                    <span class="text-primary">@Patryk</span> Veuillez vous assurer que vous êtes....
                                                 </p>
                                             </div>
                                         </a>
@@ -206,10 +205,10 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="notify-details">Violette Lasky</p>
-                                                <small class="text-muted">5 min ago</small>
+                                                <small class="text-muted">Il y a 5 min</small>
                                             </div>
                                             <p class="mb-0 user-msg">
-                                                <small class="fs-14">Completed <span class="text-reset">Create new components</span></small>
+                                                <small class="fs-14">Terminé <span class="text-reset">Créer de nouveaux composants</span></small>
                                             </p>
                                         </a>
 
@@ -220,10 +219,10 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="notify-details">Ralph Edwards</p>
-                                                <small class="text-muted">5 min ago</small>
+                                                <small class="text-muted">Il y a 5 min</small>
                                             </div>
                                             <p class="mb-0 user-msg">
-                                                <small class="fs-14">Completed<span class="text-reset">Improve workflow in React</span></small>
+                                                <small class="fs-14">Terminé<span class="text-reset">Amélioration du flux de travail dans React</span></small>
                                             </p>
                                         </a>
 
@@ -235,17 +234,17 @@
                                             <div class="notify-content">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p class="notify-details">Jocab jones</p>
-                                                    <small class="text-muted">7 min ago</small>
+                                                    <small class="text-muted">Il y a 7 min</small>
                                                 </div>
                                                 <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2">
-                                                    <span class="text-reset">@Patryk</span> Please make sure that you're....
+                                                    <span class="text-reset">@Patryk</span> Veuillez vous assurer que vous êtes....
                                                 </p>
                                             </div>
                                         </a>
                                     </div>
 
                                     <!-- All-->
-                                    <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">View all
+                                    <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">Voir tout
                                         <i class="fe-arrow-right"></i>
                                     </a>
                                 </div>
@@ -260,19 +259,19 @@
                                 <div class="dropdown-menu dropdown-menu-end profile-dropdown">
                                     <!-- item-->
                                     <div class="dropdown-header noti-title">
-                                        <h6 class="text-overflow m-0">Welcome !</h6>
+                                        <h6 class="text-overflow m-0">Bienvenue !</h6>
                                     </div>
 
                                     <!-- item-->
                                     <a class='dropdown-item notify-item' href='/hando/html/pages-profile'>
                                         <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
-                                        <span>My Account</span>
+                                        <span>Mon Compte</span>
                                     </a>
 
                                     <!-- item-->
                                     <a class='dropdown-item notify-item' href='/hando/html/auth-lock-screen'>
                                         <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
-                                        <span>Lock Screen</span>
+                                        <span>Écran de verrouillage</span>
                                     </a>
 
                                     <div class="dropdown-divider"></div>
@@ -282,7 +281,7 @@
                                         onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
                                         <i class="mdi mdi-location-exit fs-16 align-middle"></i>
-                                        <span>Logout</span>
+                                        <span>Déconnexion</span>
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -340,12 +339,12 @@
                             </li>
 
                             
-                            <li class="menu-title">Products</li>
+                            <li class="menu-title">Produits</li>
 
                             <li>
                                 <a class='tp-link' href="{{url('products')}}" >
                                     <i class="fa-solid fa-box"></i>
-                                    <span> Products </span>
+                                    <span> Produits </span>
                                 </a>
                             </li>
                                                 
@@ -359,12 +358,12 @@
                                 </a>
                             </li>
 
-                            <li class="menu-title mt-2">Categories</li>
+                            <li class="menu-title mt-2">Catégories</li>
                                             
                             <li>
                                 <a class='tp-link' href='{{url('categories')}}'>
                                     <i class="fa-solid fa-list-check"></i>
-                                    <span> List de Categorie </span>
+                                    <span> Liste de Catégories </span>
                                 </a>
                             </li>
                                                         
@@ -382,14 +381,14 @@
                                     <span> Rayon </span>
                                 </a>
                             </li>
-                            <li class="menu-title mt-2">Sub Categories</li>
+                            <li class="menu-title mt-2">Sous-Catégories</li>
                                             
                             <li>
                                 <a class='tp-link' href='{{url('subcategory')}}'>
                                     <i class="fa-solid fa-sitemap"></i>
                                     <!-- or alternative: -->
                                     <!-- <i class="fa-solid fa-diagram-project"></i> -->
-                                    <span> Familie </span>
+                                    <span> Famille </span>
                                 </a>
                             </li>
                             <li>
@@ -406,7 +405,7 @@
                             <li>
                                 <a class='tp-link' href='{{url('unite')}}'>
                                     <i class="fa-solid fa-list-check"></i>
-                                    <span> unite </span>
+                                    <span> Unité </span>
                                 </a>
                             </li>
                             
@@ -454,7 +453,7 @@
                             <li>
                                 <a class='tp-link' href="{{route('users.index')}}" >
                                     <span class="mdi mdi-account-group"></span>
-                                    <span> List de utilisateurs </span>
+                                    <span> Liste des utilisateurs </span>
                                 </a>
                                 
                             </li>
@@ -469,7 +468,7 @@
                                 
                             </li>
 
-                            <li class="menu-title mt-2">  Paramètre </li>
+                            <li class="menu-title mt-2">  Paramètres </li>
 
                             <li>
                                 <a href="#sidebarCharts" >

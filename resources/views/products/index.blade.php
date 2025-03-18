@@ -3,10 +3,10 @@
 @section('dashboard')
 
 
-<!-- Custom JS -->
+<!-- JS Personnalisé -->
 <script src="{{ asset('js/product/script.js') }}"></script>
 <script>
-    // Pass PHP variables to JavaScript
+    // Variables PHP vers JavaScript
     var csrf_token = "{{ csrf_token() }}";
     var addProduct_url = "{{ url('addProduct') }}";
     var products_url = "{{ url('products') }}";
@@ -19,9 +19,9 @@
 
 <div class="content-page">
     <div class="content">
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
-            <!-- Page Title -->
+            <!-- Titre de la page -->
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">Liste des produits</h4>
@@ -29,25 +29,25 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Produits</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- Products List -->
+            <!-- Liste des produits -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <!-- Add Product Button -->
+                            <!-- Bouton Ajouter Produit -->
                             <div class="mb-3">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAddProduct">
                                     <i class="fa-solid fa-plus"></i> Ajouter un produit
                                 </button>
                             </div>
                             
-                            <!-- Products Table -->
+                            <!-- Tableau des produits -->
                             <div class="table-responsive">
                                 <table class="table datatable TableProducts">
                                     <thead class="thead-light">
@@ -68,7 +68,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Data will be loaded by DataTables -->
+                                        <!-- Les données seront chargées par DataTables -->
                                     </tbody>
                                 </table>
                             </div>
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- Add Product Modal -->
+            <!-- Modal Ajouter Produit -->
             <div class="modal fade" id="ModalAddProduct" tabindex="-1" aria-labelledby="ModalAddProductLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -86,12 +86,12 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Validation Errors -->
+                            <!-- Erreurs de validation -->
                             <ul class="validationAddProduct"></ul>
 
-                            <!-- Add Product Form -->
+                            <!-- Formulaire d'ajout de produit -->
                             <form id="FormAddProduct">
-                                <!-- Basic Product Information -->
+                                <!-- Informations de base du produit -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -112,7 +112,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Category and Subcategory -->
+                                <!-- Catégorie et Sous-catégorie -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -130,13 +130,13 @@
                                             <label>Famille</label>
                                             <select name="id_subcategorie" id="id_subcategorie" class="form-control" required>
                                                 <option value="">Sélectionner une famille</option>
-                                                <!-- Will be populated dynamically -->
+                                                <!-- Sera rempli dynamiquement -->
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Location -->
+                                <!-- Emplacement -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -154,13 +154,13 @@
                                             <label>Rayon</label>
                                             <select name="id_rayon" id="id_rayon" class="form-control" required>
                                                 <option value="">Sélectionner un rayon</option>
-                                                <!-- Will be populated dynamically -->
+                                                <!-- Sera rempli dynamiquement -->
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Pricing -->
+                                <!-- Prix -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -176,7 +176,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Stock and Tax -->
+                                <!-- Stock et Taxe -->
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -203,7 +203,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Additional Information -->
+                                <!-- Informations supplémentaires -->
                                 <div class="row mb-3">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -222,7 +222,7 @@
                 </div>
             </div>
 
-            <!-- Edit Product Modal -->
+            <!-- Modal Modifier Produit -->
             <div class="modal fade" id="ModalEditProduct" tabindex="-1" aria-labelledby="ModalEditProductLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -231,14 +231,14 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Validation Errors -->
+                            <!-- Erreurs de validation -->
                             <ul class="validationEditProduct"></ul>
 
-                            <!-- Edit Product Form -->
+                            <!-- Formulaire de modification de produit -->
                             <form id="FormUpdateProduct">
                                 <input type="hidden" id="edit_id" name="id">
                                 
-                                <!-- Basic Product Information -->
+                                <!-- Informations de base du produit -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -275,7 +275,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Category and Subcategory -->
+                                <!-- Catégorie et Sous-catégorie -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -293,13 +293,13 @@
                                             <label>Famille</label>
                                             <select id="edit_id_subcategorie" name="id_subcategorie" class="form-control" required>
                                                 <option value="">Sélectionner une famille</option>
-                                                <!-- Will be populated dynamically -->
+                                                <!-- Sera rempli dynamiquement -->
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Location -->
+                                <!-- Emplacement -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -317,13 +317,13 @@
                                             <label>Rayon</label>
                                             <select id="edit_id_rayon" name="id_rayon" class="form-control" required>
                                                 <option value="">Sélectionner un rayon</option>
-                                                <!-- Will be populated dynamically -->
+                                                <!-- Sera rempli dynamiquement -->
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Pricing -->
+                                <!-- Prix -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -339,7 +339,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Stock and Tax -->
+                                <!-- Stock et Taxe -->
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <div class="form-group">

@@ -13,7 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
 
-<!-- Custom JS -->
+<!-- Scripts personnalisés -->
 <script src="{{asset('js/Categories/script.js')}}"></script>
 <script>
     var csrf_token          = "{{csrf_token()}}";
@@ -26,7 +26,7 @@
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -36,7 +36,7 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Catégories</li>
                     </ol>
                 </div>
@@ -53,7 +53,7 @@
                                 </button>
                             </div>
                             
-                            <!-- Category list -->
+                            <!-- Liste des catégories -->
                             <div class="table-responsive">
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
                                     <table class="table datatable dataTable no-footer TableCategories" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
@@ -66,7 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Data will be loaded by DataTables -->
+                                            <!-- Les données seront chargées par DataTables -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -77,19 +77,19 @@
             </div>
         </div>
 
-        <!-- Add Category Modal -->
+        <!-- Modal Ajouter une Catégorie -->
         <div class="modal fade" id="ModalAddCategory" tabindex="-1" aria-labelledby="ModalAddCategoryLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalAddCategoryLabel">Ajouter une nouvelle catégorie</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationAddCategory"></ul>
                             <form action="{{ url('addCategory') }}" id="FormAddCategory">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -112,19 +112,19 @@
             </div>
         </div>
 
-        <!-- Edit Category Modal -->
+        <!-- Modal Modifier la Catégorie -->
         <div class="modal fade" id="ModalEditCategory" tabindex="-1" aria-labelledby="ModalEditCategoryLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEditCategoryLabel">Modifier la catégorie</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationEditCategory"></ul>
                             <form action="{{ url('updateCategory') }}" id="FormUpdateCategory">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">

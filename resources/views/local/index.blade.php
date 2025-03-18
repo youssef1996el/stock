@@ -4,16 +4,16 @@
 {{-- <!-- DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
-<!-- jQuery and DataTables JS -->
+<!-- jQuery et DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- Awesome Notifications for alerts -->
+<!-- Awesome Notifications pour les alertes -->
 <script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
 
-<!-- Custom JS -->
+<!-- Scripts personnalisés -->
 <script src="{{asset('js/local/script.js')}}"></script>
 <script>
     var csrf_token    = "{{csrf_token()}}";
@@ -26,7 +26,7 @@
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -36,7 +36,7 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Locaux</li>
                     </ol>
                 </div>
@@ -53,7 +53,7 @@
                                 </button>
                             </div>
                             
-                            <!-- Local list -->
+                            <!-- Liste des locaux -->
                             <div class="table-responsive">
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
                                     <table class="table datatable dataTable no-footer TableLocals" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
@@ -66,7 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Data will be loaded by DataTables -->
+                                            <!-- Les données seront chargées par DataTables -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -77,19 +77,19 @@
             </div>
         </div>
 
-        <!-- Add Local Modal -->
+        <!-- Modal Ajouter un Local -->
         <div class="modal fade" id="ModalAddLocal" tabindex="-1" aria-labelledby="ModalAddLocalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalAddLocalLabel">Ajouter un nouveau local</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationAddLocal"></ul>
                             <form action="{{ url('addLocal') }}" id="FormAddLocal">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -112,19 +112,19 @@
             </div>
         </div>
 
-        <!-- Edit Local Modal -->
+        <!-- Modal Modifier le Local -->
         <div class="modal fade" id="ModalEditLocal" tabindex="-1" aria-labelledby="ModalEditLocalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEditLocalLabel">Modifier le local</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationEditLocal"></ul>
                             <form action="{{ url('updateLocal') }}" id="FormUpdateLocal">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">

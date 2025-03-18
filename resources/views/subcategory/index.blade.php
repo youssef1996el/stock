@@ -36,7 +36,7 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Sous-catégories</li>
                     </ol>
                 </div>

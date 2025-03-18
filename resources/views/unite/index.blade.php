@@ -4,16 +4,16 @@
 {{-- <!-- DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
-<!-- jQuery and DataTables JS -->
+<!-- jQuery et DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- Awesome Notifications for alerts -->
+<!-- Awesome Notifications pour les alertes -->
 <script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
 
-<!-- Custom JS -->
+<!-- Scripts personnalisés -->
 <script src="{{asset('js/unite/script.js')}}"></script>
 <script>
     var csrf_token        = "{{csrf_token()}}";
@@ -26,7 +26,7 @@
 <div class="content-page">
     <div class="content">
 
-        <!-- Start Content-->
+        <!-- Début du contenu -->
         <div class="container-fluid">
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -36,7 +36,7 @@
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
                         <li class="breadcrumb-item active">Unités</li>
                     </ol>
                 </div>
@@ -53,7 +53,7 @@
                                 </button>
                             </div>
                             
-                            <!-- Unite list -->
+                            <!-- Liste des unités -->
                             <div class="table-responsive">
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer table-responsive">
                                     <table class="table datatable dataTable no-footer TableUnites" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
@@ -66,7 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Data will be loaded by DataTables -->
+                                            <!-- Les données seront chargées par DataTables -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -77,19 +77,19 @@
             </div>
         </div>
 
-        <!-- Add Unite Modal -->
+        <!-- Modal Ajouter une Unité -->
         <div class="modal fade" id="ModalAddUnite" tabindex="-1" aria-labelledby="ModalAddUniteLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalAddUniteLabel">Ajouter une nouvelle unité</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationAddUnite"></ul>
                             <form action="{{ url('addUnite') }}" id="FormAddUnite">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -112,19 +112,19 @@
             </div>
         </div>
 
-        <!-- Edit Unite Modal -->
+        <!-- Modal Modifier l'Unité -->
         <div class="modal fade" id="ModalEditUnite" tabindex="-1" aria-labelledby="ModalEditUniteLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEditUniteLabel">Modifier l'unité</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <ul class="validationEditUnite"></ul>
                             <form action="{{ url('updateUnite') }}" id="FormUpdateUnite">
-                                <!-- Name -->
+                                <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">

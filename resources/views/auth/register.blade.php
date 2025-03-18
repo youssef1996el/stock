@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
 
         <meta charset="utf-8" />
-        <title>Log In | Hando - Responsive Admin Dashboard Template</title>
+        <title>Inscription | Hando - Modèle de Tableau de Bord Administratif Responsive</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc."/>
+        <meta name="description" content="Un thème d'administration complet qui peut être utilisé pour créer des CRM, CMS, etc."/>
         <meta name="author" content="Zoyothemes"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -61,7 +61,7 @@
                                                 </div>
         
                                                 <div class="auth-title-section mb-4 text-lg-start text-center"> 
-                                                    <h3 class="text-dark fw-semibold mb-3">Bienvenue ! Veuillez vous connecter pour continuer.</h3>
+                                                    <h3 class="text-dark fw-semibold mb-3">Bienvenue ! Veuillez vous inscrire pour continuer.</h3>
                                                     
                                                 </div>
         
@@ -148,7 +148,7 @@
                                                                     
 
                                                                     <button type="submit" class="btn btn-primary fw-semibold">
-                                                                        {{ __('Registre') }}
+                                                                        {{ __('S\'inscrire') }}
                                                                     </button>
                                                                 </div>
                                                             </div>
