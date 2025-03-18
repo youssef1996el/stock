@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    let Fournisseur = 0;
     $('.linkCallModalAddProduct').on('click', function(e) {
         $('#ModalAddProduct').modal("show");
         $('#ModalAddAchat').modal("hide");
@@ -188,13 +188,39 @@ $(document).ready(function () {
             $('#ModalEditQteTmp').modal('show');
             $('#BtnUpdateQteTmp').attr('data-id',IdTmp); 
             $('#QteTmp').val(Qtetmp);   
-        })
+        });
+
+
+        $(selector + ' tbody').on('click','tr .DeleteTmp',function(e)
+        {
+            e.preventDefault();
+            
+            let IdTmp = $(this).attr('data-id');
+            $.ajax({
+                type: "POST",
+                url: DeleteRowsTmpAchat,
+                data: 
+                {
+                    '_token' : csrf_token,
+                    'id'     : IdTmp,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200){
+                        new AWN().success(response.message, {durations: {success: 5000}});
+                        initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
+                    }
+                }
+            });
+        });
+
+
         
         
         return activeDataTables.tmpAchat;
     }
 
-    let Fournisseur = 0;
+  
     $('#DropDown_fournisseur').on('change', function() {
          Fournisseur = $('#DropDown_fournisseur').val();
         if (Fournisseur == 0) {

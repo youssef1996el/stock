@@ -168,7 +168,7 @@ class AchatController extends Controller
                             </a>';
 
                     // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
+                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteTmp"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer Catégorie">
                                 <i class="fa-solid fa-trash text-danger"></i>
@@ -273,10 +273,22 @@ class AchatController extends Controller
         {
             return response()->json([
                 'status'    => 200,
-                'meesage'   => 'Mise à jour effectuée avec succès.'
+                'message'   => 'Mise à jour effectuée avec succès.'
             ]);
         }
         
+    }
+
+    public function DeleteRowsTmpAchat(Request $request)
+    {
+        $TempAchat = TempAchat::where('id',$request->id)->delete();
+        if($TempAchat)
+        {
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'Supprimier effectuée avec succès.'
+            ]);
+        }
     }
 
 

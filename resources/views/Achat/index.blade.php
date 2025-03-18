@@ -16,6 +16,7 @@
     var StoreAchat     = "{{url('StoreAchat')}}";
     var Achat          = "{{url('Achat')}}";
     var UpdateQteTmp          = "{{url('UpdateQteTmp')}}";
+    var DeleteRowsTmpAchat          = "{{url('DeleteRowsTmpAchat')}}";
 
 </script>
 <style>
