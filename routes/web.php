@@ -13,7 +13,8 @@ use App\Http\Controllers\RayonController;
 use App\Http\Controllers\UniteController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\AchatController;
-
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\VenteController ;
 
 Auth::routes();
 
@@ -74,8 +75,14 @@ Route::post('addProduct', [ProductController::class, 'store']);
 Route::get('editProduct/{id}', [ProductController::class, 'edit']);
 Route::post('updateProduct', [ProductController::class, 'update']);
 Route::post('deleteProduct', [ProductController::class, 'destroy']);
-
-
+// Vente routes
+Route::get('/Vente', [App\Http\Controllers\VenteController::class, 'index'])->name('vente.index');
+Route::post('/PostInTmpVente', [App\Http\Controllers\VenteController::class, 'PostInTmpVente']);
+Route::get('/GetTmpVenteByClient', [App\Http\Controllers\VenteController::class, 'GetTmpVenteByClient']);
+Route::post('/StoreVente', [App\Http\Controllers\VenteController::class, 'Store']);
+Route::post('/UpdateQteTmp', [App\Http\Controllers\VenteController::class, 'UpdateQteTmp']);
+Route::post('/DeleteRowsTmpVente', [App\Http\Controllers\VenteController::class, 'DeleteRowsTmpVente']);
+Route::get('/GetTotalTmpByClientAndUser', [App\Http\Controllers\VenteController::class, 'GetTotalTmpByClientAndUser']);
 
 // Fournisseur routes
 Route::get('/fournisseur', [FournisseurController::class, 'index'])->name('fournisseur.index');
@@ -112,7 +119,12 @@ Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFour
 Route::get('GetTotalTmpByForunisseurAndUser',[AchatController::class,'GetTotalTmpByForunisseurAndUser']); 
 
 
-
+// Client routes
+Route::get('client', [ClientController::class, 'index']);
+Route::post('addClient', [ClientController::class, 'store']);
+Route::get('editClient/{id}', [ClientController::class, 'edit']);
+Route::post('updateClient', [ClientController::class, 'update']);
+Route::post('DeleteClient', [ClientController::class, 'destroy']);
 
 
 

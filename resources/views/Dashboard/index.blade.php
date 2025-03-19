@@ -352,6 +352,14 @@
                                     <span> Fournisseur </span>
                                 </a>
                             </li>
+                            <li class="menu-title">Formateurs</li>
+
+                                <li>
+                                   <a class='tp-link' href="{{url('client')}}">
+                                        <i class="fa-solid fa-chalkboard-teacher"></i>
+                                         <span> Gestion formateurs </span>
+                                         </a>
+                                </li>
 
                             <li class="menu-title mt-2">Catégories</li>
                                             
@@ -396,6 +404,16 @@
                                     <span> Achats </span>
                                 </a>
                             </li> 
+                            <li>
+    <a class='tp-link' href='{{url('Vente')}}'>
+        <i class="fa-solid fa-cash-register"></i>
+        <!-- ou alternatives: -->
+        <!-- <i class="fa-solid fa-shopping-bag"></i> -->
+        <!-- <i class="fa-solid fa-tags"></i> -->
+        <!-- <i class="fa-solid fa-dollar-sign"></i> -->
+        <span> Ventes </span>
+    </a>
+</li>
                                        
                             <li>
                                 <a class='tp-link' href='{{url('unite')}}'>
