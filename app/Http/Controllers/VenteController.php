@@ -273,6 +273,52 @@ class VenteController extends Controller
             ]);
         }
     }
+    public function deleteOldVentes()
+{
+    try {
+        // Find ventes older than 24 hours with status "En cours de traitement"
+        $cutoffTime = now()->subHours(24);
+        
+        $oldVentes = Vente::where('status', 'En cours de traitement')
+                         ->where('created_at', '<', $cutoffTime)
+                         ->get();
+        
+        $count = 0;
+        
+        foreach ($oldVentes as $vente) {
+            // Begin transaction to ensure atomicity
+            DB::beginTransaction();
+            
+            try {
+                // Delete related line items first
+                LigneVente::where('idvente', $vente->id)->delete();
+                
+                // Then delete the vente itself
+                $vente->delete();
+                
+                DB::commit();
+                $count++;
+            } catch (\Exception $e) {
+                DB::rollBack();
+                \Log::error("Failed to delete vente ID: {$vente->id}. Error: " . $e->getMessage());
+            }
+        }
+        
+        \Log::info("Auto-deleted {$count} ventes that were 24+ hours old with unchanged status.");
+        
+        return response()->json([
+            'status' => 200,
+            'message' => "Successfully deleted {$count} old sales orders."
+        ]);
+    } catch (\Exception $e) {
+        \Log::error("Error in deleteOldVentes method: " . $e->getMessage());
+        
+        return response()->json([
+            'status' => 500,
+            'message' => "An error occurred while trying to delete old sales orders."
+        ]);
+    }
+}
 
     public function GetTotalTmpByClientAndUser(Request $request)
     {
