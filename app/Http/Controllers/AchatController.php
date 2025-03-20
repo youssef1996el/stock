@@ -17,44 +17,49 @@ use App\Models\TempAchat;
 use App\Models\Achat;
 use App\Models\LigneAchat;
 use Illuminate\Support\Facades\Validator;
+use Hashids\Hashids;
 class AchatController extends Controller
 {
     public function index(Request $request)
     {
         if($request->ajax())
         {
+            $hashids = new Hashids();
             $Data_Achat = DB::table('achats as a')
             ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
             ->join('users as u'       ,'u.id','=','a.id_user')
             ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
             ->get();
             return DataTables::of($Data_Achat)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '';
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) use ($hashids) {  // <-- Pass $hashids inside the closure
+                        $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
-                    // detail button
-                    $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 "
-                                data-id="' . $row->id . '">
-                               <i class="fa-solid fa-eye text-success"></i>
-                            </a>';
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1" 
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Catégorie">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                        // Detail button (hashed ID)
+                        $btn .= '<a href="' . url('ShowBonReception/' . $hashids->encode($row->id)) . '" 
+                                    class="btn btn-sm bg-success-subtle me-1" 
+                                    data-id="' . $row->id . '" 
+                                    target="_blank">
+                                    <i class="fa-solid fa-eye text-success"></i>
+                                </a>';
 
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle" 
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Catégorie">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
         }
         $Fournisseur  = Fournisseur::all();
         $categories = Category::all();
@@ -84,7 +89,7 @@ class AchatController extends Controller
                 ->join('stock as s', 'p.id', '=', 's.id_product')
                 ->join('locals as l', 'p.id_local', '=', 'l.id')
                 ->where('p.name', 'like', '%' . $name_product . '%')
-                ->select('p.name', 's.quantite', 's.seuil', 'p.price_achat', 'l.name as name_local','p.id')
+                ->select('p.name', 's.quantite', 's.seuil', 'p.price_achat', 'l.name as name_local','p.id','p.price_vente')
                 ->get();
             return response()->json([
                 'status' => 200,
@@ -315,4 +320,41 @@ class AchatController extends Controller
             'total'     => $SumAchat
         ]);
     }
+<<<<<<< HEAD
+=======
+
+
+    public function ShowBonReception($id)
+    {
+        $hashids = new Hashids();
+        $decoded = $hashids->decode($id);
+
+        if (empty($decoded)) {
+            abort(404); // Handle invalid hash
+        }
+    
+        $id = $decoded[0]; // Extract the original ID
+
+       
+    
+        // Now, use $id to retrieve the BonReception
+        $bonReception = Achat::findOrFail($id);
+        $Fournisseur  = DB::table('fournisseurs as f')
+        ->join('achats as a','a.id_Fournisseur','=','f.id')
+        ->select('f.*')
+        ->where('a.id',$id)
+        ->first();
+        $Data_Achat = $data = DB::table('achats as a')
+        ->join('ligne_achat as l', 'a.id', '=', 'l.idachat')
+        ->join('products as p', 'l.idproduit', '=', 'p.id')
+        ->select('p.price_achat', 'l.qte', DB::raw('p.price_achat * l.qte as total'), 'p.name')
+        ->where('a.id', 1)
+        ->get();
+    
+    
+        return view('Achat.List', compact('bonReception','Fournisseur','Data_Achat'));
+    }
+
+
+>>>>>>> 4b6a026cc356424270c6a60c713dab83e91f7a0c
 }

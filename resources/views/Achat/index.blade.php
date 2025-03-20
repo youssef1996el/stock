@@ -104,7 +104,7 @@
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalAddLocalLabel">Ajouter un nouveau local</h5>
+                        <h5 class="modal-title" id="ModalAddLocalLabel">Ajouter un nouvel achat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">

@@ -152,7 +152,7 @@ class VenteController extends Controller
                     $btn = '';
 
                     // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp"
+                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp" 
                                 data-id="' . $row->id . '">
                                 <i class="fa-solid fa-pen-to-square text-primary"></i>
                             </a>';
@@ -235,7 +235,7 @@ class VenteController extends Controller
         ]);
     }  
 
-    public function UpdateQteTmp(Request $request)
+    public function UpdateQteTmpVente(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'qte' => 'required',
@@ -251,6 +251,7 @@ class VenteController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
+       
         $TempVente = TempVente::where('id', $request->id)->update([
             'qte' => $request->qte,
         ]);

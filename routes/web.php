@@ -36,60 +36,63 @@ Route::resources([
 // });
 
 // TVA Routes
-Route::get('tva'                    , [TvaController::class,        'index'     ]);
-Route::post('addTva'                , [TvaController::class,        'store'     ]);
-Route::get('tva/{id}/edit'          , [TvaController::class,        'edit'      ]);
-Route::post('updateTva'             , [TvaController::class,        'update'    ]);
-Route::post('DeleteTva'             , [TvaController::class,        'destroy'   ]);
+
+Route::get('tva'                                        , [TvaController::class,        'index'     ]);
+Route::post('addTva'                                    , [TvaController::class,        'store'     ]);
+Route::get('tva/{id}/edit'                              , [TvaController::class,        'edit'      ]);
+Route::post('updateTva'                                 , [TvaController::class,        'update'    ]);
+Route::post('DeleteTva'                                 , [TvaController::class,        'destroy'   ]);
 // Category Routes
 
-
-Route::get('categories'             , [CategoriesController::class, 'index'    ]);
-Route::post('addCategory'           , [CategoriesController::class, 'store'    ]);
-Route::get('editCategory/{id}'      , [CategoriesController::class, 'edit'     ]);
-Route::post('updateCategory'        , [CategoriesController::class, 'update'   ]);
-Route::post('DeleteCategory'        , [CategoriesController::class, 'destroy'  ]);
+Route::get('categories'                                 , [CategoriesController::class, 'index'    ]);
+Route::post('addCategory'                               , [CategoriesController::class, 'store'    ]);
+Route::get('editCategory/{id}'                          , [CategoriesController::class, 'edit'     ]);
+Route::post('updateCategory'                            , [CategoriesController::class, 'update'   ]);
+Route::post('DeleteCategory'                            , [CategoriesController::class, 'destroy'  ]);
 // sub Category Routes
-Route::get('subcategory', [SubCategoryController::class, 'index']);
-Route::post('addSubCategory', [SubCategoryController::class, 'store']);
-Route::post('updateSubCategory', [SubCategoryController::class, 'update']);
-Route::post('DeleteSubCategory', [SubCategoryController::class, 'destroy']);
-Route::get('editSubCategory/{id}', [SubCategoryController::class, 'edit']);
 
+Route::get('subcategory'                                , [SubCategoryController::class, 'index'    ]);
+Route::post('addSubCategory'                            , [SubCategoryController::class, 'store'    ]);
+Route::post('updateSubCategory'                         , [SubCategoryController::class, 'update'   ]);
+Route::post('DeleteSubCategory'                         , [SubCategoryController::class, 'destroy'  ]);
+Route::get('editSubCategory/{id}'                       , [SubCategoryController::class, 'edit'     ]);
 // Local Routes
-Route::get('local', [LocalController::class, 'index']);
-Route::post('addLocal', [LocalController::class, 'store']);
-Route::post('updateLocal', [LocalController::class, 'update']);
-Route::post('DeleteLocal', [LocalController::class, 'destroy']);
-Route::get('editLocal/{id}', [LocalController::class, 'edit']);
+
+Route::get('local'                                      , [LocalController::class, 'index'          ]);
+Route::post('addLocal'                                  , [LocalController::class, 'store'          ]);
+Route::post('updateLocal'                               , [LocalController::class, 'update'         ]);
+Route::post('DeleteLocal'                               , [LocalController::class, 'destroy'        ]);
+Route::get('editLocal/{id}'                             , [LocalController::class, 'edit'           ]);
 // Rayon Routes
-Route::get('rayon', [RayonController::class, 'index']);
-Route::post('addRayon', [RayonController::class, 'store']);
-Route::post('updateRayon', [RayonController::class, 'update']);
-Route::post('DeleteRayon', [RayonController::class, 'destroy']);
-Route::get('editRayon/{id}', [RayonController::class, 'edit']);
+
+Route::get('rayon'                                      , [RayonController::class, 'index'          ]);
+Route::post('addRayon'                                  , [RayonController::class, 'store'          ]);
+Route::post('updateRayon'                               , [RayonController::class, 'update'         ]);
+Route::post('DeleteRayon'                               , [RayonController::class, 'destroy'        ]);
+Route::get('editRayon/{id}'                             , [RayonController::class, 'edit'           ]);
 // Product Routes
 
-Route::get('products', [ProductController::class, 'index']);
-Route::post('addProduct', [ProductController::class, 'store']);
-Route::get('editProduct/{id}', [ProductController::class, 'edit']);
-Route::post('updateProduct', [ProductController::class, 'update']);
-Route::post('deleteProduct', [ProductController::class, 'destroy']);
+Route::get('products'                                   , [ProductController::class, 'index'        ]);
+Route::post('addProduct'                                , [ProductController::class, 'store'        ]);
+Route::get('editProduct/{id}'                           , [ProductController::class, 'edit'         ]);
+Route::post('updateProduct'                             , [ProductController::class, 'update'       ]);
+Route::post('deleteProduct'                             , [ProductController::class, 'destroy'      ]);
+
 // Vente routes
-Route::get('/Vente', [App\Http\Controllers\VenteController::class, 'index'])->name('vente.index');
-Route::post('/PostInTmpVente', [App\Http\Controllers\VenteController::class, 'PostInTmpVente']);
-Route::get('/GetTmpVenteByClient', [App\Http\Controllers\VenteController::class, 'GetTmpVenteByClient']);
-Route::post('/StoreVente', [App\Http\Controllers\VenteController::class, 'Store']);
-Route::post('/UpdateQteTmp', [App\Http\Controllers\VenteController::class, 'UpdateQteTmp']);
-Route::post('/DeleteRowsTmpVente', [App\Http\Controllers\VenteController::class, 'DeleteRowsTmpVente']);
-Route::get('/GetTotalTmpByClientAndUser', [App\Http\Controllers\VenteController::class, 'GetTotalTmpByClientAndUser']);
+Route::get('/Vente'                                     , [VenteController::class, 'index'])->name('vente.index');
+Route::post('/PostInTmpVente'                           , [VenteController::class, 'PostInTmpVente'            ]);
+Route::get('/GetTmpVenteByClient'                       , [VenteController::class, 'GetTmpVenteByClient'       ]);
+Route::post('/StoreVente'                               , [VenteController::class, 'Store'                     ]);
+Route::post('/UpdateQteTmpVente'                        , [VenteController::class, 'UpdateQteTmpVente'         ]);
+Route::post('/DeleteRowsTmpVente'                       , [VenteController::class, 'DeleteRowsTmpVente'        ]);
+Route::get('/GetTotalTmpByClientAndUser'                , [VenteController::class, 'GetTotalTmpByClientAndUser']);
 
 // Fournisseur routes
-Route::get('/fournisseur', [FournisseurController::class, 'index'])->name('fournisseur.index');
-Route::post('/addFournisseur', [FournisseurController::class, 'store']);
-Route::get('/editFournisseur/{id}', [FournisseurController::class, 'edit']);
-Route::post('/updateFournisseur', [FournisseurController::class, 'update']);
-Route::post('/DeleteFournisseur', [FournisseurController::class, 'destroy']);
+Route::get('/fournisseur'                               , [FournisseurController::class, 'index'])->name('fournisseur.index');
+Route::post('/addFournisseur'                           , [FournisseurController::class, 'store'                                    ]);
+Route::get('/editFournisseur/{id}'                      , [FournisseurController::class, 'edit'                                     ]);
+Route::post('/updateFournisseur'                        , [FournisseurController::class, 'update'                                   ]);
+Route::post('/DeleteFournisseur'                        , [FournisseurController::class, 'destroy'                                  ]);
 
 
 // Dependent dropdown routes
@@ -101,30 +104,31 @@ Route::get('getRayons/{id}', [ProductController::class, 'getRayons']);
 
 
 // Unite routes
-Route::get('unite', [App\Http\Controllers\UniteController::class, 'index']);
-Route::post('addUnite', [App\Http\Controllers\UniteController::class, 'store']);
-Route::get('editUnite/{id}', [App\Http\Controllers\UniteController::class, 'edit']);
-Route::post('updateUnite', [App\Http\Controllers\UniteController::class, 'update']);
-Route::post('deleteUnite', [App\Http\Controllers\UniteController::class, 'destroy']);
+Route::get('unite'                              , [UniteController::class, 'index'                          ]);
+Route::post('addUnite'                          , [UniteController::class, 'store'                          ]);
+Route::get('editUnite/{id}'                     , [UniteController::class, 'edit'                           ]);
+Route::post('updateUnite'                       , [UniteController::class, 'update'                         ]);
+Route::post('deleteUnite'                       , [UniteController::class, 'destroy'                        ]);
 
 
-
-Route::get('Achat',[AchatController::class,'index']); 
-Route::get('getProduct',[AchatController::class,'getProduct']); 
-Route::post('PostInTmpAchat',[AchatController::class,'PostInTmpAchat']); 
-Route::post('StoreAchat',[AchatController::class,'Store']); 
-Route::post('UpdateQteTmp',[AchatController::class,'UpdateQteTmp']); 
-Route::post('DeleteRowsTmpAchat',[AchatController::class,'DeleteRowsTmpAchat']); 
-Route::get('GetTmpAchatByFournisseur',[AchatController::class,'GetTmpAchatByFournisseur']); 
-Route::get('GetTotalTmpByForunisseurAndUser',[AchatController::class,'GetTotalTmpByForunisseurAndUser']); 
+// Unite Achat
+Route::get('Achat'                              ,[AchatController::class,'index'                            ]); 
+Route::get('getProduct'                         ,[AchatController::class,'getProduct'                       ]); 
+Route::post('PostInTmpAchat'                    ,[AchatController::class,'PostInTmpAchat'                   ]); 
+Route::post('StoreAchat'                        ,[AchatController::class,'Store'                            ]); 
+Route::post('UpdateQteTmp'                      ,[AchatController::class,'UpdateQteTmp'                     ]); 
+Route::post('DeleteRowsTmpAchat'                ,[AchatController::class,'DeleteRowsTmpAchat'               ]); 
+Route::get('GetTmpAchatByFournisseur'           ,[AchatController::class,'GetTmpAchatByFournisseur'         ]); 
+Route::get('GetTotalTmpByForunisseurAndUser'    ,[AchatController::class,'GetTotalTmpByForunisseurAndUser'  ]); 
+Route::get('ShowBonReception/{id}'              ,[AchatController::class,'ShowBonReception'                 ]);
 
 
 // Client routes
-Route::get('client', [ClientController::class, 'index']);
-Route::post('addClient', [ClientController::class, 'store']);
-Route::get('editClient/{id}', [ClientController::class, 'edit']);
-Route::post('updateClient', [ClientController::class, 'update']);
-Route::post('DeleteClient', [ClientController::class, 'destroy']);
+Route::get('client'                             , [ClientController::class, 'index'                         ]);
+Route::post('addClient'                         , [ClientController::class, 'store'                         ]);
+Route::get('editClient/{id}'                    , [ClientController::class, 'edit'                          ]);
+Route::post('updateClient'                      , [ClientController::class, 'update'                        ]);
+Route::post('DeleteClient'                      , [ClientController::class, 'destroy'                       ]);
 
 
 

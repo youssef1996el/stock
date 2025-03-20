@@ -14,7 +14,7 @@
     var GetVenteList = "{{url('getVenteList')}}"; // URL pour le tableau principal
     var StoreVente = "{{url('StoreVente')}}";
     var Vente = "{{url('Vente')}}";
-    var UpdateQteTmp = "{{url('UpdateQteTmp')}}";
+    var UpdateQteTmpVente = "{{url('UpdateQteTmpVente')}}";
     var DeleteRowsTmpVente = "{{url('DeleteRowsTmpVente')}}";
     var GetTotalTmpByClientAndUser = "{{url('GetTotalTmpByClientAndUser')}}";
 </script>
