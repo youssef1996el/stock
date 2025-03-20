@@ -286,7 +286,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -315,7 +315,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -496,7 +496,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -543,7 +543,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }

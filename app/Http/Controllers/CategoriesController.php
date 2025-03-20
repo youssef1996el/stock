@@ -98,7 +98,7 @@ class CategoriesController extends Controller
         } else { 
             return response()->json([
                 'status' => 500,
-                'message' => 'Quelque chose ne va pas'
+                'message' => 'Une erreur est survenue. Veuillez réessayer.'
             ]);
         }
     }
