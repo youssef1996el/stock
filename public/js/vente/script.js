@@ -169,7 +169,7 @@ $(document).ready(function () {
             },
             columns: [
                 { data: 'name', title: 'Produit' },
-                { data: 'price_vente', title: 'Prix Vente' },
+                { data: 'price_vente', title: 'Prix vente' },
                 { data: 'qte', title: 'Quantité' },
                 { data: 'client_name', title: 'Client' },
                 { data: 'action', title: 'Action', orderable: false, searchable: false }
