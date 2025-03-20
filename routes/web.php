@@ -83,7 +83,7 @@ Route::get('/Vente'                                     , [VenteController::clas
 Route::post('/PostInTmpVente'                           , [VenteController::class, 'PostInTmpVente'            ]);
 Route::get('/GetTmpVenteByClient'                       , [VenteController::class, 'GetTmpVenteByClient'       ]);
 Route::post('/StoreVente'                               , [VenteController::class, 'Store'                     ]);
-Route::post('/UpdateQteTmp'                             , [VenteController::class, 'UpdateQteTmp'              ]);
+Route::post('/UpdateQteTmpVente'                        , [VenteController::class, 'UpdateQteTmpVente'         ]);
 Route::post('/DeleteRowsTmpVente'                       , [VenteController::class, 'DeleteRowsTmpVente'        ]);
 Route::get('/GetTotalTmpByClientAndUser'                , [VenteController::class, 'GetTotalTmpByClientAndUser']);
 

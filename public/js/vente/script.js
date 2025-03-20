@@ -200,7 +200,7 @@ $(document).ready(function () {
         $(selector + ' tbody').on('click','tr .EditTmp',function(e)
         {
             e.preventDefault();
-            
+           
             let IdTmp = $(this).attr('data-id');
             let Qtetmp = $(this).closest('tr').find('td:eq(2)').text();
             $('#ModalEditQteTmp').modal('show');
@@ -470,10 +470,10 @@ $(document).ready(function () {
             new AWN().alert("La quantité doit être supérieure à zéro", {durations: {alert: 5000}});
             return false;
         }
-        $('#BtnUpdateQteTmp').prop('disabled', true).text('Enregistrement...');
+        /* $('#BtnUpdateQteTmp').prop('disabled', true).text('Enregistrement...'); */
         $.ajax({
             type: "POST",
-            url: UpdateQteTmp,
+            url: UpdateQteTmpVente,
             data: 
             {
                 '_token'  : csrf_token,
