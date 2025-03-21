@@ -39,6 +39,7 @@ class UserController extends Controller
             $dataUser = DB::table('users')
                 ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->whereNull('users.deleted_at')
                 ->select(
                     'users.id',
                     'users.name',

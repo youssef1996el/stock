@@ -23,6 +23,7 @@ class SubCategoryController extends Controller
             $dataSubCategory = DB::table('sub_categories as sc')
                 ->join('users as u', 'u.id', 'sc.iduser')
                 ->join('categories as c', 'c.id', 'sc.id_categorie')
+                ->whereNull('sc.deleted_at')
                 ->select(
                     'sc.id',
                     'sc.name',

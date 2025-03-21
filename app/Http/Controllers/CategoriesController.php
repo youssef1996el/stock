@@ -21,6 +21,7 @@ class CategoriesController extends Controller
         if ($request->ajax()) {
             $dataCategory = DB::table('categories as c')
                                 ->join('users as u','u.id','c.iduser')
+                                ->whereNull('c.deleted_at')
                 ->select(
                     'c.id',
                     'c.name',
@@ -98,7 +99,7 @@ class CategoriesController extends Controller
         } else { 
             return response()->json([
                 'status' => 500,
-                'message' => 'Quelque chose ne va pas'
+                'message' => 'Une erreur est survenue. Veuillez réessayer.'
             ]);
         }
     }

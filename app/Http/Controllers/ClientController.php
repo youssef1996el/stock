@@ -29,7 +29,8 @@ class ClientController extends Controller
                     'c.Email',
                     'u.name as username',
                     'c.created_at'
-                );
+                )
+                ->whereNull('c.deleted_at'); 
 
             return DataTables::of($dataClient)
                 ->addIndexColumn()
@@ -103,7 +104,7 @@ class ClientController extends Controller
         } else { 
             return response()->json([
                 'status' => 500,
-                'message' => 'Quelque chose ne va pas'
+                'message' => 'Une erreur est survenue. Veuillez réessayer.'
             ]);
         }
     }
@@ -206,6 +207,107 @@ class ClientController extends Controller
         return response()->json([
             'status' => 500,
             'message' => 'Une erreur est survenue lors de la suppression'
+        ], 500);
+    }
+
+    /**
+     * Display a listing of the trashed clients.
+     */
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            $dataClient = DB::table('clients as c')
+                        ->join('users as u','u.id','c.iduser')
+                        ->whereNotNull('c.deleted_at') // Only trashed items
+                        ->select(
+                            'c.id',
+                            'c.first_name',
+                            'c.last_name',
+                            'c.Telephone',
+                            'c.Email',
+                            'u.name as username',
+                            'c.created_at',
+                            'c.deleted_at'
+                        );
+
+            return DataTables::of($dataClient)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+
+                    // Restore button
+                    $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 restoreClient"
+                                data-id="' . $row->id . '">
+                                <i class="fa-solid fa-trash-restore text-success"></i>
+                            </a>';
+
+                    // Force Delete button
+                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle forceDeleteClient"
+                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                title="Supprimer définitivement">
+                                <i class="fa-solid fa-trash-alt text-danger"></i>
+                            </a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+             
+        return view('client.trashed');
+    }
+
+    /**
+     * Restore the specified client from trash.
+     */
+    public function restore(Request $request)
+    {
+        $client = Client::onlyTrashed()->find($request->id);
+
+        if (!$client) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Client non trouvé'
+            ], 404);
+        }
+
+        if ($client->restore()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Client restauré avec succès'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 500,
+            'message' => 'Une erreur est survenue lors de la restauration'
+        ], 500);
+    }
+
+    /**
+     * Permanently delete the specified client from database.
+     */
+    public function forceDelete(Request $request)
+    {
+        $client = Client::onlyTrashed()->find($request->id);
+
+        if (!$client) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Client non trouvé'
+            ], 404);
+        }
+
+        if ($client->forceDelete()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Client supprimé définitivement'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 500,
+            'message' => 'Une erreur est survenue lors de la suppression définitive'
         ], 500);
     }
 }

@@ -23,6 +23,7 @@ class RayonController extends Controller
             $dataRayon = DB::table('rayons as r')
                 ->join('users as u', 'u.id', 'r.iduser')
                 ->join('locals as l', 'l.id', 'r.id_local')
+                ->whereNull('r.deleted_at')
                 ->select(
                     'r.id',
                     'r.name',

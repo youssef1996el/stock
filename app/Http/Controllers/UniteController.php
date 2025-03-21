@@ -21,6 +21,7 @@ class UniteController extends Controller
         if ($request->ajax()) {
             $dataUnite = DB::table('unite as u')
                 ->join('users as us', 'us.id', 'u.iduser')
+                ->whereNull('u.deleted_at')
                 ->select(
                     'u.id',
                     'u.name',

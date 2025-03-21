@@ -17,6 +17,7 @@
     var UpdateQteTmpVente = "{{url('UpdateQteTmpVente')}}";
     var DeleteRowsTmpVente = "{{url('DeleteRowsTmpVente')}}";
     var GetTotalTmpByClientAndUser = "{{url('GetTotalTmpByClientAndUser')}}";
+    var ShowBonVente = "{{url('ShowBonVente')}}"; // URL for details view
 </script>
 
 <style>
@@ -287,7 +288,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Prix d'achat</label>
-                                        <input type="number" step="0.01" name="price_vente" class="form-control" required>
+                                        <input type="number" step="0.01" name="price_achat" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

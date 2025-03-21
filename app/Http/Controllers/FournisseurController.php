@@ -21,6 +21,7 @@ class FournisseurController extends Controller
         if ($request->ajax()) {
             $dataFournisseur = DB::table('fournisseurs as f')
                         ->join('users as u','u.id','f.iduser')
+                        ->whereNull('f.deleted_at')
                 ->select(
                     'f.id',
                     'f.entreprise',
@@ -99,7 +100,7 @@ class FournisseurController extends Controller
         } else { 
             return response()->json([
                 'status' => 500,
-                'message' => 'Quelque chose ne va pas'
+                'message' => 'Une erreur est survenue. Veuillez réessayer.'
             ]);
         }
     }

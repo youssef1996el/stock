@@ -35,6 +35,7 @@ class ProductController extends Controller
                 ->leftJoin('tvas as t', 's.id_tva', '=', 't.id')
                 ->leftJoin('unite as u', 's.id_unite', '=', 'u.id')
                 ->leftJoin('users as us', 'p.id_user', '=', 'us.id')
+                ->whereNull('p.deleted_at')
                 ->select(
                     'p.id',
                     'p.name',
@@ -286,7 +287,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -315,7 +316,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -496,7 +497,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }
@@ -543,7 +544,7 @@ class ProductController extends Controller
             
             return response()->json([
                 'status' => 500,
-                'message' => 'Une erreur est survenue: ' . $e->getMessage(),
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
             ], 500);
         }
     }

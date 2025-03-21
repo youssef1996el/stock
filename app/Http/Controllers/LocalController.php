@@ -21,6 +21,7 @@ class LocalController extends Controller
         if ($request->ajax()) {
             $dataLocal = DB::table('locals as l')
                 ->join('users as u', 'u.id', 'l.iduser')
+                ->whereNull('l.deleted_at')
                 ->select(
                     'l.id',
                     'l.name',
@@ -100,7 +101,7 @@ class LocalController extends Controller
         } else { 
             return response()->json([
                 'status' => 500,
-                'message' => 'Quelque chose ne va pas'
+                'message' => 'Une erreur est survenue. Veuillez réessayer.'
             ]);
         }
     }
@@ -174,7 +175,7 @@ class LocalController extends Controller
         } else {
             return response()->json([
                 'status' => 500,
-                'message' => 'Erreur lors de la mise à jour du local',
+                'message' => 'Une erreur est survenue lors de la mise à jour',
             ], 500);
         }
     }

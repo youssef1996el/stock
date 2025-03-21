@@ -28,6 +28,7 @@ class AchatController extends Controller
             $Data_Achat = DB::table('achats as a')
             ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
             ->join('users as u'       ,'u.id','=','a.id_user')
+            ->whereNull('a.deleted_at')
             ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
             ->get();
             return DataTables::of($Data_Achat)
@@ -128,7 +129,7 @@ class AchatController extends Controller
 
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Quantity is updated successfully',
+                    'message' => 'Quantité mise à jour avec succès',
                 ]);
             } else {
                 
@@ -139,7 +140,7 @@ class AchatController extends Controller
 
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Added successfully',
+                    'message' => 'Ajouté avec succès',
                 ]);
             }
         } catch (\Exception $e) {
@@ -148,7 +149,7 @@ class AchatController extends Controller
 
             return response()->json([
                 'status' => 500,
-                'message' => 'Something went wrong. Please try again.',
+                'message' => 'Une erreur est survenue. Veuillez réessayer.',
                 'error' => $e->getMessage(),
             ]);
         }
@@ -208,7 +209,7 @@ class AchatController extends Controller
         if ($TempAchat->isEmpty()) {
             return response()->json([
                 'status'  => 400,
-                'message' => 'No items found for this fournisseur'
+                'message' => 'Aucun article trouvé pour ce fournisseur'
             ]);
         }
 
@@ -226,7 +227,7 @@ class AchatController extends Controller
         if (!$Achat) {
             return response()->json([
                 'status'  => 500,
-                'message' => 'Failed to create purchase record'
+                'message' => 'Échec de la création de l\'enregistrement d\'achat'
             ]);
         }
 
@@ -252,7 +253,7 @@ class AchatController extends Controller
 
         return response()->json([
             'status'  => 200,
-            'message' => 'Purchase added successfully'
+            'message' => 'Achat ajouté avec succès'
         ]);
     }  
 
@@ -295,7 +296,7 @@ class AchatController extends Controller
         {
             return response()->json([
                 'status'    => 200,
-                'message'   => 'Supprimier effectuée avec succès.'
+                'message'   => 'Suppression effectuée avec succès.'
             ]);
         }
     }
@@ -356,6 +357,7 @@ class AchatController extends Controller
     
         return view('Achat.List', compact('bonReception','Fournisseur','Data_Achat'));
     }
+
 
 
 }

@@ -17,6 +17,7 @@ use App\Models\TempVente;
 use App\Models\Vente;
 use App\Models\LigneVente;
 use Illuminate\Support\Facades\Validator;
+use Hashids\Hashids;
 
 class VenteController extends Controller
 {
@@ -24,9 +25,11 @@ class VenteController extends Controller
     {
         if($request->ajax())
         {
+            $hashids = new Hashids();
             $Data_Vente = DB::table('ventes as v')
             ->join('clients as c','c.id','=','v.id_client')
             ->join('users as u','u.id','=','v.id_user')
+            ->whereNull('v.deleted_at')
             ->select('v.total','v.status','c.first_name','c.last_name','u.name','v.created_at','v.id')
             ->get();
             return DataTables::of($Data_Vente)
@@ -34,7 +37,7 @@ class VenteController extends Controller
                 ->addColumn('client_name', function ($row) {
                     return $row->first_name . ' ' . $row->last_name;
                 })
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($row) use ($hashids) {
                     $btn = '';
 
                     // Edit button
@@ -42,10 +45,12 @@ class VenteController extends Controller
                                 data-id="' . $row->id . '">
                                 <i class="fa-solid fa-pen-to-square text-primary"></i>
                             </a>';
-                    // detail button
-                    $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 "
-                                data-id="' . $row->id . '">
-                               <i class="fa-solid fa-eye text-success"></i>
+                    // Detail button with hash ID
+                    $btn .= '<a href="' . url('ShowBonVente/' . $hashids->encode($row->id)) . '" 
+                                class="btn btn-sm bg-success-subtle me-1" 
+                                data-id="' . $row->id . '" 
+                                target="_blank">
+                                <i class="fa-solid fa-eye text-success"></i>
                             </a>';
 
                     // Delete button
@@ -270,56 +275,57 @@ class VenteController extends Controller
         if($TempVente) {
             return response()->json([
                 'status'    => 200,
-                'message'   => 'Supprimier effectuée avec succès.'
+                'message'   => 'Suppression effectuée avec succès.'
             ]);
         }
     }
+
     public function deleteOldVentes()
-{
-    try {
-        // Find ventes older than 24 hours with status "En cours de traitement"
-        $cutoffTime = now()->subHours(24);
-        
-        $oldVentes = Vente::where('status', 'En cours de traitement')
-                         ->where('created_at', '<', $cutoffTime)
-                         ->get();
-        
-        $count = 0;
-        
-        foreach ($oldVentes as $vente) {
-            // Begin transaction to ensure atomicity
-            DB::beginTransaction();
+    {
+        try {
+            // Find ventes older than 24 hours with status "En cours de traitement"
+            $cutoffTime = now()->subHours(24);
             
-            try {
-                // Delete related line items first
-                LigneVente::where('idvente', $vente->id)->delete();
+            $oldVentes = Vente::where('status', 'En cours de traitement')
+                             ->where('created_at', '<', $cutoffTime)
+                             ->get();
+            
+            $count = 0;
+            
+            foreach ($oldVentes as $vente) {
+                // Begin transaction to ensure atomicity
+                DB::beginTransaction();
                 
-                // Then delete the vente itself
-                $vente->delete();
-                
-                DB::commit();
-                $count++;
-            } catch (\Exception $e) {
-                DB::rollBack();
-                \Log::error("Failed to delete vente ID: {$vente->id}. Error: " . $e->getMessage());
+                try {
+                    // Delete related line items first
+                    LigneVente::where('idvente', $vente->id)->delete();
+                    
+                    // Then delete the vente itself
+                    $vente->delete();
+                    
+                    DB::commit();
+                    $count++;
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    \Log::error("Failed to delete vente ID: {$vente->id}. Error: " . $e->getMessage());
+                }
             }
+            
+            \Log::info("Auto-deleted {$count} ventes that were 24+ hours old with unchanged status.");
+            
+            return response()->json([
+                'status' => 200,
+                'message' => "Successfully deleted {$count} old sales orders."
+            ]);
+        } catch (\Exception $e) {
+            \Log::error("Error in deleteOldVentes method: " . $e->getMessage());
+            
+            return response()->json([
+                'status' => 500,
+                'message' => "An error occurred while trying to delete old sales orders."
+            ]);
         }
-        
-        \Log::info("Auto-deleted {$count} ventes that were 24+ hours old with unchanged status.");
-        
-        return response()->json([
-            'status' => 200,
-            'message' => "Successfully deleted {$count} old sales orders."
-        ]);
-    } catch (\Exception $e) {
-        \Log::error("Error in deleteOldVentes method: " . $e->getMessage());
-        
-        return response()->json([
-            'status' => 500,
-            'message' => "An error occurred while trying to delete old sales orders."
-        ]);
     }
-}
 
     public function GetTotalTmpByClientAndUser(Request $request)
     {
@@ -342,5 +348,33 @@ class VenteController extends Controller
             'status'    => 200,
             'total'     => $SumVente
         ]);
+    }
+
+    public function ShowBonVente($id)
+    {
+        $hashids = new Hashids();
+        $decoded = $hashids->decode($id);
+
+        if (empty($decoded)) {
+            abort(404); // Handle invalid hash
+        }
+
+        $id = $decoded[0]; // Extract the original ID
+
+        // Now, use $id to retrieve the BonVente
+        $bonVente = Vente::findOrFail($id);
+        $Client = DB::table('clients as c')
+            ->join('ventes as v', 'v.id_Client', '=', 'c.id')
+            ->select('c.*')
+            ->where('v.id', $id)
+            ->first();
+        $Data_Vente = DB::table('ventes as v')
+            ->join('ligne_vente as l', 'v.id', '=', 'l.idvente')
+            ->join('products as p', 'l.idproduit', '=', 'p.id')
+            ->select('p.price_vente', 'l.qte', DB::raw('p.price_vente * l.qte as total'), 'p.name')
+            ->where('v.id', $id)
+            ->get();
+
+        return view('Vente.List', compact('bonVente', 'Client', 'Data_Vente'));
     }
 }
