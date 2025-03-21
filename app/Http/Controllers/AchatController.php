@@ -28,6 +28,7 @@ class AchatController extends Controller
             $Data_Achat = DB::table('achats as a')
             ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
             ->join('users as u'       ,'u.id','=','a.id_user')
+            ->whereNull('a.deleted_at')
             ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
             ->get();
             return DataTables::of($Data_Achat)
@@ -320,8 +321,6 @@ class AchatController extends Controller
             'total'     => $SumAchat
         ]);
     }
-<<<<<<< HEAD
-=======
 
 
     public function ShowBonReception($id)
@@ -356,5 +355,5 @@ class AchatController extends Controller
     }
 
 
->>>>>>> 4b6a026cc356424270c6a60c713dab83e91f7a0c
+
 }

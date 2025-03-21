@@ -35,6 +35,7 @@ class ProductController extends Controller
                 ->leftJoin('tvas as t', 's.id_tva', '=', 't.id')
                 ->leftJoin('unite as u', 's.id_unite', '=', 'u.id')
                 ->leftJoin('users as us', 'p.id_user', '=', 'us.id')
+                ->whereNull('p.deleted_at')
                 ->select(
                     'p.id',
                     'p.name',

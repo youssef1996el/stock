@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('id_rayon')->constrained('rayons');
             $table->foreignId('id_user')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

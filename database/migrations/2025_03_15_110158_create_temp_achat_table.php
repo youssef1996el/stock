@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('id_fournisseur')->nullable()->references('id')->on('fournisseurs')->onDelete('cascade');
             $table->integer('qte');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

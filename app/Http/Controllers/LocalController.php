@@ -21,6 +21,7 @@ class LocalController extends Controller
         if ($request->ajax()) {
             $dataLocal = DB::table('locals as l')
                 ->join('users as u', 'u.id', 'l.iduser')
+                ->whereNull('l.deleted_at')
                 ->select(
                     'l.id',
                     'l.name',

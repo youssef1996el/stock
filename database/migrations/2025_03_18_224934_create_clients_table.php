@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('iduser')->references('id')->on('users')->onDelete('cascade');
             $table->string('Email');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

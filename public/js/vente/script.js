@@ -208,7 +208,6 @@ $(document).ready(function () {
             $('#QteTmp').val(Qtetmp);   
         });
 
-
         $(selector + ' tbody').on('click','tr .DeleteTmp',function(e)
         {
             e.preventDefault();
@@ -470,7 +469,7 @@ $(document).ready(function () {
             new AWN().alert("La quantité doit être supérieure à zéro", {durations: {alert: 5000}});
             return false;
         }
-        /* $('#BtnUpdateQteTmp').prop('disabled', true).text('Enregistrement...'); */
+        $('#BtnUpdateQteTmp').prop('disabled', true).text('Enregistrement...');
         $.ajax({
             type: "POST",
             url: UpdateQteTmpVente,

@@ -21,6 +21,7 @@ class FournisseurController extends Controller
         if ($request->ajax()) {
             $dataFournisseur = DB::table('fournisseurs as f')
                         ->join('users as u','u.id','f.iduser')
+                        ->whereNull('f.deleted_at')
                 ->select(
                     'f.id',
                     'f.entreprise',

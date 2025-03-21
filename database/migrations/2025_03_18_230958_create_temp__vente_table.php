@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('id_client')->nullable()->references('id')->on('clients')->onDelete('cascade');
             $table->integer('qte');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -21,6 +21,7 @@ class TvaController extends Controller
         if ($request->ajax()) {
             $dataTva = DB::table('tvas as t')
                         ->join('users as u','u.id','t.iduser')
+                        ->whereNull('t.deleted_at')
                 ->select(
                     't.id',
                     't.name',
