@@ -48,6 +48,10 @@ class AchatController extends Controller
                                     target="_blank">
                                     <i class="fa-solid fa-eye text-success"></i>
                                 </a>';
+                        
+                        $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1" data-id="' . $row->id . '">
+                                <i class="fa-solid fa-circle-chevron-down"></i>
+                            </a>';
 
                         // Delete button
                         $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle" 
