@@ -14,31 +14,15 @@ $(document).ready(function () {
             url: auditUrl,
             type: 'GET',
             data: function(d) {
-                // Récupérer les valeurs des filtres
-                var modelType = $('#modelFilter').val();
-                var userId = $('#userFilter').val();
-                var eventType = $('#eventFilter').val();
+                d.model_type = $('#modelFilter').val();
+                d.user_id = $('#userFilter').val();
+                d.event = $('#eventFilter').val();
                 
-                // S'assurer que nous n'envoyons que les filtres non vides
-                if (modelType) {
-                    d.model_type = modelType;
-                }
-                
-                if (userId) {
-                    d.user_id = userId;
-                }
-                
-                if (eventType) {
-                    d.event = eventType;
-                }
-                
-                // Ajouter la plage de dates si sélectionnée
+                // Add date range if selected
                 if ($('#dateRangeFilter').val()) {
                     var dates = $('#dateRangeFilter').data('daterangepicker');
-                    if (dates && dates.startDate && dates.endDate) {
-                        d.start_date = dates.startDate.format('YYYY-MM-DD');
-                        d.end_date = dates.endDate.format('YYYY-MM-DD');
-                    }
+                    d.start_date = dates.startDate.format('YYYY-MM-DD');
+                    d.end_date = dates.endDate.format('YYYY-MM-DD');
                 }
             },
             dataSrc: function (json) {
@@ -81,7 +65,6 @@ $(document).ready(function () {
                 data: 'changes', 
                 name: 'changes',
                 render: function(data, type, row) {
-                    // Changed to a direct link to the details page
                     return '<a href="' + auditUrl + '/details/' + row.id + '" class="btn btn-sm btn-info">' +
                            '<i class="fa fa-eye"></i> Voir détails</a>';
                 }
@@ -165,15 +148,7 @@ $(document).ready(function () {
     /**
      * Apply filters when changed
      */
-    $('#modelFilter').on('change', function() {
-        tableAudits.ajax.reload();
-    });
-    
-    $('#userFilter').on('change', function() {
-        tableAudits.ajax.reload();
-    });
-    
-    $('#eventFilter').on('change', function() {
+    $('#modelFilter, #userFilter, #eventFilter').on('change', function() {
         tableAudits.ajax.reload();
     });
     
@@ -187,5 +162,36 @@ $(document).ready(function () {
         $('#dateRangeFilter').val('');
         
         tableAudits.ajax.reload();
+    });
+    
+    /**
+     * Export button
+     */
+    $('#exportAuditCSV').on('click', function() {
+        let queryParams = [];
+        
+        if ($('#modelFilter').val()) {
+            queryParams.push('model_type=' + encodeURIComponent($('#modelFilter').val()));
+        }
+        
+        if ($('#userFilter').val()) {
+            queryParams.push('user_id=' + encodeURIComponent($('#userFilter').val()));
+        }
+        
+        if ($('#eventFilter').val()) {
+            queryParams.push('event=' + encodeURIComponent($('#eventFilter').val()));
+        }
+        
+        if ($('#dateRangeFilter').val()) {
+            const dates = $('#dateRangeFilter').data('daterangepicker');
+            queryParams.push('start_date=' + encodeURIComponent(dates.startDate.format('YYYY-MM-DD')));
+            queryParams.push('end_date=' + encodeURIComponent(dates.endDate.format('YYYY-MM-DD')));
+        }
+        
+        // Construct query string
+        const queryString = queryParams.join('&');
+        
+        // Redirect to export URL
+        window.location.href = auditUrl + '/export' + (queryString ? '?' + queryString : '');
     });
 });
