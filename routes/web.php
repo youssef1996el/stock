@@ -15,6 +15,7 @@ use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\AchatController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\VenteController ;
+use App\Http\Controllers\AuditController;
 
 Auth::routes();
 
@@ -94,6 +95,9 @@ Route::post('/addFournisseur'                           , [FournisseurController
 Route::get('/editFournisseur/{id}'                      , [FournisseurController::class, 'edit'                                     ]);
 Route::post('/updateFournisseur'                        , [FournisseurController::class, 'update'                                   ]);
 Route::post('/DeleteFournisseur'                        , [FournisseurController::class, 'destroy'                                  ]);
+// Audit routes
+Route::get('/audit', [AuditController::class, 'index']);
+Route::get('/audit/details/{id}', [AuditController::class, 'details']);
 
 
 // Dependent dropdown routes

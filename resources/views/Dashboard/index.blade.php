@@ -414,6 +414,12 @@
         <span> Ventes </span>
     </a>
 </li>
+<li>
+    <a class='tp-link' href='{{url('audit')}}'>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span> Historique </span>
+    </a>
+</li>
                                        
                             <li>
                                 <a class='tp-link' href='{{url('unite')}}'>
