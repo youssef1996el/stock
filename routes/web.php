@@ -126,6 +126,7 @@ Route::post('DeleteRowsTmpAchat'                ,[AchatController::class,'Delete
 Route::get('GetTmpAchatByFournisseur'           ,[AchatController::class,'GetTmpAchatByFournisseur'         ]); 
 Route::get('GetTotalTmpByForunisseurAndUser'    ,[AchatController::class,'GetTotalTmpByForunisseurAndUser'  ]); 
 Route::get('ShowBonReception/{id}'              ,[AchatController::class,'ShowBonReception'                 ]);
+Route::get('Invoice/{id}'                       ,[AchatController::class,'Invoice'                          ]);
 
 
 // Client routes

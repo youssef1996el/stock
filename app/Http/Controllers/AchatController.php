@@ -18,6 +18,7 @@ use App\Models\Achat;
 use App\Models\LigneAchat;
 use Illuminate\Support\Facades\Validator;
 use Hashids\Hashids;
+use Barryvdh\DomPDF\Facade\Pdf;
 class AchatController extends Controller
 {
     public function index(Request $request)
@@ -49,9 +50,13 @@ class AchatController extends Controller
                                     target="_blank">
                                     <i class="fa-solid fa-eye text-success"></i>
                                 </a>';
-                        
+                        // Approve
                         $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1" data-id="' . $row->id . '">
-                                <i class="fa-solid fa-circle-chevron-down"></i>
+                                <i class="fa-solid fa-circle-chevron-down text-success"></i>
+                            </a>';
+
+                        $btn .= '<a href="' . url('Invoice/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
+                                <i class="fa-solid fa-print text-info"></i>
                             </a>';
 
                         // Delete button
@@ -82,7 +87,7 @@ class AchatController extends Controller
             ->with('tvas',$tvas)
             ->with('unites',$unites);
     } 
-    
+   
     public function getProduct(Request $request)
     {
         $name_product = $request->product;
@@ -351,11 +356,63 @@ class AchatController extends Controller
         ->join('ligne_achat as l', 'a.id', '=', 'l.idachat')
         ->join('products as p', 'l.idproduit', '=', 'p.id')
         ->select('p.price_achat', 'l.qte', DB::raw('p.price_achat * l.qte as total'), 'p.name')
-        ->where('a.id', 1)
+        ->where('a.id', $id)
         ->get();
     
     
         return view('Achat.List', compact('bonReception','Fournisseur','Data_Achat'));
+    }
+
+    public function Invoice($id)
+    {
+        $hashids = new Hashids();
+        $decoded = $hashids->decode($id);
+
+        if (empty($decoded)) {
+            abort(404); // Handle invalid hash
+        }
+    
+        $id = $decoded[0]; // Extract the original ID
+        $Data_Achat = $data = DB::table('achats as a')
+        ->join('ligne_achat as l', 'a.id', '=', 'l.idachat')
+        ->join('products as p', 'l.idproduit', '=', 'p.id')
+        ->select('p.price_achat', 'l.qte', DB::raw('p.price_achat * l.qte as total'), 'p.name','a.created_at')
+        ->where('a.id', $id)
+        ->get();
+
+       
+        $imagePath = public_path('images/logo_top.png');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $logo_bottom = public_path('images/logo_bottom.png');
+        $imageData_bottom = base64_encode(file_get_contents($logo_bottom));
+        $context = stream_context_create([
+            'ssl'  => [
+                'verify_peer'  => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed' => TRUE,
+            ]
+        ]);
+        $html = view('Achat.Facture', [
+            'Data_Achat' => $Data_Achat,
+            'imageData' => $imageData,
+            'imageData_bottom' => $imageData_bottom,
+        ])->render();
+    
+        // تحميل HTML إلى PDF
+        $pdf = Pdf::loadHTML($html)->output();
+    
+        // تحديد رؤوس الاستجابة
+        $headers = [
+            "Content-type" => "application/pdf",
+        ];
+        return response()->streamDownload(
+            fn() => print($pdf),
+            "Bon.pdf",
+            $headers
+        );
+    
+        
+        
     }
 
 
