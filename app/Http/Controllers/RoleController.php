@@ -82,20 +82,21 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'permissions' => 'required', // ✅ التحقق من البريد الإلكتروني الفريد
-            
-        ],[
-            'name' => 'nom role',
-            'permissions' => 'autorisations',
-            
+            'name' => 'required|string|max:255',
+            'permissions' => 'required|array|min:1', // التحقق من وجود عنصر واحد على الأقل
+            'permissions.*' => 'exists:permissions,id',
+        ], [
+            'name.required' => 'Le champ :attribute est requis.',
+            'permissions.required' => 'Le champ :attribute est requis.',
+            'permissions.min' => 'Veuillez sélectionner au moins une autorisation.',
+            'permissions.*.exists' => 'Certaines autorisations sélectionnées n\'existent pas.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'dataError' => 400,
                 'errors' => $validator->messages(),
-            ], 400); // تأكد من وضع كود الحالة HTTP هنا
+            ]); // تأكد من وضع كود الحالة HTTP هنا
         }
         $role = Role::create(['name' => $request->name]);
 
@@ -112,7 +113,7 @@ class RoleController extends Controller
         else
         {
             return response()->json([
-                'status'    => 500,
+                'dataError'    => 500,
                 'message'   => 'Une erreur est survenue, veuillez réessayer .'
             ]); 
         }
@@ -164,20 +165,20 @@ class RoleController extends Controller
             ]);
         }
 
-        // ✅ Validate request
-        $request->validate([
+        // ✅ استخدم Validator للتحقق
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
             'permissions.*' => 'exists:permissions,id'
         ]);
 
-        if ($request->fails()) {
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
-                'errors' => $request->messages(),
-            ], 400); // تأكد من وضع كود الحالة HTTP هنا
+                'errors' => $validator->errors(),
+            ], 400); 
         }
-
+        
         // ✅ Update role name
         $role->update(['name' => $request->name]);
 

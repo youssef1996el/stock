@@ -12,7 +12,7 @@
     var AddRoles                       = "{{route('roles.store')}}";
     var roles                      = "{{route('roles.index')}}";
     var updateRole                      = "{{url('updateRole')}}";
-    var DeleteRole                      = "{{url('DeleteRole')}}";
+    var DeleteRole                      = "{{url('DeleteRole')}}"; 
    
 </script>
 <div class="content-page">
@@ -91,7 +91,7 @@
             <div class="modal-body">
                 <div class="row">
                     <ul class="validationAddRoles"></ul>
-                    <form action="{{ route('roles.store') }}" id="FormAddRoles">
+                    <form action="{{ route('roles.store') }}" id="FormAddRoles"> 
                        
                 
                         <!-- Full Name & Email -->
@@ -106,7 +106,8 @@
                                 </div>
                             </div>
                 
-                            <div class="col-12">           
+                            <div class="col-12">
+                                <label for="">Permissions</label>           
                                 <select class="form-select @error('permissions') is-invalid @enderror" multiple aria-label="Permissions" id="permissions" name="permissions[]" style="height: 210px;">
                                     @forelse ($permissions as $permission)
                                         <option value="{{ $permission->id }}" {{ in_array($permission->id, old('permissions') ?? []) ? 'selected' : '' }}>
@@ -145,7 +146,7 @@
             <div class="modal-body">
                 <div class="row">
                     <ul class="validationEditRoles"></ul>
-                    <form action="{{ url('updateRole') }}" id="FormUpdateRoles">
+                    <form action="{{ url('updateRole') }}" id="FormUpdateRoles">  
                         
                 
                         <!-- Full Name & Email -->

@@ -166,14 +166,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                       {{--  @foreach ($Data_Achat as $item) --}}
-                            <tr>
-                                <td style="text-align: center">{{-- {{ $item->name }} --}}</td>
-                                <td style="text-align: center">{{-- {{ $item->qte }} --}}</td>
-                                <td style="text-align: center">{{-- {{ $item->qte }} --}}</td>
-                                <td style="text-align: center"></td>
-                            </tr>
-                       {{--  @endforeach --}}
+                       
+                        <tr>
+                            <td style="text-align: center"></td>
+                            <td style="text-align: center"></td>
+                            <td style="text-align: center"></td>
+                            <td style="text-align: center"></td>
+                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
@@ -185,12 +185,10 @@
         <footer>
             <div class="invoice-footer">
                 <img src="data:image/png;base64,{{ $imageData_bottom }}" alt="" width="750px">
-               {{--  <span class="text-uppercase" style="padding: 8px;display: flex;justify-content: center;align-content: center">
-                    <p style="font-size: 12px;">ICE: {{ $Info->ice }} / CNSS: {{ $Info->cnss }} / RC: {{ $Info->rc }} / IF: {{ $Info->if }} / adresse: {{ $Info->address }}</p>
-                </span> --}}
+              
             </div>
         </footer>
-       {{--  <div class="watermark">{{ $typeOrder ? 'Facture' : 'Bon' }}</div> --}}
+      
     </div>
     
     

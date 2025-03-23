@@ -45,7 +45,7 @@
     }
 </style>
 
-<div class="content-page">
+<div class="content-page"> 
     <div class="content">
 
         <!-- Début du contenu -->

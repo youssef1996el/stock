@@ -296,7 +296,9 @@ class AchatController extends Controller
 
     public function DeleteRowsTmpAchat(Request $request)
     {
+       
         $TempAchat = TempAchat::where('id',$request->id)->delete();
+         
         if($TempAchat)
         {
             return response()->json([

@@ -226,6 +226,7 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     if(response.status == 200){
+                        
                         new AWN().success(response.message, {durations: {success: 5000}});
                         initializeTableTmpAchat('.TableAmpAchat', Fournisseur);
                         GetTotalTmpByForunisseurAndUserScript(Fournisseur);
@@ -267,7 +268,7 @@ $(document).ready(function () {
             destroy: true,
             processing: true,
             serverSide: false,
-            autoWidth: false,
+            autoWidth: false, 
             columns: [
                 { data: 'name', title: 'Produit' },
                 { data: 'quantite', title: 'Quantité' },
