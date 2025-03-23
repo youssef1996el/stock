@@ -118,7 +118,7 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
-            dataType: "json",
+            dataType: "json", 
             success: function (response) 
             {
                 $('#BtnADDRoles').prop('disabled', false).text('Sauvegarder');
@@ -133,12 +133,9 @@ $(document).ready(function () {
                 {
                     new AWN().warning(response.message, {durations: {warning: 5000}});
                 }
-                else if(response.status == 400)
+                else if(response.dataError == 400)
                 {
-                   /*  alert(231);
-                    $.each(response.errors, function(key, list_err) {
-                        new AWN().warning(list_err, {durations: {warning: 5000}});
-                    }); */
+                    
                     $('.validationAddRoles').html("");
                     $('.validationAddRoles').addClass('alert alert-danger');
                     $.each(response.errors, function(key, list_err) {
@@ -151,7 +148,7 @@ $(document).ready(function () {
                         });
                     }, 5000);
                 }  
-                else if (response.status == 404 || response.status == 500) {
+                else if (response.dataError == 404 || response.dataError == 500) {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },

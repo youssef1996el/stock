@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Facade;
 return [
 
     /*
@@ -126,10 +127,20 @@ return [
    'providers' => ServiceProvider::defaultProviders()->merge([
         Yajra\DataTables\DataTablesServiceProvider::class,
         Yajra\DataTables\HtmlServiceProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
         
         // App\Providers\BroadcastServiceProvider::class,
         
         
         Spatie\Permission\PermissionServiceProvider::class,
+    ])->toArray(),
+
+    'aliases' => Facade::defaultAliases()->merge([
+        // 'Example' => App\Facades\Example::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class
     ])->toArray(),
 ];
