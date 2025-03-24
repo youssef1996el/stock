@@ -57,10 +57,15 @@ class ProductController extends Controller
             return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editProduct" data-id="'.$row->id.'">
-                            <i class="fa-solid fa-pen-to-square text-primary"></i></a>';
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteProduct" data-id="'.$row->id.'">
-                            <i class="fa-solid fa-trash text-danger"></i></a>';
+                    if (auth()->user()->can('Products-modifier')) { 
+
+                        $btn = '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editProduct" data-id="'.$row->id.'">
+                        <i class="fa-solid fa-pen-to-square text-primary"></i></a>';
+                    }
+                    if (auth()->user()->can('Products-supprimer')) { 
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteProduct" data-id="'.$row->id.'">
+                                <i class="fa-solid fa-trash text-danger"></i></a>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])

@@ -34,20 +34,21 @@ class TvaController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
-
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editTva"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
-
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteTva"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer TVA">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
-
+                    if (auth()->user()->can('Taxes-modifier')) { 
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editTva" data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
+                   
+                    if (auth()->user()->can('Taxes-supprimer')) { 
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteTva"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer TVA">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])
