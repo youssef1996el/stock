@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Category extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+
+class Category extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     /**
      * The table associated with the model.
@@ -25,5 +29,16 @@ class Category extends Model
     protected $fillable = [
         'name',
         'iduser',
+    ];
+    
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 }

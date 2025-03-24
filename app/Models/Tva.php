@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Tva extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+
+class Tva extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     /**
      * The table associated with the model.
@@ -27,10 +31,22 @@ class Tva extends Model
         'value',
         'iduser',
     ];
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function user()
-{
-    return $this->belongsTo(User::class, 'iduser');
-}
+    {
+        return $this->belongsTo(User::class, 'iduser');
+    }
 
     /**
      * The attributes that should be cast.

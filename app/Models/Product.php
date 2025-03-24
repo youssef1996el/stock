@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Product extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+
+class Product extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +32,17 @@ class Product extends Model
         'id_local',
         'id_rayon',
         'id_user',
+    ];
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
