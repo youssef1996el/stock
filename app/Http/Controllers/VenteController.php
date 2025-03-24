@@ -29,7 +29,6 @@ class VenteController extends Controller
             $Data_Vente = DB::table('ventes as v')
             ->join('clients as c','c.id','=','v.id_client')
             ->join('users as u','u.id','=','v.id_user')
-            ->whereNull('v.deleted_at')
             ->select('v.total','v.status','c.first_name','c.last_name','u.name','v.created_at','v.id')
             ->get();
             return DataTables::of($Data_Vente)
@@ -72,7 +71,7 @@ class VenteController extends Controller
         $rayons = Rayon::all();
         $tvas = Tva::all();
         $unites = Unite::all();
-        return view('Vente.index')
+        return view('vente.index')
             ->with('clients', $clients)
             ->with('categories', $categories)
             ->with('subcategories', $subcategories)
@@ -375,6 +374,6 @@ class VenteController extends Controller
             ->where('v.id', $id)
             ->get();
 
-        return view('Vente.List', compact('bonVente', 'Client', 'Data_Vente'));
+        return view('vente.list', compact('bonVente', 'Client', 'Data_Vente'));
     }
 }

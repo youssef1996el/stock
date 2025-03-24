@@ -71,7 +71,7 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddVente">
-                                    <i class="fa-solid fa-plus"></i> Ajouter une vente
+                                    <i class="fa-solid fa-plus"></i> Ajouter une nouvelle commande
                                 </button>
                             </div>
                             
@@ -104,7 +104,7 @@
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalAddVenteLabel">Ajouter une nouvelle vente</h5>
+                        <h5 class="modal-title" id="ModalAddVenteLabel">Ajouter une nouvelle commande </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">

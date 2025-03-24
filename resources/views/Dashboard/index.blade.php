@@ -411,7 +411,7 @@
         <!-- <i class="fa-solid fa-shopping-bag"></i> -->
         <!-- <i class="fa-solid fa-tags"></i> -->
         <!-- <i class="fa-solid fa-dollar-sign"></i> -->
-        <span> Ventes </span>
+        <span> commande </span>
     </a>
 </li>
 <li>

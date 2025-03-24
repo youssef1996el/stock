@@ -19,6 +19,7 @@ use App\Models\LigneAchat;
 use Illuminate\Support\Facades\Validator;
 use Hashids\Hashids;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class AchatController extends Controller
 {
     public function index(Request $request)
@@ -28,13 +29,12 @@ class AchatController extends Controller
             $hashids = new Hashids();
             $Data_Achat = DB::table('achats as a')
             ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
-            ->join('users as u'       ,'u.id','=','a.id_user')
-            ->whereNull('a.deleted_at')
+            ->join('users as u','u.id','=','a.id_user')
             ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
             ->get();
             return DataTables::of($Data_Achat)
                     ->addIndexColumn()
-                    ->addColumn('action', function ($row) use ($hashids) {  // <-- Pass $hashids inside the closure
+                    ->addColumn('action', function ($row) use ($hashids) {
                         $btn = '';
 
                         // Edit button
@@ -60,9 +60,9 @@ class AchatController extends Controller
                             </a>';
 
                         // Delete button
-                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle" 
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteAchat" 
                                     data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                    title="Supprimer Catégorie">
+                                    title="Supprimer Achat">
                                     <i class="fa-solid fa-trash text-danger"></i>
                                 </a>';
 
@@ -78,7 +78,7 @@ class AchatController extends Controller
         $rayons = Rayon::all();
         $tvas = Tva::all();
         $unites = Unite::all();
-        return view('Achat.index')
+        return view('achat.index')
             ->with('Fournisseur',$Fournisseur)
             ->with('categories',$categories)
             ->with('subcategories',$subcategories)
@@ -92,7 +92,6 @@ class AchatController extends Controller
     {
         $name_product = $request->product;
     
-        
         if ($request->ajax()) {
             
             $Data_Product = DB::table('products as p')
@@ -110,26 +109,20 @@ class AchatController extends Controller
 
     public function PostInTmpAchat(Request $request)
     {
-        
         $data = $request->all();
         $data['id_user'] = Auth::user()->id;
         $data['qte'] = 1;
-
         
         DB::beginTransaction();
 
         try {
-            
             $existingProduct = TempAchat::where('idproduit', $data['idproduit'])
                 ->where('id_fournisseur', $data['id_fournisseur'])
                 ->where('id_user', $data['id_user'])
                 ->first();
 
             if ($existingProduct) {
-               
                 $existingProduct->increment('qte', 1);
-
-               
                 DB::commit();
 
                 return response()->json([
@@ -137,10 +130,7 @@ class AchatController extends Controller
                     'message' => 'Quantité mise à jour avec succès',
                 ]);
             } else {
-                
                 TempAchat::create($data);
-
-                
                 DB::commit();
 
                 return response()->json([
@@ -149,7 +139,6 @@ class AchatController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-           
             DB::rollBack();
 
             return response()->json([
@@ -169,8 +158,6 @@ class AchatController extends Controller
         ->where('t.id_fournisseur', '=', $request->id_fournisseur)
         ->select('t.id', 'p.name', 'p.price_achat', 'f.entreprise', 't.qte');
         
-        
-
         return DataTables::of($Data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -193,9 +180,7 @@ class AchatController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
     }
-
 
     public function Store(Request $request)
     {
@@ -279,7 +264,7 @@ class AchatController extends Controller
             return response()->json([
                 'status' => 400,
                 'errors' => $validator->messages(),
-            ], 400); // تأكد من وضع كود الحالة HTTP هنا
+            ], 400);
         }
         $TempAchat = TempAchat::where('id',$request->id)->update([
             'qte'   => $request->qte,
@@ -291,12 +276,10 @@ class AchatController extends Controller
                 'message'   => 'Mise à jour effectuée avec succès.'
             ]);
         }
-        
     }
 
     public function DeleteRowsTmpAchat(Request $request)
     {
-       
         $TempAchat = TempAchat::where('id',$request->id)->delete();
          
         if($TempAchat)
@@ -306,6 +289,23 @@ class AchatController extends Controller
                 'message'   => 'Suppression effectuée avec succès.'
             ]);
         }
+    }
+
+    public function DeleteAchat(Request $request)
+    {
+        // Hard delete instead of soft delete
+        $achat = Achat::findOrFail($request->id);
+        
+        // First delete related records in ligne_achat
+        LigneAchat::where('idachat', $achat->id)->delete();
+        
+        // Then delete the achat record
+        $achat->delete();
+        
+        return response()->json([
+            'status'    => 200,
+            'message'   => 'Achat supprimé avec succès.'
+        ]);
     }
 
     public function GetTotalTmpByForunisseurAndUser(Request $request)
@@ -322,8 +322,6 @@ class AchatController extends Controller
                 DB::raw('t.qte * p.price_achat as total_by_product'))
             ->get();
 
-      
-
         // Calculate total purchase amount
         $SumAchat = $TempAchat->sum('total_by_product');
 
@@ -332,7 +330,6 @@ class AchatController extends Controller
             'total'     => $SumAchat
         ]);
     }
-
 
     public function ShowBonReception($id)
     {
@@ -344,8 +341,6 @@ class AchatController extends Controller
         }
     
         $id = $decoded[0]; // Extract the original ID
-
-       
     
         // Now, use $id to retrieve the BonReception
         $bonReception = Achat::findOrFail($id);
@@ -361,8 +356,7 @@ class AchatController extends Controller
         ->where('a.id', $id)
         ->get();
     
-    
-        return view('Achat.List', compact('bonReception','Fournisseur','Data_Achat'));
+        return view('achat.list', compact('bonReception','Fournisseur','Data_Achat'));
     }
 
     public function Invoice($id)
@@ -382,7 +376,6 @@ class AchatController extends Controller
         ->where('a.id', $id)
         ->get();
 
-       
         $imagePath = public_path('images/logo_top.png');
         $imageData = base64_encode(file_get_contents($imagePath));
         $logo_bottom = public_path('images/logo_bottom.png');
@@ -394,16 +387,16 @@ class AchatController extends Controller
                 'allow_self_signed' => TRUE,
             ]
         ]);
-        $html = view('Achat.Facture', [
+        $html = view('achat.facture', [
             'Data_Achat' => $Data_Achat,
             'imageData' => $imageData,
             'imageData_bottom' => $imageData_bottom,
         ])->render();
     
-        // تحميل HTML إلى PDF
+        // Load HTML to PDF
         $pdf = Pdf::loadHTML($html)->output();
     
-        // تحديد رؤوس الاستجابة
+        // Set response headers
         $headers = [
             "Content-type" => "application/pdf",
         ];
@@ -412,11 +405,5 @@ class AchatController extends Controller
             "Bon.pdf",
             $headers
         );
-    
-        
-        
     }
-
-
-
 }

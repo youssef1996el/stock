@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('idproduit')->references('id')->on('products')->onDelete('cascade');
             $table->integer('qte');
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 
