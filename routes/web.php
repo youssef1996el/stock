@@ -88,6 +88,7 @@ Route::post('/UpdateQteTmpVente'                        , [VenteController::clas
 Route::post('/DeleteRowsTmpVente'                       , [VenteController::class, 'DeleteRowsTmpVente'        ]);
 Route::get('/GetTotalTmpByClientAndUser'                , [VenteController::class, 'GetTotalTmpByClientAndUser']);
 Route::get('ShowBonVente/{id}'                          , [VenteController::class, 'ShowBonVente'])->name('ShowBonVente');
+Route::get('FactureVente/{id}'                          , [VenteController::class, 'FactureVente']);
 
 // Fournisseur routes
 Route::get('/fournisseur'                               , [FournisseurController::class, 'index'])->name('fournisseur.index');
