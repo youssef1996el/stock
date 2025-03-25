@@ -16,25 +16,15 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Instantiate a new UserController instance.
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    //     $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index','show']]);
-    //     $this->middleware('permission:create-user', ['only' => ['create','store']]);
-    //     $this->middleware('permission:edit-user', ['only' => ['edit','update']]);
-    //     $this->middleware('permission:delete-user', ['only' => ['destroy']]);
-    // }
-
-    /**
      * Display a listing of the resource.
      */
     public function index(request $request)
     {
+        // Check if user has permission to view users
+        if (!auth()->user()->can('utilisateur')) {
+            return redirect()->back()->with('error', 'Vous n\'avez pas la permission d\'accéder aux utilisateurs');
+        }
        
-                 
-                 
         if ($request->ajax()) {
             $dataUser = DB::table('users')
                 ->leftJoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -47,7 +37,7 @@ class UserController extends Controller
                     'users.password',
                     
                     'users.created_at',
-                    DB::raw("GROUP_CONCAT(roles.name SEPARATOR ', ') as roles") // ✅ جلب الأدوار كمصفوفة مفصولة بفاصلة
+                    DB::raw("GROUP_CONCAT(roles.name SEPARATOR ', ') as roles")
                 )
                 ->groupBy('users.id', 'users.name', 'users.email', 'users.password', 'users.created_at');
     
@@ -56,19 +46,23 @@ class UserController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
     
-                    // زر التعديل
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUser"
-                                data-id="' . $row->id . '"    title="modifier roles"
-                                >
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('utilisateur-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUser"
+                                    data-id="' . $row->id . '"    title="modifier roles"
+                                    >
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
     
-                    // زر الحذف
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteuser"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer roles">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('utilisateur-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteuser"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer roles">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
     
                     return $btn;
                 })
@@ -88,6 +82,11 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        // Check if user has permission to add users
+        if (!auth()->user()->can('utilisateur-ajoute')) {
+            abort(403, 'Vous n\'avez pas la permission d\'ajouter des utilisateurs');
+        }
+
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);
@@ -96,16 +95,24 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)/* : RedirectResponse */
+    public function store(StoreUserRequest $request)
     {
+        // Check if user has permission to add users
+        if (!auth()->user()->can('utilisateur-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des utilisateurs'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email', // ✅ التحقق من البريد الإلكتروني الفريد
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ], [
             'required' => 'Le champ :attribute est requis.',
             'email.email' => 'Le champ mail doit être une adresse valide.',
-            'email.unique' => 'Cet email est déjà utilisé, veuillez en choisir un autre.', // ✅ رسالة خطأ عند التكرار
+            'email.unique' => 'Cet email est déjà utilisé, veuillez en choisir un autre.',
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
         ], [
             'name' => 'nom complet',
@@ -117,8 +124,9 @@ class UserController extends Controller
             return response()->json([
                 'status' => 400,
                 'errors' => $validator->messages(),
-            ], 400); // تأكد من وضع كود الحالة HTTP هنا
+            ], 400);
         }
+        
         $input = $request->all();
         $input['password'] = Hash::make($request->password);
 
@@ -139,12 +147,7 @@ class UserController extends Controller
                 'status' => 500,
                 'message' => 'Quelque chose ne va pas'
             ]);
-
         }
-       
-        
-
-        
     }
 
     /**
@@ -160,6 +163,11 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+        // Check if user has permission to modify users
+        if (!auth()->user()->can('utilisateur-modifier')) {
+            abort(403, 'Vous n\'avez pas la permission de modifier des utilisateurs');
+        }
+
         // Check Only Super Admin can update his own Profile
         if ($user->hasRole('Super Admin')){
             if($user->id != auth()->user()->id){
@@ -179,10 +187,15 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify users
+        if (!auth()->user()->can('utilisateur-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des utilisateurs'
+            ], 403);
+        }
        
         $user = User::find($request->id);
-
-       
 
         if (!$user) {
             return response()->json([
@@ -191,19 +204,23 @@ class UserController extends Controller
             ], 404);
         }
 
+        // Check Super Admin protection
+        if ($user->hasRole('Super Admin') && $user->id != auth()->user()->id) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas le droit de modifier le profile Super Admin'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            // ✅ Exclure l'ID actuel
-            
             'password' => 'nullable|min:6',
         ], [
             'required' => 'Le champ :attribute est requis.',
-            
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
         ], [
             'name' => 'nom complet',
             'email' => 'mail',
-            
             'password' => 'mot de passe',
         ]);
 
@@ -214,7 +231,6 @@ class UserController extends Controller
             ], 400);
         }
 
-        // ✅ Utilisation de update() au lieu de save()
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -222,7 +238,6 @@ class UserController extends Controller
             'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
         ]);
 
-        // ✅ Synchronisation des rôles si fournis
         if ($request->has('roles')) {
             $user->syncRoles($request->roles);
         }
@@ -231,14 +246,21 @@ class UserController extends Controller
             'status' => 200,
             'message' => 'Utilisateur mis à jour avec succès',
         ]);
-       
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user , Request $request)
+    public function destroy(User $user, Request $request)
     {
+        // Check if user has permission to delete users
+        if (!auth()->user()->can('utilisateur-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des utilisateurs'
+            ], 403);
+        }
+
         $user = User::find($request->id);
 
         if (!$user) {
@@ -248,7 +270,15 @@ class UserController extends Controller
             ], 404);
         }
 
-        // Supprimer l'utilisateur
+        // Check if user is trying to delete Super Admin or themselves
+        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous ne pouvez pas supprimer le Super Admin ou votre propre compte'
+            ], 403);
+        }
+
+        // Delete the user
         if ($user->delete()) {
             return response()->json([
                 'status' => 200,
@@ -260,15 +290,5 @@ class UserController extends Controller
             'status' => 500,
             'message' => 'Une erreur est survenue lors de la suppression'
         ], 500);
-        // About if user is Super Admin or User ID belongs to Auth User
-        /* if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id)
-        {
-            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-        }
-
-        $user->syncRoles([]);
-        $user->delete();
-        return redirect()->route('users.index')
-                ->withSuccess('User is deleted successfully.'); */
     }
 }

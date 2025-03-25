@@ -1,18 +1,6 @@
 @extends('dashboard.index')
 
 @section('dashboard')
-{{-- <!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-
-<!-- jQuery et DataTables JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-<!-- Awesome Notifications pour les alertes -->
-<script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
-
 <!-- Scripts personnalisés -->
 <script src="{{asset('js/unite/script.js')}}"></script>
 <script>
@@ -48,9 +36,11 @@
 
                         <div class="card-body">
                             <div class="mb-3">
+                                @can('Unité-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddUnite">
                                     <i class="fa-solid fa-plus"></i> Ajouter une unité
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Liste des unités -->
@@ -77,6 +67,7 @@
             </div>
         </div>
 
+        @can('Unité-ajoute')
         <!-- Modal Ajouter une Unité -->
         <div class="modal fade" id="ModalAddUnite" tabindex="-1" aria-labelledby="ModalAddUniteLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -111,7 +102,9 @@
                 </div>
             </div>
         </div>
+        @endcan
 
+        @can('Unité-modifier')
         <!-- Modal Modifier l'Unité -->
         <div class="modal fade" id="ModalEditUnite" tabindex="-1" aria-labelledby="ModalEditUniteLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -124,6 +117,7 @@
                         <div class="row">
                             <ul class="validationEditUnite"></ul>
                             <form action="{{ url('updateUnite') }}" id="FormUpdateUnite">
+                                <input type="hidden" id="id" name="id">
                                 <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
@@ -146,6 +140,7 @@
                 </div>
             </div>
         </div>
+        @endcan
     </div>
 </div>
 @endsection

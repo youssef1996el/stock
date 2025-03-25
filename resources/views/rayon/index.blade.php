@@ -1,18 +1,6 @@
 @extends('dashboard.index')
 
 @section('dashboard')
-{{-- <!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-
-<!-- jQuery and DataTables JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-<!-- Awesome Notifications for alerts -->
-<script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
-
 <!-- Custom JS -->
 <script src="{{asset('js/rayon/script.js')}}"></script>
 <script>
@@ -48,9 +36,11 @@
 
                         <div class="card-body">
                             <div class="mb-3">
+                                @can('Rayon-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddRayon">
                                     <i class="fa-solid fa-plus"></i> Ajouter un rayon
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Rayon list -->
@@ -78,6 +68,7 @@
             </div>
         </div>
 
+        @can('Rayon-ajoute')
         <!-- Add Rayon Modal -->
         <div class="modal fade" id="ModalAddRayon" tabindex="-1" aria-labelledby="ModalAddRayonLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -126,7 +117,9 @@
                 </div>
             </div>
         </div>
+        @endcan
 
+        @can('Rayon-modifier')
         <!-- Edit Rayon Modal -->
         <div class="modal fade" id="ModalEditRayon" tabindex="-1" aria-labelledby="ModalEditRayonLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -139,6 +132,7 @@
                         <div class="row">
                             <ul class="validationEditRayon"></ul>
                             <form action="{{ url('updateRayon') }}" id="FormUpdateRayon">
+                                <input type="hidden" id="id" name="id">
                                 <!-- Name & Local -->
                                 <div class="row">
                                     <div class="col-md-6">
@@ -175,6 +169,7 @@
                 </div>
             </div>
         </div>
+        @endcan
     </div>
 </div>
 @endsection

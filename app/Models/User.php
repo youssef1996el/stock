@@ -18,6 +18,7 @@ class User extends Authenticatable implements Auditable
     use SoftDeletes;
     use AuditableTrait;
 
+
     /**
      * The attributes that are mass assignable.
      *

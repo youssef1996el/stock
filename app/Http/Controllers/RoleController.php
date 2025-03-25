@@ -15,19 +15,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 class RoleController extends Controller
 {
-    /* public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:create-role|edit-role|delete-role', ['only' => ['index','show']]);
-        $this->middleware('permission:create-role', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-role', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-role', ['only' => ['destroy']]);
-    } */
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        // Check if user has permission to view roles
+        if (!auth()->user()->can('rôles-voir')) {
+            return redirect()->back()->with('error', 'Vous n\'avez pas la permission d\'accéder aux rôles');
+        }
+
         if($request->ajax())
         {
             $roles = Role::with('permissions')->select('id', 'name');
@@ -39,21 +36,25 @@ class RoleController extends Controller
             ->addColumn('actions', function ($role) {
                 $btn = '';
     
-                    // زر التعديل
+                if (auth()->user()->can('rôles-modifier')) {
+                    // Edit button
                     $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editRole"
                                 data-id="' . $role->id . '"  
                                 >
                                 <i class="fa-solid fa-pen-to-square text-primary"></i>
                             </a>';
-    
-                    // زر الحذف
+                }
+                
+                if (auth()->user()->can('rôles-supprimer')) {
+                    // Delete button
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleterole"
                                 data-id="' . $role->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer company">
                                 <i class="fa-solid fa-trash text-danger"></i>
                             </a>';
+                }
     
-                    return $btn;
+                return $btn;
             })
             ->rawColumns(['permissions', 'actions']) // Allow HTML rendering
             ->make(true);
@@ -71,6 +72,11 @@ class RoleController extends Controller
      */
     public function create(): View
     {
+        // Check if user has permission to add roles
+        if (!auth()->user()->can('rôles-ajoute')) {
+            abort(403, 'Vous n\'avez pas la permission d\'ajouter des rôles');
+        }
+
         return view('roles.create', [
             'permissions' => Permission::get()
         ]);
@@ -81,6 +87,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add roles
+        if (!auth()->user()->can('rôles-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des rôles'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array|min:1', // التحقق من وجود عنصر واحد على الأقل
@@ -117,9 +131,6 @@ class RoleController extends Controller
                 'message'   => 'Une erreur est survenue, veuillez réessayer .'
             ]); 
         }
-
-        /* return redirect()->route('roles.index')
-                ->withSuccess('New role is added successfully.'); */
     }
 
     /**
@@ -135,6 +146,11 @@ class RoleController extends Controller
      */
     public function edit(Role $role): View
     {
+        // Check if user has permission to modify roles
+        if (!auth()->user()->can('rôles-modifier')) {
+            abort(403, 'Vous n\'avez pas la permission de modifier des rôles');
+        }
+
         if($role->name=='Super Admin'){
             abort(403, 'SUPER ADMIN ROLE CAN NOT BE EDITED');
         }
@@ -155,7 +171,15 @@ class RoleController extends Controller
      */
     public function update(Request $request)
     {
-        // ✅ Ensure role exists in the database
+        // Check if user has permission to modify roles
+        if (!auth()->user()->can('rôles-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des rôles'
+            ], 403);
+        }
+
+        // Ensure role exists in the database
         $role = Role::find($request->id);
 
         if (!$role) {
@@ -165,7 +189,15 @@ class RoleController extends Controller
             ]);
         }
 
-        // ✅ استخدم Validator للتحقق
+        // Check if trying to edit Super Admin role
+        if ($role->name == 'Super Admin') {
+            return response()->json([
+                'status' => 403,
+                'message' => 'SUPER ADMIN ROLE CAN NOT BE EDITED'
+            ], 403);
+        }
+
+        // Use Validator for validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
@@ -179,10 +211,10 @@ class RoleController extends Controller
             ], 400); 
         }
         
-        // ✅ Update role name
+        // Update role name
         $role->update(['name' => $request->name]);
 
-        // ✅ Sync permissions
+        // Sync permissions
         $permissions = Permission::whereIn('id', $request->permissions)->pluck('name')->toArray();
         $role->syncPermissions($permissions);
 
@@ -192,14 +224,20 @@ class RoleController extends Controller
         ]);
     }
 
-
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, Role $role)
     {
-         // Validate the incoming request to ensure it contains an 'id' parameter
+        // Check if user has permission to delete roles
+        if (!auth()->user()->can('rôles-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des rôles'
+            ], 403);
+        }
+
+        // Validate the incoming request to ensure it contains an 'id' parameter
         $request->validate([
             'id' => 'required|exists:roles,id', // Validate that the role exists
         ]);
@@ -234,5 +272,4 @@ class RoleController extends Controller
             'message' => 'Role deleted successfully.'
         ]);
     }
-
 }

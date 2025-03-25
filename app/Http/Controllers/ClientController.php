@@ -37,18 +37,22 @@ class ClientController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editClient"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Formateurs-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editClient"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteClient"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Client">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Formateurs-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteClient"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Client">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -66,6 +70,14 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add clients
+        if (!auth()->user()->can('Formateurs-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des clients'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -122,6 +134,14 @@ class ClientController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        // Check if user has permission to modify clients
+        if (!auth()->user()->can('Formateurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des clients'
+            ], 403);
+        }
+
         $client = Client::find($id);
         
         if (!$client) {
@@ -139,6 +159,14 @@ class ClientController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify clients
+        if (!auth()->user()->can('Clients-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des clients'
+            ], 403);
+        }
+
         $client = Client::find($request->id);
 
         if (!$client) {
@@ -188,6 +216,14 @@ class ClientController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete clients
+        if (!auth()->user()->can('Formateurs-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des clients'
+            ], 403);
+        }
+
         $client = Client::find($request->id);
 
         if (!$client) {
@@ -235,18 +271,22 @@ class ClientController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Restore button
-                    $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 restoreClient"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-trash-restore text-success"></i>
-                            </a>';
+                    if (auth()->user()->can('Formateurs-modifier')) {
+                        // Restore button
+                        $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 restoreClient"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-trash-restore text-success"></i>
+                                </a>';
+                    }
 
-                    // Force Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle forceDeleteClient"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer définitivement">
-                                <i class="fa-solid fa-trash-alt text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Formateurs-supprimer')) {
+                        // Force Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle forceDeleteClient"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer définitivement">
+                                    <i class="fa-solid fa-trash-alt text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -262,6 +302,14 @@ class ClientController extends Controller
      */
     public function restore(Request $request)
     {
+        // Check if user has permission to modify clients
+        if (!auth()->user()->can('Formateurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de restaurer des clients'
+            ], 403);
+        }
+
         $client = Client::onlyTrashed()->find($request->id);
 
         if (!$client) {
@@ -289,6 +337,14 @@ class ClientController extends Controller
      */
     public function forceDelete(Request $request)
     {
+        // Check if user has permission to delete clients
+        if (!auth()->user()->can('Formateurs-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer définitivement des clients'
+            ], 403);
+        }
+
         $client = Client::onlyTrashed()->find($request->id);
 
         if (!$client) {

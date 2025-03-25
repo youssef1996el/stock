@@ -34,18 +34,22 @@ class UniteController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUnite"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Unité-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUnite"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteUnite"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Unité">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Unité-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteUnite"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Unité">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -63,6 +67,14 @@ class UniteController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add unites
+        if (!auth()->user()->can('Unité-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des unités'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
         ], [
@@ -111,6 +123,14 @@ class UniteController extends Controller
      */
     public function edit($id)
     {
+        // Check if user has permission to modify unites
+        if (!auth()->user()->can('Unité-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des unités'
+            ], 403);
+        }
+
         $unite = Unite::find($id);
         
         if (!$unite) {
@@ -128,6 +148,14 @@ class UniteController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify unites
+        if (!auth()->user()->can('Unité-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des unités'
+            ], 403);
+        }
+
         $unite = Unite::find($request->id);
         
         if (!$unite) {
@@ -185,6 +213,14 @@ class UniteController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete unites
+        if (!auth()->user()->can('Unité-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des unités'
+            ], 403);
+        }
+
         $unite = Unite::find($request->id);
 
         if (!$unite) {

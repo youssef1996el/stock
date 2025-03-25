@@ -18,13 +18,13 @@
 
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">Liste des clients</h4>
+                    <h4 class="fs-18 fw-semibold m-0">Liste des formateurs</h4>
                 </div>
                 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Applications</a></li>
-                        <li class="breadcrumb-item active">Clients</li>
+                        <li class="breadcrumb-item active">Formateurs</li>
                     </ol>
                 </div>
             </div>
@@ -35,7 +35,9 @@
 
                         <div class="card-body">
                             <div class=" mb-3">
-                                <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddClient">Ajouter client</button>
+                                @can('Formateurs-ajoute')
+                                <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddClient">Ajouter formateur</button>
+                                @endcan
                             </div>
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
@@ -70,12 +72,13 @@
             </div>
         </div>
 
+        @can('Formateurs-ajoute')
         <!-- Add Client Modal -->
         <div class="modal fade" id="ModalAddClient" tabindex="-1" aria-labelledby="ModalAddClientLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalAddClientLabel">Ajouter un nouveau client</h5>
+                    <h5 class="modal-title" id="ModalAddClientLabel">Ajouter un nouveau formateur</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -136,20 +139,22 @@
             </div>
         </div>
     </div>
+    @endcan
 
+    @can('Formateurs-modifier')
     <!-- Edit Client Modal -->
     <div class="modal fade" id="ModalEditClient" tabindex="-1" aria-labelledby="ModalEditClientLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalEditClientLabel">Modifier client</h5>
+                    <h5 class="modal-title" id="ModalEditClientLabel">Modifier formateur</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <ul class="validationEditClient"></ul>
                         <form action="{{ url('updateClient') }}" id="FormUpdateClient">
-                            
+                            <input type="hidden" id="id" name="id">
                             <!-- First Name, Last Name -->
                             <div class="row">
                                 <div class="col-md-6">
@@ -203,5 +208,6 @@
             </div>
         </div>
     </div>
+    @endcan
 </div>
 @endsection

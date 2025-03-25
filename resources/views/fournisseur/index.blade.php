@@ -35,7 +35,9 @@
 
                         <div class="card-body">
                             <div class=" mb-3">
+                                @can('Fournisseurs-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddFournisseur">Ajouter fournisseur</button>
+                                @endcan
                             </div>
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
@@ -69,120 +71,125 @@
             </div>
         </div>
 
+        @can('Fournisseurs-ajoute')
         <!-- Add Fournisseur Modal -->
         <div class="modal fade" id="ModalAddFournisseur" tabindex="-1" aria-labelledby="ModalAddFournisseurLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalAddFournisseurLabel">Ajouter un nouveau fournisseur</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <ul class="validationAddFournisseur"></ul>
-                        <form action="{{ url('addFournisseur') }}" id="FormAddFournisseur">
-                            
-                            <!-- Entreprise, Telephone, Email -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group mb-3">
-                                        <label>Entreprise</label>
-                                        <input type="text" name="entreprise" class="form-control @error('entreprise') is-invalid @enderror" value="{{ old('entreprise') }}">
-                                        @error('entreprise')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label>Téléphone</label>
-                                        <input type="text" name="Telephone" id="phone_fournisseur" class="form-control @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
-                                        @error('Telephone')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                    
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label>Email</label>
-                                        <input type="email" name="Email" class="form-control @error('Email') is-invalid @enderror" value="{{ old('Email') }}">
-                                        @error('Email')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalAddFournisseurLabel">Ajouter un nouveau fournisseur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer text-end">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary" id="BtnAddFournisseur">Sauvegarder</button>
+                    <div class="modal-body">
+                        <div class="row">
+                            <ul class="validationAddFournisseur"></ul>
+                            <form action="{{ url('addFournisseur') }}" id="FormAddFournisseur">
+                                
+                                <!-- Entreprise, Telephone, Email -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label>Entreprise</label>
+                                            <input type="text" name="entreprise" class="form-control @error('entreprise') is-invalid @enderror" value="{{ old('entreprise') }}">
+                                            @error('entreprise')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label>Téléphone</label>
+                                            <input type="text" name="Telephone" id="phone_fournisseur" class="form-control @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
+                                            @error('Telephone')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                        
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label>Email</label>
+                                            <input type="email" name="Email" class="form-control @error('Email') is-invalid @enderror" value="{{ old('Email') }}">
+                                            @error('Email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" id="BtnAddFournisseur">Sauvegarder</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        @endcan
 
-    <!-- Edit Fournisseur Modal -->
-    <div class="modal fade" id="ModalEditFournisseur" tabindex="-1" aria-labelledby="ModalEditFournisseurLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalEditFournisseurLabel">Modifier fournisseur</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <ul class="validationEditFournisseur"></ul>
-                        <form action="{{ url('updateFournisseur') }}" id="FormUpdateFournisseur">
-                            
-                            <!-- Entreprise, Telephone, Email -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group mb-3">
-                                        <label>Entreprise</label>
-                                        <input type="text" id="entreprise" name="entreprise" class="form-control @error('entreprise') is-invalid @enderror" value="{{ old('entreprise') }}">
-                                        @error('entreprise')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label>Téléphone</label>
-                                        <input type="text" id="Telephone" name="Telephone" class="form-control phone_fournisseur_edit @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
-                                        @error('Telephone')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                    
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label>Email</label>
-                                        <input type="email" id="Email" name="Email" class="form-control @error('Email') is-invalid @enderror" value="{{ old('Email') }}">
-                                        @error('Email')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+        @can('Fournisseurs-modifier')
+        <!-- Edit Fournisseur Modal -->
+        <div class="modal fade" id="ModalEditFournisseur" tabindex="-1" aria-labelledby="ModalEditFournisseurLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalEditFournisseurLabel">Modifier fournisseur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer text-end">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary" id="BtnUpdateFournisseur">Mettre à jour</button>
+                    <div class="modal-body">
+                        <div class="row">
+                            <ul class="validationEditFournisseur"></ul>
+                            <form action="{{ url('updateFournisseur') }}" id="FormUpdateFournisseur">
+                                <input type="hidden" id="id" name="id">
+                                <!-- Entreprise, Telephone, Email -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label>Entreprise</label>
+                                            <input type="text" id="entreprise" name="entreprise" class="form-control @error('entreprise') is-invalid @enderror" value="{{ old('entreprise') }}">
+                                            @error('entreprise')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label>Téléphone</label>
+                                            <input type="text" id="Telephone" name="Telephone" class="form-control phone_fournisseur_edit @error('Telephone') is-invalid @enderror" value="{{ old('Telephone') }}">
+                                            @error('Telephone')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                        
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label>Email</label>
+                                            <input type="email" id="Email" name="Email" class="form-control @error('Email') is-invalid @enderror" value="{{ old('Email') }}">
+                                            @error('Email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" id="BtnUpdateFournisseur">Mettre à jour</button>
+                    </div>
                 </div>
             </div>
         </div>
+        @endcan
     </div>
 </div>
 @endsection

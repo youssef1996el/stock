@@ -57,10 +57,15 @@ class ProductController extends Controller
             return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editProduct" data-id="'.$row->id.'">
-                            <i class="fa-solid fa-pen-to-square text-primary"></i></a>';
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteProduct" data-id="'.$row->id.'">
-                            <i class="fa-solid fa-trash text-danger"></i></a>';
+                    $btn = '';
+                    if (auth()->user()->can('Products-modifier')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editProduct" data-id="'.$row->id.'">
+                                <i class="fa-solid fa-pen-to-square text-primary"></i></a>';
+                    }
+                    if (auth()->user()->can('Products-supprimer')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteProduct" data-id="'.$row->id.'">
+                                <i class="fa-solid fa-trash text-danger"></i></a>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -187,6 +192,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add products
+        if (!auth()->user()->can('Products-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des produits'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'price_achat' => 'required|numeric',
@@ -297,6 +310,14 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        // Check if user has permission to modify products
+        if (!auth()->user()->can('Products-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des produits'
+            ], 403);
+        }
+
         try {
             $product = Product::with(['stock', 'category', 'subcategory', 'local', 'rayon'])->find($id);
             
@@ -326,6 +347,14 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify products
+        if (!auth()->user()->can('Products-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des produits'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:products,id',
             'name' => 'required|string|max:255',
@@ -507,6 +536,14 @@ class ProductController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete products
+        if (!auth()->user()->can('Products-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des produits'
+            ], 403);
+        }
+
         try {
             DB::beginTransaction();
             

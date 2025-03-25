@@ -34,20 +34,21 @@ class TvaController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
-
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editTva"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
-
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteTva"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer TVA">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
-
+                    if (auth()->user()->can('Taxes-modifier')) { 
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editTva" data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
+                   
+                    if (auth()->user()->can('Taxes-supprimer')) { 
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteTva"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer TVA">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -64,6 +65,14 @@ class TvaController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add TVA
+        if (!auth()->user()->can('Taxes-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des TVA'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'value' => 'required|numeric',
@@ -114,6 +123,14 @@ class TvaController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        // Check if user has permission to modify TVA
+        if (!auth()->user()->can('Taxes-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des TVA'
+            ], 403);
+        }
+
         $tva = Tva::find($id);
         
         if (!$tva) {
@@ -131,6 +148,14 @@ class TvaController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify TVA
+        if (!auth()->user()->can('Taxes-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des TVA'
+            ], 403);
+        }
+
         $tva = Tva::find($request->id);
 
         if (!$tva) {
@@ -174,6 +199,14 @@ class TvaController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete TVA
+        if (!auth()->user()->can('Taxes-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des TVA'
+            ], 403);
+        }
+
         $tva = Tva::find($request->id);
 
         if (!$tva) {
