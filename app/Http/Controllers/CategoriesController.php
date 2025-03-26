@@ -34,18 +34,22 @@ class CategoriesController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCategory"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Categories-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCategory"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCategory"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Catégorie">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Categories-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCategory"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Catégorie">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -61,6 +65,14 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add categories
+        if (!auth()->user()->can('Categories-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des catégories'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
         ], [
@@ -109,6 +121,14 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
+        // Check if user has permission to modify categories
+        if (!auth()->user()->can('Categories-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des catégories'
+            ], 403);
+        }
+
         $category = Category::find($id);
         
         if (!$category) {
@@ -126,6 +146,14 @@ class CategoriesController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify categories
+        if (!auth()->user()->can('Categories-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des catégories'
+            ], 403);
+        }
+
         $category = Category::find($request->id);
         
         if (!$category) {
@@ -183,6 +211,14 @@ class CategoriesController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete categories
+        if (!auth()->user()->can('Categories-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des catégories'
+            ], 403);
+        }
+
         $category = Category::find($request->id);
 
         if (!$category) {

@@ -42,9 +42,11 @@
                         <div class="card-body">
                             <!-- Bouton Ajouter Produit -->
                             <div class="mb-3">
+                                @can('Products-ajoute')
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAddProduct">
                                     <i class="fa-solid fa-plus"></i> Ajouter un produit
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Tableau des produits -->
@@ -78,6 +80,7 @@
             </div>
 
             <!-- Modal Ajouter Produit -->
+            @can('Products-ajoute')
             <div class="modal fade" id="ModalAddProduct" tabindex="-1" aria-labelledby="ModalAddProductLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -221,8 +224,10 @@
                     </div>
                 </div>
             </div>
+            @endcan
 
             <!-- Modal Modifier Produit -->
+            @can('Products-modifier')
             <div class="modal fade" id="ModalEditProduct" tabindex="-1" aria-labelledby="ModalEditProductLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -374,6 +379,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </div>
     </div>
 </div>

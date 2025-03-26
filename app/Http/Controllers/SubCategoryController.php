@@ -37,18 +37,22 @@ class SubCategoryController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editSubCategory"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Famille-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editSubCategory"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteSubCategory"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Sous-catégorie">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Famille-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteSubCategory"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Sous-catégorie">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -69,6 +73,14 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add subcategories
+        if (!auth()->user()->can('Famille-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des sous-catégories'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'id_categorie' => 'required|exists:categories,id',
@@ -123,6 +135,14 @@ class SubCategoryController extends Controller
      */
     public function edit($id)
     {
+        // Check if user has permission to modify subcategories
+        if (!auth()->user()->can('Famille-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des sous-catégories'
+            ], 403);
+        }
+
         $subcategory = SubCategory::find($id);
         
         if (!$subcategory) {
@@ -140,6 +160,14 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify subcategories
+        if (!auth()->user()->can('Famille-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des sous-catégories'
+            ], 403);
+        }
+
         $subcategory = SubCategory::find($request->id);
         
         if (!$subcategory) {
@@ -202,6 +230,14 @@ class SubCategoryController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete subcategories
+        if (!auth()->user()->can('Famille-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des sous-catégories'
+            ], 403);
+        }
+
         $subcategory = SubCategory::find($request->id);
 
         if (!$subcategory) {

@@ -35,19 +35,23 @@ class FournisseurController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
-
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editFournisseur"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
-
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteFournisseur"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Fournisseur">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    
+                    if (auth()->user()->can('Fournisseurs-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editFournisseur"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
+                    
+                    if (auth()->user()->can('Fournisseurs-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteFournisseur"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Fournisseur">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -65,6 +69,14 @@ class FournisseurController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add suppliers
+        if (!auth()->user()->can('Fournisseurs-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des fournisseurs'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'entreprise' => 'required|string|max:255',
             'Telephone' => 'required|string|max:20',
@@ -135,6 +147,14 @@ class FournisseurController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify suppliers
+        if (!auth()->user()->can('Fournisseurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des fournisseurs'
+            ], 403);
+        }
+
         $fournisseur = Fournisseur::find($request->id);
 
         if (!$fournisseur) {
@@ -181,6 +201,14 @@ class FournisseurController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete suppliers
+        if (!auth()->user()->can('Fournisseurs-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des fournisseurs'
+            ], 403);
+        }
+        
         $fournisseur = Fournisseur::find($request->id);
 
         if (!$fournisseur) {

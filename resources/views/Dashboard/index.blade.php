@@ -323,152 +323,169 @@
                                     <span> Page d'accueil </span> 
                                 </a>
                             </li>
-                            @can('Taxes')
-                                <li class="menu-title">TVA</li>
 
-                                <li>
-                                    <a class='tp-link' href="{{url('tva')}}" >
-                                        <i class="fa-solid fa-percent"></i>
-                                        <span> Taxe </span>
-                                    </a>
-                                </li>
-                            @endcan
+                            <li class="menu-title">TVA</li>
+
+                            <li>
+                                <a class='tp-link' href="{{url('tva')}}" >
+                                    <i class="fa-solid fa-percent"></i>
+                                    <span> Taxe </span>
+                                </a>
+                            </li>
+
                             
-                            @can('Products')
-                                <li class="menu-title">Produits</li>
+                            <li class="menu-title">Produits</li>
 
-                                <li>
-                                    <a class='tp-link' href="{{url('products')}}" >
-                                        <i class="fa-solid fa-box"></i>
-                                        <span> Produits </span>
-                                    </a>
-                                </li>
-                            @endcan
+                            <li>
+                                <a class='tp-link' href="{{url('products')}}" >
+                                    <i class="fa-solid fa-box"></i>
+                                    <span> Produits </span>
+                                </a>
+                            </li>
                                                 
-                            @can('Fournisseurs')
-                                <li class="menu-title">Fournisseur</li>
 
-                                <li>
-                                    <a class='tp-link' href="{{url('fournisseur')}}" >
-                                        <i class="fa-solid fa-truck-field"></i>
-                                        <span> Fournisseur </span>
-                                    </a>
-                                </li>
-                            @endcan
+                            <li class="menu-title">Fournisseur</li>
 
-                            @can('Formateurs')
+                            <li>
+                                <a class='tp-link' href="{{url('fournisseur')}}" >
+                                    <i class="fa-solid fa-truck-field"></i>
+                                    <span> Fournisseur </span>
+                                </a>
+                            </li>
                             <li class="menu-title">Formateurs</li>
+
                                 <li>
                                    <a class='tp-link' href="{{url('client')}}">
                                         <i class="fa-solid fa-chalkboard-teacher"></i>
                                          <span> Gestion formateurs </span>
-                                    </a>
+                                         </a>
                                 </li>
-                            @endcan
 
-                            @can('Categories')
-                                <li class="menu-title mt-2">Catégories</li>
-                                                
-                                <li>
-                                    <a class='tp-link' href='{{url('categories')}}'>
-                                        <i class="fa-solid fa-list-check"></i>
-                                        <span> Liste de Catégories </span>
-                                    </a>
-                                </li>
-                            @endcan
+                            <li class="menu-title mt-2">Catégories</li>
+                                            
+                            <li>
+                                <a class='tp-link' href='{{url('categories')}}'>
+                                    <i class="fa-solid fa-list-check"></i>
+                                    <span> Liste de Catégories </span>
+                                </a>
+                            </li>
+                                                        
+                            <li class="menu-title mt-2">Local</li>
+                                            
+                            <li>
+                                <a class='tp-link' href='{{url('local')}}'>
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span> Local </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{url('rayon')}}'>
+                                    <i class="fa-solid fa-table-cells"></i>
+                                    <span> Rayon </span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2">Sous-Catégories</li>
+                                            
+                            <li>
+                                <a class='tp-link' href='{{url('subcategory')}}'>
+                                    <i class="fa-solid fa-sitemap"></i>
+                                    <!-- or alternative: -->
+                                    <!-- <i class="fa-solid fa-diagram-project"></i> -->
+                                    <span> Famille </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{url('Achat')}}'>
+                                    <i class="fa-solid fa-shopping-cart"></i>
+                                    <!-- or alternatives: -->
+                                    <!-- <i class="fa-solid fa-cart-shopping"></i> -->
+                                    <!-- <i class="fa-solid fa-receipt"></i> -->
+                                    <!-- <i class="fa-solid fa-cash-register"></i> -->
+                                    <span> Achats </span>
+                                </a>
+                            </li> 
+                            <li>
+    <a class='tp-link' href='{{url('Vente')}}'>
+        <i class="fa-solid fa-cash-register"></i>
+        <!-- ou alternatives: -->
+        <!-- <i class="fa-solid fa-shopping-bag"></i> -->
+        <!-- <i class="fa-solid fa-tags"></i> -->
+        <!-- <i class="fa-solid fa-dollar-sign"></i> -->
+        <span> commande </span>
+    </a>
+</li>
+<li>
+    <a class='tp-link' href='{{url('audit')}}'>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span> Historique </span>
+    </a>
+</li>
+                                       
+                            <li>
+                                <a class='tp-link' href='{{url('unite')}}'>
+                                    <i class="fa-solid fa-list-check"></i>
+                                    <span> Unité </span>
+                                </a>
+                            </li>
+                            
+
                             
                             
-                            @can('Local')
-                                <li class="menu-title mt-2">Local</li>                 
-                                <li>
-                                    <a class='tp-link' href='{{url('local')}}'>
-                                        <i class="fa-solid fa-location-dot"></i>
-                                        <span> Local </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('Rayon')
-                                <li>
-                                    <a class='tp-link' href='{{url('rayon')}}'>
-                                        <i class="fa-solid fa-table-cells"></i>
-                                        <span> Rayon </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('Famille')
-                                <li class="menu-title mt-2">Sous-Catégories</li>
-                                                
-                                <li>
-                                    <a class='tp-link' href='{{url('subcategory')}}'>
-                                        <i class="fa-solid fa-sitemap"></i>
-                                        
-                                        <span> Famille </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('Achat')
-                                <li>
-                                    <a class='tp-link' href='{{url('Achat')}}'>
-                                        <i class="fa-solid fa-shopping-cart"></i>
-                                        <span> Achats </span>
-                                    </a>
-                                </li> 
-                            @endcan
-
-                            @can('Commande')
-                                <li>
-                                    <a class='tp-link' href='{{url('Vente')}}'>
-                                        <i class="fa-solid fa-cash-register"></i>
-                                    
-                                        <span> commande </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('Historique')
-                                <li>
-                                    <a class='tp-link' href='{{url('audit')}}'>
-                                        <i class="fa-solid fa-clock-rotate-left"></i>
-                                        <span> Historique </span>
-                                    </a>
-                                </li>
-                            @endcan  
+                           
                             
-                            @can('Unité')
-                                <li>
-                                    <a class='tp-link' href='{{url('unite')}}'>
-                                        <i class="fa-solid fa-list-check"></i>
-                                        <span> Unité </span>
-                                    </a>
-                                </li>
-                            @endcan 
 
-                            @can('utilisateur')
-                                <li class="menu-title mt-2"> Utilisateurs</li>
+                            
 
-                                <li>
-                                    <a class='tp-link' href="{{route('users.index')}}" >
-                                        <span class="mdi mdi-account-group"></span>
-                                        <span> Liste des utilisateurs </span>
-                                    </a>
-                                    
-                                </li>
-                            @endcan 
+                            
+                            <li class="menu-title mt-2">Stockage</li>
+                            <li>
+                                <a href="#sidebarIcons" data-bs-toggle="collapse">
+                                    <i data-feather="award"></i>
+                                    <span> Situation de stockage </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse" id="sidebarIcons">
+                                    <ul class="nav-second-level">
+                                        <li>
+                                            <a class='tp-link' href='/hando/html/icons-feather'>Sortie de caisses vides</a>
+                                        </li>
+                                        <li>
+                                            <a class='tp-link' href='/hando/html/icons-mdi'>Entrée de marchandises</a>
+                                        </li>
+                                        <li>
+                                            <a class='tp-link' href='/hando/html/icons-mdi'>Sortie de marchandises</a>
+                                        </li>
+                                        <li>
+                                            <a class='tp-link' href='/hando/html/icons-mdi'>Retour de caisses vides</a>
+                                        </li>
+                                        <li>
+                                            <a class='tp-link' href='/hando/html/icons-mdi'>Le bilan général</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                            @can('utilisateur')
-                                <li class="menu-title mt-2">  Pouvoirs </li>
+                          
 
-                                <li>
-                                    <a href="{{url('roles')}}" class='tp-link'>
-                                        <span class="mdi mdi-account-key-outline"></span>
-                                        <span>  Pouvoirs utilisateurs </span>
-                                    </a>
-                                    
-                                </li>
-                            @endcan 
+                            <li class="menu-title mt-2"> Utilisateurs</li>
+
+                            <li>
+                                <a class='tp-link' href="{{route('users.index')}}" >
+                                    <span class="mdi mdi-account-group"></span>
+                                    <span> Liste des utilisateurs </span>
+                                </a>
+                                
+                            </li>
+
+                            <li class="menu-title mt-2">  Pouvoirs </li>
+
+                            <li>
+                                <a href="{{url('roles')}}" class='tp-link'>
+                                    <span class="mdi mdi-account-key-outline"></span>
+                                    <span>  Pouvoirs utilisateurs </span>
+                                </a>
+                                
+                            </li>
 
                             <li class="menu-title mt-2">  Paramètres </li>
 

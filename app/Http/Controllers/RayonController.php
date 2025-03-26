@@ -37,18 +37,22 @@ class RayonController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editRayon"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Rayon-modifier')) {
+                        // Edit button
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editRayon"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteRayon"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Rayon">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Rayon-supprimer')) {
+                        // Delete button
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteRayon"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Rayon">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -69,6 +73,14 @@ class RayonController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user has permission to add rayons
+        if (!auth()->user()->can('Rayon-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter des rayons'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'id_local' => 'required|exists:locals,id',
@@ -123,6 +135,14 @@ class RayonController extends Controller
      */
     public function edit($id)
     {
+        // Check if user has permission to modify rayons
+        if (!auth()->user()->can('Rayon-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des rayons'
+            ], 403);
+        }
+
         $rayon = Rayon::find($id);
         
         if (!$rayon) {
@@ -140,6 +160,14 @@ class RayonController extends Controller
      */
     public function update(Request $request)
     {
+        // Check if user has permission to modify rayons
+        if (!auth()->user()->can('Rayon-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier des rayons'
+            ], 403);
+        }
+
         $rayon = Rayon::find($request->id);
         
         if (!$rayon) {
@@ -202,6 +230,14 @@ class RayonController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Check if user has permission to delete rayons
+        if (!auth()->user()->can('Rayon-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des rayons'
+            ], 403);
+        }
+
         $rayon = Rayon::find($request->id);
 
         if (!$rayon) {

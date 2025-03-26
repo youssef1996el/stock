@@ -1,18 +1,6 @@
 @extends('dashboard.index')
 
 @section('dashboard')
-{{-- <!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-
-<!-- jQuery and DataTables JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-<!-- Awesome Notifications for alerts -->
-<script src="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/index.var.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/awesome-notifications@3.1.3/dist/style.min.css"> --}}
-
 <!-- Scripts personnalisés -->
 <script src="{{asset('js/Categories/script.js')}}"></script>
 <script>
@@ -48,9 +36,11 @@
 
                         <div class="card-body">
                             <div class="mb-3">
+                                @can('Categories-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCategory">
                                     <i class="fa-solid fa-plus"></i> Ajouter une catégorie
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Liste des catégories -->
@@ -77,6 +67,7 @@
             </div>
         </div>
 
+        @can('Categories-ajoute')
         <!-- Modal Ajouter une Catégorie -->
         <div class="modal fade" id="ModalAddCategory" tabindex="-1" aria-labelledby="ModalAddCategoryLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -111,7 +102,9 @@
                 </div>
             </div>
         </div>
+        @endcan
 
+        @can('Categories-modifier')
         <!-- Modal Modifier la Catégorie -->
         <div class="modal fade" id="ModalEditCategory" tabindex="-1" aria-labelledby="ModalEditCategoryLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -124,6 +117,7 @@
                         <div class="row">
                             <ul class="validationEditCategory"></ul>
                             <form action="{{ url('updateCategory') }}" id="FormUpdateCategory">
+                                <input type="hidden" id="id" name="id">
                                 <!-- Nom -->
                                 <div class="row">
                                     <div class="col-md-12">
@@ -146,6 +140,7 @@
                 </div>
             </div>
         </div>
+        @endcan
     </div>
 </div>
 @endsection
