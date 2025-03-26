@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Category;
@@ -18,6 +20,7 @@ use App\Models\Vente;
 use App\Models\LigneVente;
 use Illuminate\Support\Facades\Validator;
 use Hashids\Hashids;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class VenteController extends Controller
 {
@@ -38,7 +41,7 @@ class VenteController extends Controller
                 })
                 ->addColumn('action', function ($row) use ($hashids) {
                     $btn = '';
-
+    
                     // Edit button
                     $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
                                 data-id="' . $row->id . '">
@@ -51,14 +54,19 @@ class VenteController extends Controller
                                 target="_blank">
                                 <i class="fa-solid fa-eye text-success"></i>
                             </a>';
-
+                    
+                    // Print invoice button
+                    $btn .= '<a href="' . url('FactureVente/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
+                            <i class="fa-solid fa-print text-info"></i>
+                        </a>';
+    
                     // Delete button
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer Vente">
                                 <i class="fa-solid fa-trash text-danger"></i>
                             </a>';
-
+    
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -79,7 +87,7 @@ class VenteController extends Controller
             ->with('rayons', $rayons)
             ->with('tvas', $tvas)
             ->with('unites', $unites);
-    } 
+    }
     
     public function getProduct(Request $request)
     {
@@ -376,4 +384,51 @@ class VenteController extends Controller
 
         return view('vente.list', compact('bonVente', 'Client', 'Data_Vente'));
     }
+    public function FactureVente($id)
+{
+    $hashids = new Hashids();
+    $decoded = $hashids->decode($id);
+
+    if (empty($decoded)) {
+        abort(404); // Handle invalid hash
+    }
+
+    $id = $decoded[0]; // Extract the original ID
+    $Data_Vente = DB::table('ventes as v')
+        ->join('ligne_vente as l', 'v.id', '=', 'l.idvente')
+        ->join('products as p', 'l.idproduit', '=', 'p.id')
+        ->select('p.price_vente', 'l.qte', DB::raw('p.price_vente * l.qte as total'), 'p.name', 'v.created_at')
+        ->where('v.id', $id)
+        ->get();
+
+    $imagePath = public_path('images/logo_top.png');
+    $imageData = base64_encode(file_get_contents($imagePath));
+    $logo_bottom = public_path('images/logo_bottom.png');
+    $imageData_bottom = base64_encode(file_get_contents($logo_bottom));
+    $context = stream_context_create([
+        'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer_name' => FALSE,
+            'allow_self_signed' => TRUE,
+        ]
+    ]);
+    $html = view('vente.facture', [
+        'Data_Vente' => $Data_Vente,
+        'imageData' => $imageData,
+        'imageData_bottom' => $imageData_bottom,
+    ])->render();
+
+    // Load HTML to PDF
+    $pdf = Pdf::loadHTML($html)->output();
+
+    // Set response headers
+    $headers = [
+        "Content-type" => "application/pdf",
+    ];
+    return response()->streamDownload(
+        fn() => print($pdf),
+        "FactureVente.pdf",
+        $headers
+    );
+}
 }

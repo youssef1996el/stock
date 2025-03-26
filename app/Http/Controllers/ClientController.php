@@ -37,16 +37,26 @@ class ClientController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
+<<<<<<< HEAD
                     if (auth()->user()->can('Formateurs-modifier')) {
                         // Edit button
+=======
+                    // Edit button - only show if user has permission
+                    if (auth()->user()->can('Formateurs-modifier')) {
+>>>>>>> permissions-work
                         $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editClient"
                                     data-id="' . $row->id . '">
                                     <i class="fa-solid fa-pen-to-square text-primary"></i>
                                 </a>';
                     }
 
+<<<<<<< HEAD
                     if (auth()->user()->can('Formateurs-supprimer')) {
                         // Delete button
+=======
+                    // Delete button - only show if user has permission
+                    if (auth()->user()->can('Formateurs-supprimer')) {
+>>>>>>> permissions-work
                         $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteClient"
                                     data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                     title="Supprimer Client">
@@ -70,11 +80,19 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
         // Check if user has permission to add clients
         if (!auth()->user()->can('Formateurs-ajoute')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des clients'
+=======
+        // Check permission before storing
+        if (!auth()->user()->can('Formateurs-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter un client'
+>>>>>>> permissions-work
             ], 403);
         }
 
@@ -134,11 +152,19 @@ class ClientController extends Controller
      */
     public function edit(Request $request, $id)
     {
+<<<<<<< HEAD
         // Check if user has permission to modify clients
         if (!auth()->user()->can('Formateurs-modifier')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission de modifier des clients'
+=======
+        // Check permission before editing
+        if (!auth()->user()->can('Formateurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier un client'
+>>>>>>> permissions-work
             ], 403);
         }
 
@@ -159,11 +185,19 @@ class ClientController extends Controller
      */
     public function update(Request $request)
     {
+<<<<<<< HEAD
         // Check if user has permission to modify clients
         if (!auth()->user()->can('Clients-modifier')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission de modifier des clients'
+=======
+        // Check permission before updating
+        if (!auth()->user()->can('Formateurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier un client'
+>>>>>>> permissions-work
             ], 403);
         }
 
@@ -216,11 +250,19 @@ class ClientController extends Controller
      */
     public function destroy(Request $request)
     {
+<<<<<<< HEAD
         // Check if user has permission to delete clients
         if (!auth()->user()->can('Formateurs-supprimer')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission de supprimer des clients'
+=======
+        // Check permission before deleting
+        if (!auth()->user()->can('Formateurs-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer un client'
+>>>>>>> permissions-work
             ], 403);
         }
 
@@ -271,16 +313,26 @@ class ClientController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
+<<<<<<< HEAD
                     if (auth()->user()->can('Formateurs-modifier')) {
                         // Restore button
+=======
+                    // Restore button - only show if user has permission
+                    if (auth()->user()->can('Formateurs-modifier')) {
+>>>>>>> permissions-work
                         $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1 restoreClient"
                                     data-id="' . $row->id . '">
                                     <i class="fa-solid fa-trash-restore text-success"></i>
                                 </a>';
                     }
 
+<<<<<<< HEAD
                     if (auth()->user()->can('Formateurs-supprimer')) {
                         // Force Delete button
+=======
+                    // Force Delete button - only show if user has permission
+                    if (auth()->user()->can('Formateurs-supprimer')) {
+>>>>>>> permissions-work
                         $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle forceDeleteClient"
                                     data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                     title="Supprimer définitivement">
@@ -302,11 +354,19 @@ class ClientController extends Controller
      */
     public function restore(Request $request)
     {
+<<<<<<< HEAD
         // Check if user has permission to modify clients
         if (!auth()->user()->can('Formateurs-modifier')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission de restaurer des clients'
+=======
+        // Check permission before restoring
+        if (!auth()->user()->can('Formateurs-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de restaurer un client'
+>>>>>>> permissions-work
             ], 403);
         }
 
@@ -337,11 +397,19 @@ class ClientController extends Controller
      */
     public function forceDelete(Request $request)
     {
+<<<<<<< HEAD
         // Check if user has permission to delete clients
         if (!auth()->user()->can('Formateurs-supprimer')) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Vous n\'avez pas la permission de supprimer définitivement des clients'
+=======
+        // Check permission before force deleting
+        if (!auth()->user()->can('Formateurs-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer définitivement un client'
+>>>>>>> permissions-work
             ], 403);
         }
 

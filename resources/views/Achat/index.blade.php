@@ -70,9 +70,11 @@
 
                         <div class="card-body">
                             <div class="mb-3">
+                            @can('Achat-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddAchat">
                                     <i class="fa-solid fa-plus"></i> Ajouter un achat
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Liste des achats -->
@@ -100,6 +102,7 @@
         </div>
 
         <!-- Modal Ajouter un Achat -->
+        @can('Achat-ajoute')
         <div class="modal fade" id="ModalAddAchat" tabindex="-1" aria-labelledby="ModalAddAchat" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
@@ -201,6 +204,7 @@
                 </div>
             </div>
         </div>
+        @endcan
 
         <div class="modal fade" id="ModalAddProduct" tabindex="-1" aria-labelledby="ModalAddProductLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -353,6 +357,7 @@
         
         
         <!-- Modal -->
+        @can('Achat-modifier')
         <div class="modal fade" id="ModalEditQteTmp" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content" style="background-color: ##dee8f0 !important">
@@ -376,6 +381,7 @@
                 </div>
             </div>
         </div>
+        @endcan
         
         
         

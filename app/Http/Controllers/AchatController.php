@@ -36,36 +36,48 @@ class AchatController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) use ($hashids) {
                         $btn = '';
-
-                        // Edit button
-                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1" 
-                                    data-id="' . $row->id . '">
-                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+    
+                        // Edit button with permission check
+                        if (auth()->user()->can('Achat-modifier')) {
+                            $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1" 
+                                        data-id="' . $row->id . '">
+                                        <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                    </a>';
+                        }
+    
+                        // Detail button (hashed ID) - View permission
+                        if (auth()->user()->can('Achat')) {
+                            $btn .= '<a href="' . url('ShowBonReception/' . $hashids->encode($row->id)) . '" 
+                                        class="btn btn-sm bg-success-subtle me-1" 
+                                        data-id="' . $row->id . '" 
+                                        target="_blank">
+                                        <i class="fa-solid fa-eye text-success"></i>
+                                    </a>';
+                        }
+                        
+                        // Approve button with permission check
+                        if (auth()->user()->can('Achat-modifier')) {
+                            $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1" data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-circle-chevron-down text-success"></i>
                                 </a>';
-
-                        // Detail button (hashed ID)
-                        $btn .= '<a href="' . url('ShowBonReception/' . $hashids->encode($row->id)) . '" 
-                                    class="btn btn-sm bg-success-subtle me-1" 
-                                    data-id="' . $row->id . '" 
-                                    target="_blank">
-                                    <i class="fa-solid fa-eye text-success"></i>
+                        }
+    
+                        // Print button - View permission
+                        if (auth()->user()->can('Achat')) {
+                            $btn .= '<a href="' . url('Invoice/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
+                                    <i class="fa-solid fa-print text-info"></i>
                                 </a>';
-                        // Approve
-                        $btn .= '<a href="#" class="btn btn-sm bg-success-subtle me-1" data-id="' . $row->id . '">
-                                <i class="fa-solid fa-circle-chevron-down text-success"></i>
-                            </a>';
-
-                        $btn .= '<a href="' . url('Invoice/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
-                                <i class="fa-solid fa-print text-info"></i>
-                            </a>';
-
-                        // Delete button
-                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteAchat" 
-                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                    title="Supprimer Achat">
-                                    <i class="fa-solid fa-trash text-danger"></i>
-                                </a>';
-
+                        }
+    
+                        // Delete button with permission check
+                        if (auth()->user()->can('Achat-supprimer')) {
+                            $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteAchat" 
+                                        data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                        title="Supprimer Achat">
+                                        <i class="fa-solid fa-trash text-danger"></i>
+                                    </a>';
+                        }
+    
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -86,7 +98,7 @@ class AchatController extends Controller
             ->with('rayons',$rayons)
             ->with('tvas',$tvas)
             ->with('unites',$unites);
-    } 
+    }
    
     public function getProduct(Request $request)
     {
@@ -109,22 +121,30 @@ class AchatController extends Controller
 
     public function PostInTmpAchat(Request $request)
     {
+        // Check permission before posting to temp achat
+        if (!auth()->user()->can('Achat-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter un achat'
+            ], 403);
+        }
+        
         $data = $request->all();
         $data['id_user'] = Auth::user()->id;
         $data['qte'] = 1;
         
         DB::beginTransaction();
-
+    
         try {
             $existingProduct = TempAchat::where('idproduit', $data['idproduit'])
                 ->where('id_fournisseur', $data['id_fournisseur'])
                 ->where('id_user', $data['id_user'])
                 ->first();
-
+    
             if ($existingProduct) {
                 $existingProduct->increment('qte', 1);
                 DB::commit();
-
+    
                 return response()->json([
                     'status' => 200,
                     'message' => 'Quantité mise à jour avec succès',
@@ -132,7 +152,7 @@ class AchatController extends Controller
             } else {
                 TempAchat::create($data);
                 DB::commit();
-
+    
                 return response()->json([
                     'status' => 200,
                     'message' => 'Ajouté avec succès',
@@ -140,7 +160,7 @@ class AchatController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-
+    
             return response()->json([
                 'status' => 500,
                 'message' => 'Une erreur est survenue. Veuillez réessayer.',
@@ -162,20 +182,24 @@ class AchatController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '';
-
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp"
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
-
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteTmp"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Catégorie">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
-
+    
+                    // Edit button with permission check
+                    if (auth()->user()->can('Achat-modifier')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp"
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
+    
+                    // Delete button with permission check
+                    if (auth()->user()->can('Achat-supprimer')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteTmp"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Catégorie">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
+    
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -184,9 +208,17 @@ class AchatController extends Controller
 
     public function Store(Request $request)
     {
+        // Check permission before storing
+        if (!auth()->user()->can('Achat-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter un achat'
+            ], 403);
+        }
+        
         $userId = Auth::id();
         $fournisseur = $request->id_fournisseur;
-
+    
         // Retrieve temporary purchase data
         $TempAchat = DB::table('temp_achat as t')
             ->join('products as p', 'p.id', '=', 't.idproduit')
@@ -195,17 +227,17 @@ class AchatController extends Controller
             ->select('t.id_fournisseur', 't.qte', 't.idproduit', 'p.price_achat', 
                 DB::raw('t.qte * p.price_achat as total_by_product'))
             ->get();
-
+    
         if ($TempAchat->isEmpty()) {
             return response()->json([
                 'status'  => 400,
                 'message' => 'Aucun article trouvé pour ce fournisseur'
             ]);
         }
-
+    
         // Calculate total purchase amount
         $SumAchat = $TempAchat->sum('total_by_product');
-
+    
         // Create new purchase
         $Achat = Achat::create([
             'total'         => $SumAchat,
@@ -213,14 +245,14 @@ class AchatController extends Controller
             'id_Fournisseur'=> $fournisseur,
             'id_user'       => $userId,
         ]);
-
+    
         if (!$Achat) {
             return response()->json([
                 'status'  => 500,
                 'message' => 'Échec de la création de l\'enregistrement d\'achat'
             ]);
         }
-
+    
         // Insert purchase details in bulk
         $LignesAchat = [];
         foreach ($TempAchat as $item) {
@@ -233,22 +265,30 @@ class AchatController extends Controller
                 'updated_at'=> now(),
             ];
         }
-
+    
         LigneAchat::insert($LignesAchat); // Bulk insert for better performance
-
+    
         // Delete temporary purchase records
         TempAchat::where('id_user', $userId)
             ->where('id_fournisseur', $fournisseur)
             ->delete();
-
+    
         return response()->json([
             'status'  => 200,
             'message' => 'Achat ajouté avec succès'
         ]);
-    }  
+    }
 
     public function UpdateQteTmp(Request $request)
     {
+        // Check permission before updating
+        if (!auth()->user()->can('Achat-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier un achat'
+            ], 403);
+        }
+        
         $validator = Validator::make($request->all(), [
             'qte' => 'required',
             
@@ -280,6 +320,14 @@ class AchatController extends Controller
 
     public function DeleteRowsTmpAchat(Request $request)
     {
+        // Check permission before deleting
+        if (!auth()->user()->can('Achat-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer un achat'
+            ], 403);
+        }
+        
         $TempAchat = TempAchat::where('id',$request->id)->delete();
          
         if($TempAchat)
@@ -292,21 +340,29 @@ class AchatController extends Controller
     }
 
     public function DeleteAchat(Request $request)
-    {
-        // Hard delete instead of soft delete
-        $achat = Achat::findOrFail($request->id);
-        
-        // First delete related records in ligne_achat
-        LigneAchat::where('idachat', $achat->id)->delete();
-        
-        // Then delete the achat record
-        $achat->delete();
-        
+{
+    // Check permission before deleting
+    if (!auth()->user()->can('Achat-supprimer')) {
         return response()->json([
-            'status'    => 200,
-            'message'   => 'Achat supprimé avec succès.'
-        ]);
+            'status' => 403,
+            'message' => 'Vous n\'avez pas la permission de supprimer un achat'
+        ], 403);
     }
+    
+    // Hard delete instead of soft delete
+    $achat = Achat::findOrFail($request->id);
+    
+    // First delete related records in ligne_achat
+    LigneAchat::where('idachat', $achat->id)->delete();
+    
+    // Then delete the achat record
+    $achat->delete();
+    
+    return response()->json([
+        'status'    => 200,
+        'message'   => 'Achat supprimé avec succès.'
+    ]);
+}
 
     public function GetTotalTmpByForunisseurAndUser(Request $request)
     {
@@ -333,9 +389,14 @@ class AchatController extends Controller
 
     public function ShowBonReception($id)
     {
+        // Check permission for viewing 
+        if (!auth()->user()->can('Achat')) {
+            abort(403, 'Vous n\'avez pas la permission de voir ce bon de réception');
+        }
+        
         $hashids = new Hashids();
         $decoded = $hashids->decode($id);
-
+    
         if (empty($decoded)) {
             abort(404); // Handle invalid hash
         }
@@ -361,9 +422,14 @@ class AchatController extends Controller
 
     public function Invoice($id)
     {
+        // Check permission for viewing invoice
+        if (!auth()->user()->can('Achat')) {
+            abort(403, 'Vous n\'avez pas la permission de voir cette facture');
+        }
+        
         $hashids = new Hashids();
         $decoded = $hashids->decode($id);
-
+    
         if (empty($decoded)) {
             abort(404); // Handle invalid hash
         }
@@ -375,7 +441,7 @@ class AchatController extends Controller
         ->select('p.price_achat', 'l.qte', DB::raw('p.price_achat * l.qte as total'), 'p.name','a.created_at')
         ->where('a.id', $id)
         ->get();
-
+    
         $imagePath = public_path('images/logo_top.png');
         $imageData = base64_encode(file_get_contents($imagePath));
         $logo_bottom = public_path('images/logo_bottom.png');
