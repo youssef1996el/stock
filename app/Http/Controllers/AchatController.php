@@ -31,6 +31,7 @@ class AchatController extends Controller
             ->join('fournisseurs as f','f.id','=','a.id_Fournisseur')
             ->join('users as u','u.id','=','a.id_user')
             ->select('a.total','a.status','f.entreprise','u.name','a.created_at','a.id')
+            ->whereNull('a.deleted_at')
             ->get();
             return DataTables::of($Data_Achat)
                     ->addIndexColumn()
