@@ -42,7 +42,16 @@
                                             <label>Type</label>
                                             <select id="modelFilter" class="form-control">
                                                 <option value="">Tous les types</option>
-                                                <option value="client">Clients</option>
+                                                <option value="client">Formateur</option>
+                                                <option value="fournisseur">Fournisseurs</option>
+                                                <option value="local">Locaux</option>
+                                                <option value="tva">TVA</option>
+                                                <option value="rayon">Rayons</option>
+                                                <option value="unite">Unités</option>
+                                                <option value="category">Catégories</option>
+                                                <option value="subcategory">Famille</option>
+                                                <option value="product">Produits</option>
+                                                <option value="user">Utilisateurs</option>
                                                 <!-- Add other model types here -->
                                             </select>
                                         </div>

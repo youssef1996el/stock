@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('achats', function (Blueprint $table) {
             $table->id();
             $table->decimal('total', 10, 2);
-            $table->enum('status', ['En cours de traitement', 'Accepté', 'Refusé', 'Reçu'])->default('En cours de traitement');
+            $table->enum('status', ['En cours de traitement', 'Traité', 'Livré', 'Annulé'])->default('En cours de traitement');
             $table->foreignId('id_Fournisseur')->references('id')->on('fournisseurs')->onDelete('cascade');
             $table->foreignId('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

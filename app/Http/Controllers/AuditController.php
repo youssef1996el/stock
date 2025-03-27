@@ -7,6 +7,15 @@ use OwenIt\Auditing\Models\Audit;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Fournisseur;
+use App\Models\Local;
+use App\Models\Tva;
+use App\Models\Rayon;
+use App\Models\Unite;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Stock;
+use App\Models\SubCategory;
 use Carbon\Carbon;
 
 class AuditController extends Controller
@@ -109,6 +118,18 @@ class AuditController extends Controller
         $newValues = is_string($audit->new_values) ? json_decode($audit->new_values, true) : $audit->new_values;
         $newValues = $newValues ?: [];
         
+        // Process special fields (like resolving IDs to names)
+        $oldValues = $this->processSpecialFields($audit->auditable_type, $oldValues, $audit->auditable_id);
+        $newValues = $this->processSpecialFields($audit->auditable_type, $newValues, $audit->auditable_id);
+        
+        // Suppression des champs ID dans les valeurs
+        if (isset($oldValues['id'])) {
+            unset($oldValues['id']);
+        }
+        if (isset($newValues['id'])) {
+            unset($newValues['id']);
+        }
+        
         // Get field names
         $fieldNames = $this->getFieldNames($audit->auditable_type);
         
@@ -123,6 +144,75 @@ class AuditController extends Controller
             'fieldNames' => $fieldNames,
             'eventName' => $this->getReadableEvent($audit->event)
         ]);
+    }
+    
+    /**
+     * Process special fields like resolving IDs to names.
+     */
+    private function processSpecialFields($modelClass, $values, $auditableId = null)
+    {
+        $processedValues = $values;
+        
+        // Process IDs to names for specific fields
+        foreach ($processedValues as $key => $value) {
+            // Process user IDs to names
+            if (in_array($key, ['iduser', 'id_user']) && !empty($value)) {
+                $user = User::find($value);
+                if ($user) {
+                    $processedValues[$key] = $user->name;
+                }
+            }
+            
+            // Process other foreign keys as needed
+            if ($key === 'id_local' && !empty($value)) {
+                $local = Local::find($value);
+                if ($local) {
+                    $processedValues[$key] = $local->name;
+                }
+            }
+            
+            if ($key === 'id_rayon' && !empty($value)) {
+                $rayon = Rayon::find($value);
+                if ($rayon) {
+                    $processedValues[$key] = $rayon->name;
+                }
+            }
+            
+            if ($key === 'id_categorie' && !empty($value)) {
+                $category = Category::find($value);
+                if ($category) {
+                    $processedValues[$key] = $category->name;
+                }
+            }
+            
+            if ($key === 'id_subcategorie' && !empty($value)) {
+                $subcategory = SubCategory::find($value);
+                if ($subcategory) {
+                    $processedValues[$key] = $subcategory->name;
+                }
+            }
+            
+            // Handling unite for Product model
+            if ($key === 'unite' && $modelClass === Product::class) {
+                // For products, if unite is null, get it from the Stock table
+                if (empty($value) && $auditableId) {
+                    $stock = Stock::where('id_product', $auditableId)->first();
+                    if ($stock && $stock->id_unite) {
+                        $unite = Unite::find($stock->id_unite);
+                        if ($unite) {
+                            $processedValues[$key] = $unite->name;
+                        }
+                    }
+                } else if (!empty($value)) {
+                    $unite = Unite::find($value);
+                    if ($unite) {
+                        $processedValues[$key] = $unite->name;
+                    }
+                }
+            }
+        }
+        
+        return $processedValues;
     }
     
     /**
@@ -182,6 +272,18 @@ class AuditController extends Controller
                 $newValues = is_string($audit->new_values) ? json_decode($audit->new_values, true) : $audit->new_values;
                 $newValues = $newValues ?: [];
                 
+                // Remove ID from values
+                if (isset($oldValues['id'])) {
+                    unset($oldValues['id']);
+                }
+                if (isset($newValues['id'])) {
+                    unset($newValues['id']);
+                }
+                
+                // Process special fields
+                $oldValues = $this->processSpecialFields($audit->auditable_type, $oldValues, $audit->auditable_id);
+                $newValues = $this->processSpecialFields($audit->auditable_type, $newValues, $audit->auditable_id);
+                
                 // Format the changes description
                 $changes = $this->formatChangesForCsv($audit->event, $oldValues, $newValues, $audit->auditable_type);
                 
@@ -211,13 +313,15 @@ class AuditController extends Controller
         if ($event === 'created') {
             $changes = 'Création: ';
             foreach ($newValues as $key => $value) {
-                $fieldName = $this->getReadableFieldName($modelClass, $key);
-                $changes .= $fieldName . ': ' . $this->formatValue($value) . '; ';
+                if ($key !== 'id') { // Ne pas inclure l'ID dans les changements
+                    $fieldName = $this->getReadableFieldName($modelClass, $key);
+                    $changes .= $fieldName . ': ' . $this->formatValue($value) . '; ';
+                }
             }
         } else if ($event === 'updated') {
             $changes = 'Modification: ';
             foreach ($newValues as $key => $value) {
-                if (isset($oldValues[$key])) {
+                if ($key !== 'id' && isset($oldValues[$key])) { // Ne pas inclure l'ID dans les changements
                     $fieldName = $this->getReadableFieldName($modelClass, $key);
                     $changes .= $fieldName . ': ' . $this->formatValue($oldValues[$key]) . ' → ' . 
                                $this->formatValue($value) . '; ';
@@ -271,7 +375,7 @@ class AuditController extends Controller
      */
     private function getFieldNames($modelClass)
     {
-        // Client model field names
+        // Client model field names (now Formateur)
         if ($modelClass === Client::class) {
             return [
                 'first_name' => 'Prénom',
@@ -293,6 +397,93 @@ class AuditController extends Controller
             ];
         }
         
+        // Fournisseur model field names
+        else if ($modelClass === Fournisseur::class) {
+            return [
+                'entreprise' => 'Entreprise',
+                'Telephone' => 'Téléphone',
+                'Email' => 'Adresse email',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Local model field names
+        else if ($modelClass === Local::class) {
+            return [
+                'name' => 'Nom',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Tva model field names
+        else if ($modelClass === Tva::class) {
+            return [
+                'name' => 'Nom',
+                'value' => 'Valeur (%)',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Rayon model field names
+        else if ($modelClass === Rayon::class) {
+            return [
+                'name' => 'Nom',
+                'iduser' => 'Créé par',
+                'id_local' => 'Local',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Unite model field names
+        else if ($modelClass === Unite::class) {
+            return [
+                'name' => 'Nom',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Category model field names
+        else if ($modelClass === Category::class) {
+            return [
+                'name' => 'Nom',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // SubCategory model field names (now Famille)
+        else if ($modelClass === SubCategory::class) {
+            return [
+                'name' => 'Nom',
+                'id_categorie' => 'Catégorie',
+                'iduser' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
+        // Product model field names
+        else if ($modelClass === Product::class) {
+            return [
+                'name' => 'Nom',
+                'code_article' => 'Code article',
+                'unite' => 'Unité',
+                'price_achat' => 'Prix d\'achat',
+                'price_vente' => 'Prix de vente',
+                'code_barre' => 'Code barre',
+                'emplacement' => 'Emplacement',
+                'id_categorie' => 'Catégorie',
+                'id_subcategorie' => 'Famille',  // Changed from 'Sous-catégorie' to 'Famille'
+                'id_local' => 'Local',
+                'id_rayon' => 'Rayon',
+                'id_user' => 'Créé par',
+                'deleted_at' => 'Date de suppression'
+            ];
+        }
+        
         return [];
     }
     
@@ -302,8 +493,19 @@ class AuditController extends Controller
     private function getModelClass($type)
     {
         $mapping = [
-            'client' => Client::class,
+            'formateur' => Client::class,         // Changed from 'client' to 'formateur'
             'user' => User::class,
+            'fournisseur' => Fournisseur::class,
+            'local' => Local::class,
+            'tva' => Tva::class,
+            'rayon' => Rayon::class,
+            'unite' => Unite::class,
+            'category' => Category::class,
+            'famille' => SubCategory::class,      // Changed from 'subcategory' to 'famille'
+            'product' => Product::class,
+            // For backward compatibility
+            'client' => Client::class,            // Keep this for backward compatibility
+            'subcategory' => SubCategory::class,  // Keep this for backward compatibility
             // Add other mappings as needed
         ];
         
@@ -331,8 +533,16 @@ class AuditController extends Controller
     private function getReadableModelName($modelClass)
     {
         $mapping = [
-            Client::class => 'Client',
+            Client::class => 'Formateur',          // Changed from 'Client' to 'Formateur'
             User::class => 'Utilisateur',
+            Fournisseur::class => 'Fournisseur',
+            Local::class => 'Local',
+            Tva::class => 'TVA',
+            Rayon::class => 'Rayon',
+            Unite::class => 'Unité',
+            Category::class => 'Catégorie',
+            SubCategory::class => 'Famille',       // Changed from 'Sous-catégorie' to 'Famille'
+            Product::class => 'Produit',
             // Add other models here
         ];
         
@@ -346,14 +556,55 @@ class AuditController extends Controller
     {
         if ($modelClass === Client::class) {
             $client = Client::withTrashed()->find($id);
-            return $client ? $client->first_name . ' ' . $client->last_name : 'Client #' . $id;
+            return $client ? $client->first_name . ' ' . $client->last_name : 'Formateur';  // Changed from 'Client'
         }
         
         if ($modelClass === User::class) {
             $user = User::withTrashed()->find($id);
-            return $user ? $user->name : 'Utilisateur #' . $id;
+            return $user ? $user->name : 'Utilisateur';
         }
         
-        return 'ID: ' . $id;
+        if ($modelClass === Fournisseur::class) {
+            $fournisseur = Fournisseur::withTrashed()->find($id);
+            return $fournisseur ? $fournisseur->entreprise : 'Fournisseur';
+        }
+        
+        if ($modelClass === Local::class) {
+            $local = Local::withTrashed()->find($id);
+            return $local ? $local->name : 'Local';
+        }
+        
+        if ($modelClass === Tva::class) {
+            $tva = Tva::withTrashed()->find($id);
+            return $tva ? $tva->name . ' (' . $tva->value . '%)' : 'TVA';
+        }
+        
+        if ($modelClass === Rayon::class) {
+            $rayon = Rayon::withTrashed()->find($id);
+            return $rayon ? $rayon->name : 'Rayon';
+        }
+        
+        if ($modelClass === Unite::class) {
+            $unite = Unite::withTrashed()->find($id);
+            return $unite ? $unite->name : 'Unité';
+        }
+        
+        if ($modelClass === Category::class) {
+            $category = Category::withTrashed()->find($id);
+            return $category ? $category->name : 'Catégorie';
+        }
+        
+        if ($modelClass === SubCategory::class) {
+            $subcategory = SubCategory::withTrashed()->find($id);
+            return $subcategory ? $subcategory->name : 'Famille';  // Changed from 'Sous-catégorie'
+        }
+        
+        if ($modelClass === Product::class) {
+            $product = Product::withTrashed()->find($id);
+            return $product ? $product->name . ' (' . $product->code_article . ')' : 'Produit';
+        }
+        
+        // Pour tout autre modèle, retourner simplement le nom de la classe
+        return class_basename($modelClass);
     }
 }

@@ -1,8 +1,3 @@
-
-
-
-
-
 @extends('dashboard.index')
 
 @section('dashboard')
@@ -40,7 +35,9 @@
 
                         <div class="card-body">
                             <div class=" mb-3">
-                                <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddRoles">Add roles</button>
+                                @can('rôles-ajoute')
+                                    <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddRoles">Add roles</button>
+                                @endcan
                             </div>
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">

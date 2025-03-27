@@ -56,19 +56,23 @@ class UserController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
     
-                    // زر التعديل
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUser"
-                                data-id="' . $row->id . '"    title="modifier roles"
-                                >
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    // زر التعديل - Add permission check
+                    if (auth()->user()->can('utilisateur-modifier')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editUser"
+                                    data-id="' . $row->id . '"    title="modifier roles"
+                                    >
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
     
-                    // زر الحذف
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteuser"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer roles">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    // زر الحذف - Add permission check
+                    if (auth()->user()->can('utilisateur-supprimer')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteuser"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer roles">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
     
                     return $btn;
                 })

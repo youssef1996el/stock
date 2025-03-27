@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Rayon extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+
+class Rayon extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     /**
      * The table associated with the model.
@@ -26,6 +30,17 @@ class Rayon extends Model
         'name',
         'iduser',
         'id_local',
+    ];
+    
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**

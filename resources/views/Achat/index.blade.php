@@ -15,9 +15,12 @@
     var GetAchatList   = "{{url('getAchatList')}}"; // URL pour le tableau principal
     var StoreAchat     = "{{url('StoreAchat')}}";
     var Achat          = "{{url('Achat')}}";
-    var UpdateQteTmp          = "{{url('UpdateQteTmp')}}";
-    var DeleteRowsTmpAchat          = "{{url('DeleteRowsTmpAchat')}}";
-    var GetTotalTmpByForunisseurAndUser          = "{{url('GetTotalTmpByForunisseurAndUser')}}";
+    var UpdateQteTmp   = "{{url('UpdateQteTmp')}}";
+    var DeleteRowsTmpAchat = "{{url('DeleteRowsTmpAchat')}}";
+    var GetTotalTmpByForunisseurAndUser = "{{url('GetTotalTmpByForunisseurAndUser')}}";
+    var DeleteAchat    = "{{url('DeleteAchat')}}";
+    var EditAchat      = "{{url('EditAchat')}}";
+    var UpdateAchat    = "{{url('UpdateAchat')}}";
 
 </script>
 <style>
@@ -351,12 +354,37 @@
             </div>
         </div>
 
-        
+        <!-- Modal Modifier un Achat -->
+        @can('Achat-modifier')
+        <div class="modal fade" id="ModalEditAchat" tabindex="-1" aria-labelledby="ModalEditAchatLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalEditAchatLabel">Modifier le statut d'achat</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="validationEditAchat"></div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Statut</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="En cours de traitement">En cours de traitement</option>
+                                <option value="Traité">Traité</option>
+                                <option value="Livré">Livré</option>
+                                <option value="Annulé">Annulé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" id="BtnUpdateAchat">Mettre à jour</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endcan
 
-
-        
-        
-        <!-- Modal -->
+        <!-- Modal Modifier Quantité -->
         @can('Achat-modifier')
         <div class="modal fade" id="ModalEditQteTmp" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -382,8 +410,6 @@
             </div>
         </div>
         @endcan
-        
-        
         
     </div>
 </div>

@@ -513,4 +513,131 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Edit Achat functionality
+    $('.TableAchat tbody').on('click', '.bg-primary-subtle', function(e) {
+        e.preventDefault();
+        $('#ModalEditAchat').modal("show");
+        var idAchat = $(this).attr('data-id');
+        var status = $(this).closest('tr').find('td:eq(2)').text();
+        
+        // Get achat details from server
+        $.ajax({
+            type: "GET",
+            url: 'EditAchat/' + idAchat,
+            dataType: "json",
+            success: function (response) {
+                if(response) {
+                    $('#status').val(response.status);
+                    $('#BtnUpdateAchat').attr('data-id', idAchat);
+                }
+                else {
+                    new AWN().warning("Impossible de récupérer les détails de l'achat", {durations: {warning: 5000}});
+                }
+            },
+            error: function() {
+                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+            }
+        });
+    });
+    
+  // Update Achat
+  $('#BtnUpdateAchat').on('click', function(e) {
+    e.preventDefault();
+    
+    let id = $(this).attr('data-id');
+    let status = $('#status').val();
+    
+    $('#BtnUpdateAchat').prop('disabled', true).text('Mise à jour...');
+    
+    $.ajax({
+        type: "POST",
+        url: UpdateAchat,
+        data: {
+            '_token': csrf_token,
+            'id': id,
+            'status': status
+        },
+        dataType: "json",
+        success: function(response) {
+            $('#BtnUpdateAchat').prop('disabled', false).text('Mettre à jour');
+            if (response.status == 200) {
+                new AWN().success(response.message, {durations: {success: 5000}});
+                $('#ModalEditAchat').modal('hide');
+                $('.TableAchat').DataTable().ajax.reload();
+            } else {
+                // Handle other successful responses that aren't status 200
+                new AWN().warning(response.message || "Une erreur est survenue", {durations: {warning: 5000}});
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#BtnUpdateAchat').prop('disabled', false).text('Mettre à jour');
+            
+            // Parse the response to handle validation errors
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.status === 400 && response.errors) {
+                    // Join all validation error messages
+                    const errorMessages = Object.values(response.errors)
+                        .flat()
+                        .join('<br>');
+                    new AWN().warning(errorMessages, {durations: {warning: 5000}});
+                } else if (response.status === 404) {
+                    new AWN().warning(response.message, {durations: {warning: 5000}});
+                } else {
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
+            } catch (e) {
+                console.error("Error parsing response:", e);
+                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+            }
+        }
+    });
+});
+    // Delete Achat functionality
+    $('.TableAchat tbody').on('click', '.DeleteAchat', function(e) {
+        e.preventDefault();
+        var idAchat = $(this).attr('data-id');
+        let notifier = new AWN();
+        
+        let onOk = () => {
+            $.ajax({
+                type: "post",
+                url: "DeleteAchat",
+                data: {
+                    id: idAchat,
+                    _token: csrf_token,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if(response.status == 200) {
+                        new AWN().success(response.message, {durations: {success: 5000}});
+                        $('.TableAchat').DataTable().ajax.reload();
+                    }   
+                    else if(response.status == 404) {
+                        new AWN().warning(response.message, {durations: {warning: 5000}});
+                    }  
+                },
+                error: function() {
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
+            });
+        };
+        
+        let onCancel = () => {
+            notifier.info('Annulation de la suppression');
+        };
+        
+        notifier.confirm(
+            'Êtes-vous sûr de vouloir supprimer cet achat ?',
+            onOk,
+            onCancel,
+            {
+                labels: {
+                    confirm: 'Supprimer',
+                    cancel: 'Annuler'
+                }
+            }
+        );
+    });
 });

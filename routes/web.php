@@ -117,7 +117,7 @@ Route::post('updateUnite'                       , [UniteController::class, 'upda
 Route::post('deleteUnite'                       , [UniteController::class, 'destroy'                        ]);
 
 
-// Unite Achat
+//  Achat
 Route::get('Achat'                              ,[AchatController::class,'index'                            ]); 
 Route::get('getProduct'                         ,[AchatController::class,'getProduct'                       ]); 
 Route::post('PostInTmpAchat'                    ,[AchatController::class,'PostInTmpAchat'                   ]); 
@@ -128,6 +128,9 @@ Route::get('GetTmpAchatByFournisseur'           ,[AchatController::class,'GetTmp
 Route::get('GetTotalTmpByForunisseurAndUser'    ,[AchatController::class,'GetTotalTmpByForunisseurAndUser'  ]); 
 Route::get('ShowBonReception/{id}'              ,[AchatController::class,'ShowBonReception'                 ]);
 Route::get('Invoice/{id}'                       ,[AchatController::class,'Invoice'                          ]);
+Route::post('DeleteAchat'                       ,[AchatController::class, 'DeleteAchat']);
+Route::get('EditAchat/{id}', [AchatController::class, 'edit']);
+Route::post('UpdateAchat', [AchatController::class, 'update']);
 
 
 // Client routes

@@ -70,9 +70,11 @@
 
                         <div class="card-body">
                             <div class="mb-3">
+                                @can('Commande-ajoute')
                                 <button class="btn btn-primary" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddVente">
                                     <i class="fa-solid fa-plus"></i> Ajouter une nouvelle commande
                                 </button>
+                                @endcan
                             </div>
                             
                             <!-- Liste des ventes -->
@@ -100,6 +102,7 @@
         </div>
 
         <!-- Modal Ajouter une Vente -->
+        @can('Commande-ajoute')
         <div class="modal fade" id="ModalAddVente" tabindex="-1" aria-labelledby="ModalAddVente" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
@@ -199,6 +202,7 @@
                 </div>
             </div>
         </div>
+        @endcan
 
         <div class="modal fade" id="ModalAddProduct" tabindex="-1" aria-labelledby="ModalAddProductLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -346,6 +350,7 @@
         </div>
 
         <!-- Modal pour modifier la quantité -->
+        @can('Commande-modifier')
         <div class="modal fade" id="ModalEditQteTmp" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content" style="background-color: ##dee8f0 !important">
@@ -369,6 +374,7 @@
                 </div>
             </div>
         </div>
+        @endcan
         
     </div>
 </div>

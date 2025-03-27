@@ -340,29 +340,29 @@ class AchatController extends Controller
     }
 
     public function DeleteAchat(Request $request)
-{
-    // Check permission before deleting
-    if (!auth()->user()->can('Achat-supprimer')) {
+    {
+        // Check permission before deleting
+        if (!auth()->user()->can('Achat-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer un achat'
+            ], 403);
+        }
+        
+        // Hard delete instead of soft delete
+        $achat = Achat::findOrFail($request->id);
+        
+        // First delete related records in ligne_achat
+        LigneAchat::where('idachat', $achat->id)->delete();
+        
+        // Then delete the achat record
+        $achat->delete();
+        
         return response()->json([
-            'status' => 403,
-            'message' => 'Vous n\'avez pas la permission de supprimer un achat'
-        ], 403);
+            'status'    => 200,
+            'message'   => 'Achat supprimé avec succès.'
+        ]);
     }
-    
-    // Hard delete instead of soft delete
-    $achat = Achat::findOrFail($request->id);
-    
-    // First delete related records in ligne_achat
-    LigneAchat::where('idachat', $achat->id)->delete();
-    
-    // Then delete the achat record
-    $achat->delete();
-    
-    return response()->json([
-        'status'    => 200,
-        'message'   => 'Achat supprimé avec succès.'
-    ]);
-}
 
     public function GetTotalTmpByForunisseurAndUser(Request $request)
     {
@@ -471,5 +471,61 @@ class AchatController extends Controller
             "Bon.pdf",
             $headers
         );
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, $id)
+    {
+        $achat = Achat::find($id);
+        
+        if (!$achat) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Achat non trouvé'
+            ], 404);
+        }
+
+        return response()->json($achat);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
+    {
+        $achat = Achat::find($request->id);
+    
+        if (!$achat) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Achat non trouvé'
+            ], 404);
+        }
+    
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:En cours de traitement,Traité,Livré,Annulé',
+        ], [
+            'required' => 'Le champ :attribute est requis.',
+            'in' => 'Le statut doit être l\'un des suivants: En cours de traitement, Traité, Livré, Annulé',
+        ], [
+            'status' => 'statut',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ], 400);
+        }
+    
+        $achat->status = $request->status;
+        $achat->save();
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'Achat mis à jour avec succès',
+        ]);
     }
 }

@@ -43,29 +43,38 @@ class VenteController extends Controller
                     $btn = '';
     
                     // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    if (auth()->user()->can('Commande-modifier')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 "
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
+                    
                     // Detail button with hash ID
-                    $btn .= '<a href="' . url('ShowBonVente/' . $hashids->encode($row->id)) . '" 
-                                class="btn btn-sm bg-success-subtle me-1" 
-                                data-id="' . $row->id . '" 
-                                target="_blank">
-                                <i class="fa-solid fa-eye text-success"></i>
-                            </a>';
+                    if (auth()->user()->can('Commande')) {
+                        $btn .= '<a href="' . url('ShowBonVente/' . $hashids->encode($row->id)) . '" 
+                                    class="btn btn-sm bg-success-subtle me-1" 
+                                    data-id="' . $row->id . '" 
+                                    target="_blank">
+                                    <i class="fa-solid fa-eye text-success"></i>
+                                </a>';
+                    }
                     
                     // Print invoice button
-                    $btn .= '<a href="' . url('FactureVente/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
-                            <i class="fa-solid fa-print text-info"></i>
-                        </a>';
+                    if (auth()->user()->can('Commande')) {
+                        $btn .= '<a href="' . url('FactureVente/' . $hashids->encode($row->id)) . '" class="btn btn-sm bg-info-subtle me-1" data-id="' . $row->id . '" target="_blank">
+                                <i class="fa-solid fa-print text-info"></i>
+                            </a>';
+                    }
     
                     // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Vente">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    if (auth()->user()->can('Commande-supprimer')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle "
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Vente">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
     
                     return $btn;
                 })
@@ -109,6 +118,14 @@ class VenteController extends Controller
 
     public function PostInTmpVente(Request $request)
     {
+        // Check permission before posting to temp vente
+        if (!auth()->user()->can('Commande-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter une commande'
+            ], 403);
+        }
+        
         $data = $request->all();
         $data['id_user'] = Auth::user()->id;
         $data['qte'] = 1;
@@ -163,18 +180,22 @@ class VenteController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '';
 
-                    // Edit button
-                    $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp" 
-                                data-id="' . $row->id . '">
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                            </a>';
+                    // Edit button with permission check
+                    if (auth()->user()->can('Commande-modifier')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 EditTmp" 
+                                    data-id="' . $row->id . '">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>';
+                    }
 
-                    // Delete button
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteTmp"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer Vente">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>';
+                    // Delete button with permission check
+                    if (auth()->user()->can('Commande-supprimer')) {
+                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteTmp"
+                                    data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                    title="Supprimer Vente">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>';
+                    }
 
                     return $btn;
                 })
@@ -184,6 +205,14 @@ class VenteController extends Controller
 
     public function Store(Request $request)
     {
+        // Check permission before storing
+        if (!auth()->user()->can('Commande-ajoute')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission d\'ajouter une commande'
+            ], 403);
+        }
+        
         $userId = Auth::id();
         $client = $request->id_client;
 
@@ -249,6 +278,14 @@ class VenteController extends Controller
 
     public function UpdateQteTmpVente(Request $request)
     {
+        // Check permission before updating
+        if (!auth()->user()->can('Commande-modifier')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de modifier une commande'
+            ], 403);
+        }
+        
         $validator = Validator::make($request->all(), [
             'qte' => 'required',
         ], [
@@ -278,6 +315,14 @@ class VenteController extends Controller
 
     public function DeleteRowsTmpVente(Request $request)
     {
+        // Check permission before deleting
+        if (!auth()->user()->can('Commande-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer une commande'
+            ], 403);
+        }
+        
         $TempVente = TempVente::where('id', $request->id)->delete();
         if($TempVente) {
             return response()->json([
@@ -289,6 +334,14 @@ class VenteController extends Controller
 
     public function deleteOldVentes()
     {
+        // Check permission before bulk deleting 
+        if (!auth()->user()->can('Commande-supprimer')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Vous n\'avez pas la permission de supprimer des commandes'
+            ], 403);
+        }
+        
         try {
             // Find ventes older than 24 hours with status "En cours de traitement"
             $cutoffTime = now()->subHours(24);
@@ -359,6 +412,11 @@ class VenteController extends Controller
 
     public function ShowBonVente($id)
     {
+        // Check permission for viewing
+        if (!auth()->user()->can('Commande')) {
+            abort(403, 'Vous n\'avez pas la permission de voir ce bon de vente');
+        }
+        
         $hashids = new Hashids();
         $decoded = $hashids->decode($id);
 
@@ -384,51 +442,57 @@ class VenteController extends Controller
 
         return view('vente.list', compact('bonVente', 'Client', 'Data_Vente'));
     }
+    
     public function FactureVente($id)
-{
-    $hashids = new Hashids();
-    $decoded = $hashids->decode($id);
+    {
+        // Check permission for viewing invoice
+        if (!auth()->user()->can('Commande')) {
+            abort(403, 'Vous n\'avez pas la permission de voir cette facture');
+        }
+        
+        $hashids = new Hashids();
+        $decoded = $hashids->decode($id);
 
-    if (empty($decoded)) {
-        abort(404); // Handle invalid hash
+        if (empty($decoded)) {
+            abort(404); // Handle invalid hash
+        }
+
+        $id = $decoded[0]; // Extract the original ID
+        $Data_Vente = DB::table('ventes as v')
+            ->join('ligne_vente as l', 'v.id', '=', 'l.idvente')
+            ->join('products as p', 'l.idproduit', '=', 'p.id')
+            ->select('p.price_vente', 'l.qte', DB::raw('p.price_vente * l.qte as total'), 'p.name', 'v.created_at')
+            ->where('v.id', $id)
+            ->get();
+
+        $imagePath = public_path('images/logo_top.png');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $logo_bottom = public_path('images/logo_bottom.png');
+        $imageData_bottom = base64_encode(file_get_contents($logo_bottom));
+        $context = stream_context_create([
+            'ssl' => [
+                'verify_peer' => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed' => TRUE,
+            ]
+        ]);
+        $html = view('vente.facture', [
+            'Data_Vente' => $Data_Vente,
+            'imageData' => $imageData,
+            'imageData_bottom' => $imageData_bottom,
+        ])->render();
+
+        // Load HTML to PDF
+        $pdf = Pdf::loadHTML($html)->output();
+
+        // Set response headers
+        $headers = [
+            "Content-type" => "application/pdf",
+        ];
+        return response()->streamDownload(
+            fn() => print($pdf),
+            "FactureVente.pdf",
+            $headers
+        );
     }
-
-    $id = $decoded[0]; // Extract the original ID
-    $Data_Vente = DB::table('ventes as v')
-        ->join('ligne_vente as l', 'v.id', '=', 'l.idvente')
-        ->join('products as p', 'l.idproduit', '=', 'p.id')
-        ->select('p.price_vente', 'l.qte', DB::raw('p.price_vente * l.qte as total'), 'p.name', 'v.created_at')
-        ->where('v.id', $id)
-        ->get();
-
-    $imagePath = public_path('images/logo_top.png');
-    $imageData = base64_encode(file_get_contents($imagePath));
-    $logo_bottom = public_path('images/logo_bottom.png');
-    $imageData_bottom = base64_encode(file_get_contents($logo_bottom));
-    $context = stream_context_create([
-        'ssl' => [
-            'verify_peer' => FALSE,
-            'verify_peer_name' => FALSE,
-            'allow_self_signed' => TRUE,
-        ]
-    ]);
-    $html = view('vente.facture', [
-        'Data_Vente' => $Data_Vente,
-        'imageData' => $imageData,
-        'imageData_bottom' => $imageData_bottom,
-    ])->render();
-
-    // Load HTML to PDF
-    $pdf = Pdf::loadHTML($html)->output();
-
-    // Set response headers
-    $headers = [
-        "Content-type" => "application/pdf",
-    ];
-    return response()->streamDownload(
-        fn() => print($pdf),
-        "FactureVente.pdf",
-        $headers
-    );
-}
 }

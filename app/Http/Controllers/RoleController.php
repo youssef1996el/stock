@@ -39,21 +39,25 @@ class RoleController extends Controller
             ->addColumn('actions', function ($role) {
                 $btn = '';
     
-                    // زر التعديل
+                // Edit button - check permission
+                if (auth()->user()->can('rôles-modifier')) {
                     $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editRole"
                                 data-id="' . $role->id . '"  
                                 >
                                 <i class="fa-solid fa-pen-to-square text-primary"></i>
                             </a>';
+                }
     
-                    // زر الحذف
+                // Delete button - check permission
+                if (auth()->user()->can('rôles-supprimer')) {
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleterole"
                                 data-id="' . $role->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer company">
                                 <i class="fa-solid fa-trash text-danger"></i>
                             </a>';
+                }
     
-                    return $btn;
+                return $btn;
             })
             ->rawColumns(['permissions', 'actions']) // Allow HTML rendering
             ->make(true);
