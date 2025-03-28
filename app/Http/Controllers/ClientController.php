@@ -74,10 +74,10 @@ class ClientController extends Controller
         if (!auth()->user()->can('Formateurs-ajoute')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission d\'ajouter un client'
+                'message' => 'Vous n\'avez pas la permission d\'ajouter un Formateur'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -99,19 +99,35 @@ class ClientController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+    
+        // Nettoyer et standardiser les noms pour la comparaison
+        $cleanedFirstName = strtolower(trim($request->first_name));
+        $cleanedLastName = strtolower(trim($request->last_name));
+        
+        // Vérifier si un client avec le même prénom ET nom existe déjà (insensible à la casse)
+        $exists = Client::whereRaw('LOWER(TRIM(first_name)) = ?', [$cleanedFirstName])
+                       ->whereRaw('LOWER(TRIM(last_name)) = ?', [$cleanedLastName])
+                       ->count();
+        
+        if ($exists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Un formateur avec ce prénom et ce nom existe déjà',
+            ], 422);
+        }
+    
         $client = Client::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'first_name' => trim($request->first_name),
+            'last_name' => trim($request->last_name),
             'Telephone' => $request->Telephone,
             'Email' => $request->Email,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($client) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Client créé avec succès',
+                'message' => 'Formateur créé avec succès',
             ]);
         } else { 
             return response()->json([
@@ -138,7 +154,7 @@ class ClientController extends Controller
         if (!auth()->user()->can('Formateurs-modifier')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission de modifier un client'
+                'message' => 'Vous n\'avez pas la permission de modifier un formateur'
             ], 403);
         }
 
@@ -147,7 +163,7 @@ class ClientController extends Controller
         if (!$client) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Client non trouvé'
+                'message' => 'formateur non trouvé'
             ], 404);
         }
 
@@ -166,16 +182,16 @@ class ClientController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier un client'
             ], 403);
         }
-
+    
         $client = Client::find($request->id);
-
+    
         if (!$client) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Client non trouvé'
             ], 404);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -190,24 +206,41 @@ class ClientController extends Controller
             'Telephone' => 'téléphone',
             'Email' => 'email',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+    
+        // Check if another client with the same name exists (case insensitive)
+        $cleanedFirstName = strtolower(trim($request->first_name));
+        $cleanedLastName = strtolower(trim($request->last_name));
+        
+        // Check for duplicate excluding the current client being updated
+        $exists = Client::where('id', '!=', $request->id)
+                       ->whereRaw('LOWER(TRIM(first_name)) = ?', [$cleanedFirstName])
+                       ->whereRaw('LOWER(TRIM(last_name)) = ?', [$cleanedLastName])
+                       ->count();
+        
+        if ($exists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Un formateur avec ce prénom et ce nom existe déjà',
+            ], 422);
+        }
+    
         $client->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'Telephone' => $request->Telephone,
             'Email' => $request->Email,
         ]);
-
+    
         return response()->json([
             'status' => 200,
-            'message' => 'Client mis à jour avec succès',
+            'message' => 'formateur mis à jour avec succès',
         ]);
     }
 
@@ -220,7 +253,7 @@ class ClientController extends Controller
         if (!auth()->user()->can('Formateurs-supprimer')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission de supprimer un client'
+                'message' => 'Vous n\'avez pas la permission de supprimer un formateur'
             ], 403);
         }
 
@@ -229,14 +262,14 @@ class ClientController extends Controller
         if (!$client) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Client non trouvé'
+                'message' => 'formateur non trouvé'
             ], 404);
         }
 
         if ($client->delete()) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Client supprimé avec succès'
+                'message' => 'formateur supprimé avec succès'
             ]);
         }
 

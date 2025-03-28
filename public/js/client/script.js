@@ -148,9 +148,9 @@ $(document).ready(function () {
         
         let formData = new FormData($('#FormAddClient')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddClient').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddClient,
@@ -185,14 +185,26 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
-                }  
+                }
+                else if(response.status == 422)
+                {
+                    // Traitement spécifique pour le cas où un client avec le même prénom et nom existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
+                }
                 else if (response.status == 404 || response.status == 500) {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $('#BtnAddClient').prop('disabled', false).text('Sauvegarder');
-                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                
+                // Récupérer le message d'erreur personnalisé du serveur
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Fallback au message générique
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
             }
         });
     });
@@ -223,6 +235,9 @@ $(document).ready(function () {
                 else if (response.status == 404) {
                     new AWN().warning(response.message, {durations: {warning: 5000}});
                 }
+                else if (response.status == 422) {
+                    new AWN().warning(response.message, {durations: {warning: 5000}});
+                }
                 else if (response.status == 400) {
                     $('.validationEditClient').html("");
                     $('.validationEditClient').addClass('alert alert-danger');
@@ -240,9 +255,15 @@ $(document).ready(function () {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $('#BtnUpdateClient').prop('disabled', false).text('Mettre à jour');
-                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                if (xhr.status === 422) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else if (xhr.status === 403) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else {
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
             }
         });
     });

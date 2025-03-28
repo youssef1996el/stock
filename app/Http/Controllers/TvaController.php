@@ -82,13 +82,38 @@ class TvaController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+    
+        // Nettoyer et standardiser le nom pour la comparaison
+        $cleanedName = strtolower(trim($request->name));
+        $cleanedValue = trim($request->value);
+        
+        // Vérifier si une TVA avec un nom similaire existe déjà (insensible à la casse)
+        $nameExists = Tva::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])->count();
+        
+        if ($nameExists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Une TVA avec ce nom existe déjà',
+            ], 422);
+        }
+        
+        // Vérifier si une TVA avec cette valeur existe déjà
+        $valueExists = Tva::where('value', $cleanedValue)->count();
+        
+        if ($valueExists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Une TVA avec cette valeur existe déjà',
+            ], 422);
+        }
+    
+        // Créer la TVA avec les valeurs nettoyées
         $tva = Tva::create([
-            'name' => $request->name,
-            'value' => $request->value,
+            'name' => trim($request->name), // Conserver la casse d'origine mais supprimer les espaces
+            'value' => $cleanedValue,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($tva) {
             return response()->json([
                 'status' => 200,

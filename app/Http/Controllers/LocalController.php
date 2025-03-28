@@ -74,7 +74,7 @@ class LocalController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des locaux'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
         ], [
@@ -89,9 +89,12 @@ class LocalController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
-        // Check if local already exists with the same name
-        $exists = Local::where('name', $request->name)->exists();
+    
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if local already exists with the same name (case insensitive)
+        $exists = Local::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])->exists();
             
         if ($exists) {
             return response()->json([
@@ -99,12 +102,12 @@ class LocalController extends Controller
                 'message' => 'Ce local existe déjà',
             ], 409);
         }
-
+    
         $local = Local::create([
             'name' => $request->name,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($local) {
             return response()->json([
                 'status' => 200,
@@ -155,7 +158,7 @@ class LocalController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des locaux'
             ], 403);
         }
-
+    
         $local = Local::find($request->id);
         
         if (!$local) {
@@ -180,9 +183,12 @@ class LocalController extends Controller
             ], 400);
         }
         
-        // Check if another local with the same name exists
-        $exists = Local::where('name', $request->name)
-            ->where('id', '!=', $request->id) // Exclude current record
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if another local with the same name exists (case insensitive)
+        $exists = Local::where('id', '!=', $request->id) // Exclude current record
+            ->whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
             ->exists();
             
         if ($exists) {
@@ -191,7 +197,7 @@ class LocalController extends Controller
                 'message' => 'Ce local existe déjà',
             ], 409);
         }
-
+    
         $local->name = $request->name;
         $saved = $local->save();
         

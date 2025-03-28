@@ -199,7 +199,7 @@ class ProductController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des produits'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'price_achat' => 'required|numeric',
@@ -225,7 +225,18 @@ class ProductController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+    
+        // Vérifier si un produit avec ce nom existe déjà (insensible à la casse)
+        $cleanedName = strtolower(trim($request->name));
+        $nameExists = Product::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])->count();
+        
+        if ($nameExists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Un produit avec ce nom existe déjà',
+            ], 422);
+        }
+    
         try {
             DB::beginTransaction();
             
@@ -258,9 +269,9 @@ class ProductController extends Controller
             
             // Create product
             $product = Product::create([
-                'name' => $request->name,
+                'name' => trim($request->name), // Utiliser le nom nettoyé
                 'code_article' => $code_article,
-                'unite' => null, // We'll use the id_unite in stock table now
+                'unite' => null,
                 'price_achat' => $request->price_achat,
                 'price_vente' => $request->price_vente,
                 'code_barre' => $request->code_barre,
@@ -354,7 +365,7 @@ class ProductController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des produits'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:products,id',
             'name' => 'required|string|max:255',
@@ -392,6 +403,19 @@ class ProductController extends Controller
                     'status' => 404,
                     'message' => 'Produit non trouvé',
                 ], 404);
+            }
+            
+            // Vérifier si un produit avec ce nom existe déjà (insensible à la casse)
+            $cleanedName = strtolower(trim($request->name));
+            $nameExists = Product::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
+                          ->where('id', '!=', $request->id)
+                          ->count();
+            
+            if ($nameExists > 0) {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'Un produit avec ce nom existe déjà',
+                ], 422);
             }
             
             // Verify the relationship between category and subcategory
@@ -436,46 +460,9 @@ class ProductController extends Controller
                 $product->code_article = $categoryPrefix . $subcategoryPrefix . $currentSequence;
             }
             
-            // Check for duplicate product (excluding the current product)
-            $existingProduct = Product::where('name', $request->name)
-                ->where('id_categorie', $request->id_categorie)
-                ->where('id_subcategorie', $request->id_subcategorie)
-                ->where('id', '!=', $request->id)
-                ->first();
-            
-            if ($existingProduct) {
-                // Product exists, just update the quantity
-                $existingStock = Stock::where('id_product', $existingProduct->id)->first();
-                $currentStock = Stock::where('id_product', $product->id)->first();
-                
-                if ($existingStock && $currentStock) {
-                    // Add the quantity from the current product to the existing one
-                    $newQuantity = $existingStock->quantite + $currentStock->quantite;
-                    
-                    $existingStock->update([
-                        'quantite' => $newQuantity,
-                        // Update other stock fields to the new values if needed
-                        'id_tva' => $request->id_tva,
-                        'seuil' => $request->seuil,
-                    ]);
-                    
-                    // Delete the current product and its stock
-                    $currentStock->delete();
-                    $product->delete();
-                    
-                    DB::commit();
-                    
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'Un produit similaire existe déjà. Les quantités ont été fusionnées.',
-                    ]);
-                }
-            }
-            
-            // If no duplicate or we want to update the existing product
             // Update product
             $product->update([
-                'name' => $request->name,
+                'name' => trim($request->name),
                 'price_achat' => $request->price_achat,
                 'price_vente' => $request->price_vente,
                 'code_barre' => $request->code_barre,

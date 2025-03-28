@@ -140,15 +140,14 @@ $(document).ready(function () {
     
     $(phoneFormatter);
     
-    $('#BtnAddFournisseur').on('click', function(e)
-    {
+    $('#BtnAddFournisseur').on('click', function(e) {
         e.preventDefault();
         
         let formData = new FormData($('#FormAddFournisseur')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddFournisseur').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddFournisseur,
@@ -183,14 +182,25 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
-                }  
+                }
+                else if (response.status == 422) {
+                    // Traitement spécifique pour le cas où un fournisseur existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
+                }
                 else if (response.status == 404 || response.status == 500) {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $('#BtnAddFournisseur').prop('disabled', false).text('Sauvegarder');
-                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                
+                // Récupérer le message d'erreur personnalisé du serveur
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Fallback au message générique seulement si aucun message personnalisé n'est disponible
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
             }
         });
     });
@@ -233,14 +243,25 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
-                }  
+                }
+                else if (response.status == 422) {
+                    // Traitement spécifique pour le cas où un fournisseur avec le même nom existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
+                }
                 else if (response.status == 500) {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $('#BtnUpdateFournisseur').prop('disabled', false).text('Mettre à jour');
-                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                
+                // Récupérer le message d'erreur personnalisé du serveur
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Fallback au message générique
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
             }
         });
     });

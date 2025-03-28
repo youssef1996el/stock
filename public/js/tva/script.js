@@ -112,15 +112,14 @@ $(document).ready(function () {
         }
     });
     
-    $('#BtnAddTva').on('click', function(e)
-    {
+    $('#BtnAddTva').on('click', function(e) {
         e.preventDefault();
         
         let formData = new FormData($('#FormAddTva')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddTva').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddTva,
@@ -155,14 +154,26 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
-                }  
+                }
+                else if(response.status == 422)
+                {
+                    // Traitement du cas où une TVA avec le même nom ou valeur existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
+                }
                 else if (response.status == 404 || response.status == 500) {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $('#BtnAddTva').prop('disabled', false).text('Sauvegarder');
-                new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                
+                // Récupérer le message d'erreur personnalisé du serveur
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Fallback au message générique
+                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                }
             }
         });
     });

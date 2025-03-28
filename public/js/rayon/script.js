@@ -139,9 +139,9 @@ $(document).ready(function () {
         
         let formData = new FormData($('#FormAddRayon')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddRayon').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddRayon,
@@ -181,16 +181,22 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnAddRayon').prop('disabled', false).text('Sauvegarder');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.status === 403) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else if (xhr.status === 409) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });
@@ -248,16 +254,22 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnUpdateRayon').prop('disabled', false).text('Mettre à jour');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.status === 403) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else if (xhr.status === 409) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });

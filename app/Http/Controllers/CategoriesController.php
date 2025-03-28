@@ -72,7 +72,7 @@ class CategoriesController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des catégories'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
         ], [
@@ -87,22 +87,23 @@ class CategoriesController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
-        // Check if category already exists with the same name
-        $exists = Category::where('name', $request->name)->exists();
+    
+        // Vérification insensible à la casse et en supprimant les espaces
+        $cleanedName = strtolower(trim($request->name));
+        $exists = Category::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])->count();
             
-        if ($exists) {
+        if ($exists > 0) {
             return response()->json([
-                'status' => 409, // Conflict status code
+                'status' => 422, // Utilisation de 422 pour être cohérent avec les autres fonctions
                 'message' => 'Cette catégorie existe déjà',
-            ], 409);
+            ], 422);
         }
-
+    
         $category = Category::create([
-            'name' => $request->name,
+            'name' => trim($request->name), // Suppression des espaces
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($category) {
             return response()->json([
                 'status' => 200,
@@ -153,7 +154,7 @@ class CategoriesController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des catégories'
             ], 403);
         }
-
+    
         $category = Category::find($request->id);
         
         if (!$category) {
@@ -178,19 +179,20 @@ class CategoriesController extends Controller
             ], 400);
         }
         
-        // Check if another category with the same name exists
-        $exists = Category::where('name', $request->name)
-            ->where('id', '!=', $request->id) // Exclude current record
-            ->exists();
+        // Vérification insensible à la casse et en supprimant les espaces
+        $cleanedName = strtolower(trim($request->name));
+        $exists = Category::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
+            ->where('id', '!=', $request->id) // Exclure l'enregistrement actuel
+            ->count();
             
-        if ($exists) {
+        if ($exists > 0) {
             return response()->json([
-                'status' => 409, // Conflict status code
+                'status' => 422, // Utilisation de 422 pour être cohérent avec les autres fonctions
                 'message' => 'Cette catégorie existe déjà',
-            ], 409);
+            ], 422);
         }
-
-        $category->name = $request->name;
+    
+        $category->name = trim($request->name); // Suppression des espaces
         $saved = $category->save();
         
         if ($saved) {

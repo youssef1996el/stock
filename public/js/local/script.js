@@ -137,9 +137,9 @@ $(document).ready(function () {
         
         let formData = new FormData($('#FormAddLocal')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddLocal').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddLocal,
@@ -179,16 +179,22 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnAddLocal').prop('disabled', false).text('Sauvegarder');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.status === 403) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else if (xhr.status === 409) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });
@@ -245,16 +251,22 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnUpdateLocal').prop('disabled', false).text('Mettre à jour');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.status === 403) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else if (xhr.status === 409) {
+                    new AWN().warning(xhr.responseJSON.message, {durations: {warning: 5000}});
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });

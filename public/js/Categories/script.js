@@ -137,9 +137,9 @@ $(document).ready(function () {
         
         let formData = new FormData($('#FormAddCategory')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddCategory').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: AddCategory,
@@ -155,8 +155,8 @@ $(document).ready(function () {
                     $('#ModalAddCategory').modal('hide');
                     $('.TableCategories').DataTable().ajax.reload();
                     $('#FormAddCategory')[0].reset();
-                } else if(response.status == 409) {
-                    // Handle already exists case
+                } else if(response.status == 409 || response.status == 422) {
+                    // Handle already exists case (both 409 and 422)
                     new AWN().warning(response.message, {durations: {warning: 5000}});
                 } else if(response.status == 404) {
                     new AWN().warning(response.message, {durations: {warning: 5000}});
@@ -179,16 +179,20 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnAddCategory').prop('disabled', false).text('Sauvegarder');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });
@@ -221,8 +225,8 @@ $(document).ready(function () {
                     new AWN().success(response.message, {durations: {success: 5000}});
                     $('#ModalEditCategory').modal('hide');
                     $('.TableCategories').DataTable().ajax.reload();
-                } else if (response.status == 409) {
-                    // Handle already exists case
+                } else if (response.status == 409 || response.status == 422) {
+                    // Handle already exists case (both 409 and 422)
                     new AWN().warning(response.message, {durations: {warning: 5000}});
                 } else if (response.status == 404) {
                     new AWN().warning(response.message, {durations: {warning: 5000}});
@@ -245,16 +249,20 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnUpdateCategory').prop('disabled', false).text('Mettre à jour');
                 
-                // Try to parse the error response
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    // Try to parse the error response
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue, veuillez réessayer.", { durations: { alert: 5000 } });
                 }
             }
         });

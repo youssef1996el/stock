@@ -76,7 +76,7 @@ class FournisseurController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des fournisseurs'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'entreprise' => 'required|string|max:255',
             'Telephone' => 'required|string|max:20',
@@ -96,14 +96,25 @@ class FournisseurController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+        
+        // Trim the entreprise name and check if it already exists
+        $trimmedEntreprise = trim($request->entreprise);
+        $exists = Fournisseur::where('entreprise', $trimmedEntreprise)->count();
+        
+        if ($exists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Un fournisseur avec ce nom d\'entreprise existe déjà',
+            ], 422);
+        }
+    
         $fournisseur = Fournisseur::create([
-            'entreprise' => $request->entreprise,
+            'entreprise' => $trimmedEntreprise,
             'Telephone' => $request->Telephone,
             'Email' => $request->Email,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($fournisseur) {
             return response()->json([
                 'status' => 200,
@@ -154,16 +165,16 @@ class FournisseurController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des fournisseurs'
             ], 403);
         }
-
+    
         $fournisseur = Fournisseur::find($request->id);
-
+    
         if (!$fournisseur) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Fournisseur non trouvé'
             ], 404);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'entreprise' => 'required|string|max:255',
             'Telephone' => 'required|string|max:20',
@@ -176,20 +187,33 @@ class FournisseurController extends Controller
             'Telephone' => 'téléphone',
             'Email' => 'email',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
                 'errors' => $validator->messages(),
             ], 400);
         }
-
+    
+        // Trim le nom d'entreprise et vérifie s'il existe déjà (en excluant le fournisseur actuel)
+        $trimmedEntreprise = trim($request->entreprise);
+        $exists = Fournisseur::where('entreprise', $trimmedEntreprise)
+                    ->where('id', '!=', $request->id)
+                    ->count();
+        
+        if ($exists > 0) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Un fournisseur avec ce nom d\'entreprise existe déjà',
+            ], 422);
+        }
+    
         $fournisseur->update([
-            'entreprise' => $request->entreprise,
+            'entreprise' => $trimmedEntreprise,
             'Telephone' => $request->Telephone,
             'Email' => $request->Email,
         ]);
-
+    
         return response()->json([
             'status' => 200,
             'message' => 'Fournisseur mis à jour avec succès',

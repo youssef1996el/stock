@@ -80,7 +80,7 @@ class RayonController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des rayons'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'id_local' => 'required|exists:locals,id',
@@ -98,25 +98,28 @@ class RayonController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
-        // Check if rayon already exists with the same name in the same local
-        $exists = Rayon::where('name', $request->name)
-            ->where('id_local', $request->id_local)
+    
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if rayon already exists with the same name in the same local (case insensitive)
+        $exists = Rayon::where('id_local', $request->id_local)
+            ->whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
             ->exists();
-            
+                
         if ($exists) {
             return response()->json([
                 'status' => 409, // Conflict status code
                 'message' => 'Ce rayon existe déjà pour ce local',
             ], 409);
         }
-
+    
         $rayon = Rayon::create([
             'name' => $request->name,
             'id_local' => $request->id_local,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($rayon) {
             return response()->json([
                 'status' => 200,
@@ -167,7 +170,7 @@ class RayonController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des rayons'
             ], 403);
         }
-
+    
         $rayon = Rayon::find($request->id);
         
         if (!$rayon) {
@@ -195,10 +198,13 @@ class RayonController extends Controller
             ], 400);
         }
         
-        // Check if another rayon with the same name exists in the same local
-        $exists = Rayon::where('name', $request->name)
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if another rayon with the same name exists in the same local (case insensitive)
+        $exists = Rayon::where('id', '!=', $request->id) // Exclude current record
             ->where('id_local', $request->id_local)
-            ->where('id', '!=', $request->id) // Exclude current record
+            ->whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
             ->exists();
             
         if ($exists) {
@@ -207,7 +213,7 @@ class RayonController extends Controller
                 'message' => 'Ce rayon existe déjà pour ce local',
             ], 409);
         }
-
+    
         $rayon->name = $request->name;
         $rayon->id_local = $request->id_local;
         $saved = $rayon->save();

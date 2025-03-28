@@ -74,7 +74,7 @@ class UniteController extends Controller
                 'message' => 'Vous n\'avez pas la permission d\'ajouter des unités'
             ], 403);
         }
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
         ], [
@@ -89,9 +89,12 @@ class UniteController extends Controller
                 'errors' => $validator->messages(),
             ], 400);
         }
-
-        // Check if unite already exists with the same name
-        $exists = Unite::where('name', $request->name)->exists();
+    
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if unite already exists with the same name (case insensitive)
+        $exists = Unite::whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])->exists();
             
         if ($exists) {
             return response()->json([
@@ -99,12 +102,12 @@ class UniteController extends Controller
                 'message' => 'Cette unité existe déjà',
             ], 409);
         }
-
+    
         $unite = Unite::create([
             'name' => $request->name,
             'iduser' => Auth::user()->id,
         ]);
-
+    
         if($unite) {
             return response()->json([
                 'status' => 200,
@@ -155,7 +158,7 @@ class UniteController extends Controller
                 'message' => 'Vous n\'avez pas la permission de modifier des unités'
             ], 403);
         }
-
+    
         $unite = Unite::find($request->id);
         
         if (!$unite) {
@@ -180,9 +183,12 @@ class UniteController extends Controller
             ], 400);
         }
         
-        // Check if another unite with the same name exists
-        $exists = Unite::where('name', $request->name)
-            ->where('id', '!=', $request->id)
+        // Clean and prepare the name for case-insensitive check
+        $cleanedName = strtolower(trim($request->name));
+        
+        // Check if another unite with the same name exists (case insensitive)
+        $exists = Unite::where('id', '!=', $request->id)
+            ->whereRaw('LOWER(TRIM(name)) = ?', [$cleanedName])
             ->exists();
             
         if ($exists) {
@@ -191,7 +197,7 @@ class UniteController extends Controller
                 'message' => 'Cette unité existe déjà',
             ], 409);
         }
-
+    
         $unite->name = $request->name;
         $saved = $unite->save();
         

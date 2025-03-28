@@ -345,9 +345,9 @@ $(document).ready(function () {
         
         let formData = new FormData($('#FormAddProduct')[0]);
         formData.append('_token', csrf_token);
-
+    
         $('#BtnAddProduct').prop('disabled', true).text('Enregistrement...');
-
+    
         $.ajax({
             type: "POST",
             url: addProduct_url,
@@ -375,6 +375,9 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
+                } else if(response.status == 422) {
+                    // Traitement spécifique pour le cas où un produit avec le même nom existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
                 } else {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
@@ -382,15 +385,19 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnAddProduct').prop('disabled', false).text('Sauvegarder');
                 
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
                 }
             }
         });
@@ -439,6 +446,9 @@ $(document).ready(function () {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
+                } else if (response.status == 422) {
+                    // Traitement spécifique pour le cas où un produit avec le même nom existe déjà
+                    new AWN().alert(response.message, { durations: { alert: 5000 } });
                 } else {
                     new AWN().alert(response.message, { durations: { alert: 5000 } });
                 }
@@ -446,20 +456,23 @@ $(document).ready(function () {
             error: function(xhr) {
                 $('#BtnUpdateProduct').prop('disabled', false).text('Mettre à jour');
                 
-                try {
-                    var errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse && errorResponse.message) {
-                        new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
-                    } else {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    new AWN().alert(xhr.responseJSON.message, { durations: { alert: 5000 } });
+                } else {
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.message) {
+                            new AWN().alert(errorResponse.message, { durations: { alert: 5000 } });
+                        } else {
+                            new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
+                        }
+                    } catch (e) {
                         new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
                     }
-                } catch (e) {
-                    new AWN().alert("Une erreur est survenue", { durations: { alert: 5000 } });
                 }
             }
         });
     });
-    
     // Initial dropdown population on page load
     $(document).ready(function() {
         // Populate subcategories if category is pre-selected

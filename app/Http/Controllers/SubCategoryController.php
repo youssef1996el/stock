@@ -77,7 +77,7 @@ class SubCategoryController extends Controller
         if (!auth()->user()->can('Famille-ajoute')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission d\'ajouter des sous-catégories'
+                'message' => 'Vous n\'avez pas la permission d\'ajouter  une famille.'
             ], 403);
         }
 
@@ -107,7 +107,7 @@ class SubCategoryController extends Controller
         if ($exists) {
             return response()->json([
                 'status' => 409, // Conflict status code
-                'message' => 'Cette sous-catégorie existe déjà pour cette catégorie',
+                'message' => 'Cette une famille existe déjà pour cette catégorie',
             ], 409);
         }
 
@@ -120,7 +120,7 @@ class SubCategoryController extends Controller
         if($subcategory) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Sous-catégorie créée avec succès',
+                'message' => 'une famille créée avec succès',
             ]);
         } else { 
             return response()->json([
@@ -139,7 +139,7 @@ class SubCategoryController extends Controller
         if (!auth()->user()->can('Famille-modifier')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission de modifier des sous-catégories'
+                'message' => 'Vous n\'avez pas la permission de modifier des une famille.'
             ], 403);
         }
 
@@ -148,7 +148,7 @@ class SubCategoryController extends Controller
         if (!$subcategory) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Sous-catégorie non trouvée'
+                'message' => 'une famille non trouvée'
             ], 404);
         }
         
@@ -164,7 +164,7 @@ class SubCategoryController extends Controller
         if (!auth()->user()->can('Famille-modifier')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission de modifier des sous-catégories'
+                'message' => 'Vous n\'avez pas la permission de modifier une famille.'
             ], 403);
         }
 
@@ -173,7 +173,7 @@ class SubCategoryController extends Controller
         if (!$subcategory) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Sous-catégorie non trouvée'
+                'message' => 'Une famille non trouvée'
             ], 404);
         }
         
@@ -204,7 +204,7 @@ class SubCategoryController extends Controller
         if ($exists) {
             return response()->json([
                 'status' => 409, // Conflict status code
-                'message' => 'Cette sous-catégorie existe déjà pour cette catégorie',
+                'message' => 'Cette famille existe déjà pour cette catégorie',
             ], 409);
         }
 
@@ -215,12 +215,12 @@ class SubCategoryController extends Controller
         if ($saved) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Sous-catégorie mise à jour avec succès',
+                'message' => 'famille mise à jour avec succès',
             ]);
         } else {
             return response()->json([
                 'status' => 500,
-                'message' => 'Erreur lors de la mise à jour de la sous-catégorie',
+                'message' => 'Erreur lors de la mise à jour de la famille .',
             ], 500);
         }
     }
@@ -234,7 +234,7 @@ class SubCategoryController extends Controller
         if (!auth()->user()->can('Famille-supprimer')) {
             return response()->json([
                 'status' => 403,
-                'message' => 'Vous n\'avez pas la permission de supprimer des sous-catégories'
+                'message' => 'Vous n\'avez pas la permission de supprimer une famille.'
             ], 403);
         }
 
@@ -243,14 +243,14 @@ class SubCategoryController extends Controller
         if (!$subcategory) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Sous-catégorie non trouvée'
+                'message' => 'une famille non trouvée'
             ], 404);
         }
 
         if ($subcategory->delete()) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Sous-catégorie supprimée avec succès'
+                'message' => 'une famille supprimée avec succès'
             ]);
         }
 
